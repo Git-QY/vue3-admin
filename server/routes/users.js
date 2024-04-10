@@ -2,9 +2,23 @@ var express = require('express')
 var router = express.Router()
 const { User } = require('../mongodb/models/user')
 const { generateUUID } = require('../utils/index')
+const { createToken } = require('../utils/token')
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: '可以访问用户的接口' })
+})
+// 用户登录
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body
+  if (!username || !password) return res.send({ code: 500, message: '用户名或密码不能为空' })
+  try {
+    const user = await User.findOne({ username, password: password })
+    if (!user) return res.send({ code: 403, message: '用户名或密码错误' })
+    let token = createToken({ login: true, name: username })
+    res.send({ code: 200, message: '登录成功', data: { username, token } })
+  } catch (error) {
+    res.send({ code: 500, message: error })
+  }
 })
 // 新增用户
 router.post('/add', async (req, res) => {
