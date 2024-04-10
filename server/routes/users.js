@@ -1,11 +1,60 @@
 var express = require('express')
 var router = express.Router()
 const { User } = require('../mongodb/models/user')
-const { generateUUID } = require('../utils/index')
+const { generateUUID, sendMail } = require('../utils/index')
 const { createToken } = require('../utils/token')
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: '可以访问用户的接口' })
+})
+// 根据邮箱获取code
+// 设置一个定时器 定时清除check和邮箱的对应关系
+const check = {}
+router.get('/code', function (req, res, next) {
+  // 获取邮箱
+  if (!req.query.email) return res.send({ code: 400, message: '缺少必填参数' })
+  let email = req.query.email
+  let code = Math.random().toString().slice(2, 6)
+  check[email] = code // 邮箱和验证码对应关系
+  sendMail(email, code, function (result) {
+    if (result) {
+      // 获取邮箱成功 开启定时器
+      setTimeout(() => {
+        delete check[email]
+        console.log(`成功清除${email}code的对应关系`)
+      }, 60000)
+      res.send({ code: 200, message: '验证码发送成功' })
+    } else {
+      res.send({ code: 400, message: '验证码发送失败' })
+    }
+  })
+})
+// 注册用户
+router.post('/register', async function (req, res, next) {
+  const { username, password, email, code } = req.body // 必填账号密码邮箱
+  if (!username || !password || !email || !code) return res.send({ code: 400, message: '缺少必填参数' })
+  // 判断邮箱验证码是否正确 失效时间1分钟
+  if (check[email] === code) {
+    await User.create({ ...req.body, id: generateUUID() }) // 创建新用户
+    res.send({ code: 200, message: '注册成功' })
+  } else {
+    return res.send({ code: 400, message: '验证码错误' })
+  }
+})
+// 检验验证码
+router.post('/checkCode', async function (req, res, next) {
+  // 获取邮箱和验证码
+  const { email, code } = req.body
+  if (!email || !code) return res.send({ code: 400, message: '缺少必填参数' })
+  // 校验用户是否注册过
+  const user = await User.findOne({ email })
+  if (!user) return res.send({ code: 400, message: '用户不存在' })
+  // 判断邮箱验证码是否正确 失效时间1分钟
+  if (check[email] === code) {
+    res.send({ code: 200, message: '验证成功' })
+  } else {
+    return res.send({ code: 400, message: '验证码错误' })
+  }
 })
 // 用户登录
 router.post('/login', async (req, res) => {
