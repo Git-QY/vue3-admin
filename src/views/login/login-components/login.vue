@@ -19,23 +19,24 @@
 </template>
 
 <script setup lang="ts">
-import api from '@/api/user.ts'
+import api, { LoginType } from '@/api/user.ts'
 import { ref, reactive, onMounted, inject } from 'vue'
-const form = ref({ username: '', password: '' })
+const form = ref<LoginType>({ username: '', password: '' })
 const rules = reactive({
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 })
-const loginConfig = inject('loginConfig')
+const loginConfig = inject('loginConfig') as any
 const loading = ref(false)
 const loginFormRef = ref(null as any)
 
 const submitForm = async () => {
   const res = await loginFormRef.value.validate()
   if (!res) return
-  api.login(form.value).then(res => {
+  try {
+    const res = await api.login(form.value)
     console.log(res)
-  })
+  } catch (error) {}
 }
 
 onMounted(async () => {})

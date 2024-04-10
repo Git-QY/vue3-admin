@@ -11,9 +11,12 @@ router.get('/', function (req, res, next) {
 // 设置一个定时器 定时清除check和邮箱的对应关系
 const check = {}
 router.get('/code', function (req, res, next) {
-  // 获取邮箱
-  if (!req.query.email) return res.send({ code: 400, message: '缺少必填参数' })
   let email = req.query.email
+  // 获取邮箱
+  if (!email) return res.send({ code: 400, message: '缺少必填参数' })
+  // 邮箱唯一
+  const user = User.findOne({ email })
+  if (user) return res.send({ code: 400, message: '邮箱已存在' })
   let code = Math.random().toString().slice(2, 6)
   check[email] = code // 邮箱和验证码对应关系
   sendMail(email, code, function (result) {
@@ -30,9 +33,12 @@ router.get('/code', function (req, res, next) {
   })
 })
 // 注册用户
-router.post('/register', async function (req, res, next) {
+router.post('/register', async function (req, res) {
   const { username, password, email, code } = req.body // 必填账号密码邮箱
   if (!username || !password || !email || !code) return res.send({ code: 400, message: '缺少必填参数' })
+  // 用户名唯一
+  const user = await User.findOne({ username })
+  if (user) return res.send({ code: 400, message: '用户名已存在' })
   // 判断邮箱验证码是否正确 失效时间1分钟
   if (check[email] === code) {
     await User.create({ ...req.body, id: generateUUID() }) // 创建新用户
@@ -42,7 +48,7 @@ router.post('/register', async function (req, res, next) {
   }
 })
 // 检验验证码
-router.post('/checkCode', async function (req, res, next) {
+router.post('/checkCode', async function (req, res) {
   // 获取邮箱和验证码
   const { email, code } = req.body
   if (!email || !code) return res.send({ code: 400, message: '缺少必填参数' })
@@ -63,8 +69,10 @@ router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ username, password: password })
     if (!user) return res.send({ code: 403, message: '用户名或密码错误' })
-    let token = createToken({ login: true, name: username })
-    res.send({ code: 200, message: '登录成功', data: { username, token } })
+    const { status, id } = user
+    if (status === 0) return res.send({ code: 403, message: '该用户已被禁用' })
+    let token = createToken({ login: true, name: username, id })
+    res.send({ code: 200, message: '登录成功', data: { token, userInfo: user } })
   } catch (error) {
     res.send({ code: 500, message: error })
   }

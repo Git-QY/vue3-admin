@@ -16,10 +16,11 @@ const schemaRules = {
   createdTime: { type: Date, default: Date.now }, // 创建时间
   updatedTime: { type: Date, default: Date.now }, // 最后更新时间
   // 邮箱
-  email: {
-    type: String,
-    required: true,
-  },
+  email: { type: String, required: true },
+  // 状态
+  status: { type: Number, default: 1 }, // 1: 正常，0: 禁用
+  // 头像
+  avatar: { type: String, default: '' },
 }
 // 定义用户模型
 const userSchema = new mongoose.Schema(schemaRules)
