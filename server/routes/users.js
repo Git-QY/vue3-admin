@@ -36,6 +36,9 @@ router.post('/register', async function (req, res) {
   // 用户名唯一
   const user = await User.findOne({ username })
   if (user) return res.send({ code: 400, message: '用户名已存在' })
+  // 一个游戏只能注册一个账号
+  const emailUser = await User.findOne({ email })
+  if (emailUser) return res.send({ code: 400, message: '该邮箱已注册' })
   // 判断邮箱验证码是否正确 失效时间1分钟
   if (check[email] === code) {
     await User.create({ ...req.body, id: generateUUID() }) // 创建新用户
@@ -171,16 +174,18 @@ router.post('/checkEmailCode', async function (req, res, next) {
 })
 // 修改密码
 router.post('/forget', async (req, res) => {
-  const { email, token, newPassword } = req.body
-  if (!email || !newPassword) return res.send({ code: 400, message: '缺少必填参数' })
+  const { email, token, newPassword, nextPassword } = req.body
+  if (!email || !newPassword || !nextPassword || !token) return res.send({ code: 400, message: '缺少必填参数' })
   // 判断是否注册
   const user = await User.findOne({ email })
   if (!user) return res.send({ code: 400, message: '用户不存在' })
+  // 判断2次密码是否一致
+  if (newPassword !== nextPassword) return res.send({ code: 400, message: '两次密码不一致' })
   // 更新密码
   try {
     // 校验token
     const result = await verifyToken(token, 'checkEmailCode')
-    if (result.email !== email) return res.send({ code: 400, message: 'token验证失败' })
+    if (result.email !== email) return res.send({ code: 400, message: 'token标识错误' })
     await User.updateOne({ id: user.id }, { ...req.body, updatedTime: Date.now(), password: newPassword })
     res.send({ code: 200, message: '密码修改成功' })
   } catch (error) {
