@@ -11,7 +11,6 @@ const schemaRules = {
   password: {
     type: String,
     required: true,
-    match: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d\S]{6,}$/, // 长度至少6位，包含字母和数字或字符
   }, // 密码，必需
   createdTime: { type: Date, default: Date.now }, // 创建时间
   updatedTime: { type: Date, default: Date.now }, // 最后更新时间
