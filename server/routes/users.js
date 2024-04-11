@@ -2,7 +2,7 @@ var express = require('express')
 var router = express.Router()
 const { User } = require('../mongodb/models/user')
 const { generateUUID, sendMail } = require('../utils/index')
-const { createToken } = require('../utils/token')
+const { createToken, verifyToken } = require('../utils/token')
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: '可以访问用户的接口' })
@@ -14,9 +14,6 @@ router.get('/code', function (req, res, next) {
   let email = req.query.email
   // 获取邮箱
   if (!email) return res.send({ code: 400, message: '缺少必填参数' })
-  // 邮箱唯一
-  const user = User.findOne({ email })
-  if (user) return res.send({ code: 400, message: '邮箱已存在' })
   let code = Math.random().toString().slice(2, 6)
   check[email] = code // 邮箱和验证码对应关系
   sendMail(email, code, function (result) {
@@ -137,6 +134,47 @@ router.get('/detail', async (req, res) => {
     const user = await User.findOne({ id: userId }) // 根据ID查询用户
     if (!user) res.send({ code: 500, message: `没有ID为${userId}的用户信息` })
     res.send({ code: 200, data: user })
+  } catch (error) {
+    res.send({ code: 500, message: error })
+  }
+})
+// 忘记密码
+// 1 获取邮箱验证码
+// 2 校验邮箱验证码
+// 3 输入新密码
+// 4 修改密码
+
+// 检验验证码
+router.post('/checkEmailCode', async function (req, res, next) {
+  // 获取邮箱和验证码
+  const { email, code } = req.body
+  if (!email || !code) return res.send({ code: 400, message: '缺少必填参数' })
+  // 校验用户是否注册过
+  const user = await User.findOne({ email })
+  if (!user) return res.send({ code: 400, message: '用户不存在' })
+  // 判断邮箱验证码是否正确 失效时间1分钟
+  if (check[email] === code) {
+    // 生成一个token来判断是否获取成功code
+    const token = createToken({ email, code }, 'checkEmailCode')
+    res.send({ code: 200, message: '验证成功', data: token })
+  } else {
+    return res.send({ code: 400, message: '验证码错误' })
+  }
+})
+// 修改密码
+router.post('/forget', async (req, res) => {
+  const { email, token, newPassword } = req.body
+  if (!email || !newPassword) return res.send({ code: 400, message: '缺少必填参数' })
+  // 判断是否注册
+  const user = await User.findOne({ email })
+  if (!user) return res.send({ code: 400, message: '用户不存在' })
+  // 更新密码
+  try {
+    // 校验token
+    const result = await verifyToken(token, 'checkEmailCode')
+    if (result.email !== email) return res.send({ code: 400, message: 'token验证失败' })
+    await User.updateOne({ id: user.id }, { ...req.body, updatedTime: Date.now(), password: newPassword })
+    res.send({ code: 200, message: '密码修改成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
   }
