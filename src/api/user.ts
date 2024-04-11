@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 登录类型规范
+// 登录类型规范1
 export interface LoginType {
   username: string
   password: string
