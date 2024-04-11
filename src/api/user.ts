@@ -13,6 +13,12 @@ export interface RegisterType {
   code: string
 }
 
+// 响应类型规范
+interface response {
+  code: number;
+  message:string
+}
+
 export default {
   // 登录接口
   login(data: { username: string; password: string }) {
@@ -23,19 +29,19 @@ export default {
     })
   },
   // 注册接口
-  register(data:{username:string;password:string;email:string,code:string}) {
+  register(data:{username:string;password:string;email:string,code:string}):Promise<response> {
     return request({
       url:'/users/register',
       method:'post',
       data
     })
   },
+
   // 获取邮箱验证码
-  emailCode(data: { email: string;}) {
+  emailCode(email: string): Promise<response> {
     return request({
-      url: '/users/code',
-      method: 'get',
-      data
+      url: `/users/code?email=${email}`,
+      method:'get'
     })
   }
 }
