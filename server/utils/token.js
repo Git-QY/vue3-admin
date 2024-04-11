@@ -1,14 +1,13 @@
 const jwt = require('jsonwebtoken')
 // 秘钥
-const screat = '123456'
 //生成token
-function createToken(playload) {
+function createToken(playload, screat = '123456') {
   playload.ctime = Date.now()
   playload.exps = 24 * 60 * 60 * 1000 // 手动设置过期时间 60s
   return jwt.sign(playload, screat)
 }
 // 验证token
-function verifyToken(token) {
+function verifyToken(token, screat = '123456') {
   return new Promise((resolve, reject) => {
     jwt.verify(token, screat, (err, data) => {
       if (!token) return reject({ code: 401, msg: '请携带token请求' })
