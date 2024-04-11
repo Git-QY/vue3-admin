@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-const { User } = require('../mongodb/models/user')
+const { User, userValidationRules, validationResult } = require('../mongodb/models/user')
 const { generateUUID, sendMail } = require('../utils/index')
 const { createToken, verifyToken } = require('../utils/token')
 /* GET home page. */
@@ -75,9 +75,13 @@ router.post('/login', async (req, res) => {
   }
 })
 // 新增用户
-router.post('/add', async (req, res) => {
-  const { body } = req
+router.post('/add', userValidationRules(true), async (req, res) => {
+  const error = validationResult(req)
+  if (!error.isEmpty()) {
+    return res.send({ code: 500, message: error.array().map(item => item.msg) })
+  }
   try {
+    const { body } = req
     await User.create({ ...body, id: generateUUID() }) // 创建新用户
     res.send({ code: 200, message: '创建成功' })
   } catch (error) {
@@ -99,7 +103,11 @@ router.delete('/delete', async (req, res) => {
   }
 })
 // 修改用户
-router.put('/update', async (req, res) => {
+router.put('/update', userValidationRules(false), async (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.send({ code: 500, message: error.array().map(item => item.msg) })
+  }
   try {
     const { id } = req.body
     await User.updateOne({ id }, { ...req.body, updatedTime: Date.now() })
