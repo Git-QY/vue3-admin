@@ -20,7 +20,11 @@
 
 <script setup lang="ts">
 import api, { LoginType } from '@/api/user.ts'
+import router from '@/router';
+import { ElMessage } from 'element-plus';
 import { ref, reactive, onMounted, inject } from 'vue'
+import { useUserStore } from '@/store';
+const userStore = useUserStore()
 const form = ref<LoginType>({ username: '', password: '' })
 const rules = reactive({
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -36,7 +40,14 @@ const submitForm = async () => {
   try {
     const res = await api.login(form.value)
     console.log(res)
-  } catch (error) {}
+    if(res.code === 200){
+      ElMessage.success('登录成功')
+      userStore.token = res.data.token
+      router.push('/')
+    }
+  } catch (error:any) {
+    ElMessage.error(error.message)
+  }
 }
 
 onMounted(async () => {})

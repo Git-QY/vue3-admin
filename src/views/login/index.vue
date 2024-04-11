@@ -11,6 +11,9 @@ import Login from './login-components/index.vue'
 .login {
   position: relative;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &-bg {
     position: absolute;
     width: 100%;
