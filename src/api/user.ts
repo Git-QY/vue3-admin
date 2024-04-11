@@ -16,12 +16,13 @@ export interface RegisterType {
 // 响应类型规范
 interface response {
   code: number;
+  data?:any
   message:string
 }
 
 export default {
   // 登录接口
-  login(data: { username: string; password: string }) {
+  login(data: { username: string; password: string }):Promise<response> {
     return request({
       url: '/users/login',
       method: 'post',
