@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import http from '@/api'
 
 // 登录类型规范1
 export interface LoginType {
@@ -31,7 +31,7 @@ interface response {
 export default {
   // 登录接口
   login(data: { username: string; password: string }):Promise<response> {
-    return request({
+    return http({
       url: '/users/login',
       method: 'post',
       data,
@@ -39,7 +39,7 @@ export default {
   },
   // 注册接口
   register(data:{username:string;password:string;email:string,code:string}):Promise<response> {
-    return request({
+    return http({
       url:'/users/register',
       method:'post',
       data
@@ -48,7 +48,7 @@ export default {
 
   // 获取邮箱验证码
   emailCode(email: string): Promise<response> {
-    return request({
+    return http({
       url: `/users/code?email=${email}`,
       method:'get'
     })
@@ -58,7 +58,7 @@ export default {
 
   // 校验邮箱验证码 会返回一个token 再带这个token去修改密码
   checkEmailCode(data:{email:string;code:string}): Promise<response> {
-    return request({
+    return http({
       url: `/users/checkEmailCode`,
       method:'post',
       data
@@ -67,7 +67,7 @@ export default {
   // 修改密码
   // token 来自邮箱验证码
   forget(data:{email:string;token:string;newPassword:string;nextPassword:string}): Promise<response> {
-    return request({
+    return http({
       url: `/users/forget`,
       method:'post',
       data
