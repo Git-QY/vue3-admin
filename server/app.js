@@ -35,19 +35,19 @@ app.use('/', indexRouter) // 使用主页路由中间件
 app.use('/users', usersRouter) // 使用用户路由中间件
 
 // 捕获404错误并转发到错误处理程序
-// app.use(function (req, res, next) {
-//   next(createError(404))
-// })
+app.use(function (req, res, next) {
+  next(createError(404))
+})
 
 // 错误处理程序
-// app.use(function (err, req, res, next) {
-//   // 设置本地变量，仅在开发环境中提供错误信息
-//   res.locals.message = err.message
-//   res.locals.error = req.app.get('env') === 'development' ? err : {}
+app.use(function (err, req, res, next) {
+  // 设置本地变量，仅在开发环境中提供错误信息
+  res.locals.message = err.message
+  res.locals.error = req.app.get('env') === 'development' ? err : {}
 
-//   // 渲染错误页面
-//   res.status(err.status || 500)
-//   res.render('error')
-// })
+  // 渲染错误页面
+  res.status(err.status || 500)
+  res.render('error')
+})
 
 module.exports = app // 导出Express应用程序实例

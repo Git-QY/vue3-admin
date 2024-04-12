@@ -192,7 +192,6 @@ router.post('/forget', async (req, res) => {
     res.send({ code: 500, message: error })
   }
 })
-
 // 邮箱验证码登录
 router.post('/login/email', async (req, res) => {
   // 获取邮箱验证
@@ -242,23 +241,55 @@ router.post('/login/email', async (req, res) => {
  *
  */
 const axios = require('axios')
+// 目前有个问题就是如果注册的邮箱和第三方登录的邮箱相同 怎么处理
 router.post('/login/third', async (req, res) => {
   const { type, code } = req.body
   if (!type || !code) return res.send({ code: 500, message: '缺少必填参数' })
-  // 根据返回的code获取用户信息来创建用户
-  // 根据开放接口获取用户信息
-  // https://gitee.com/oauth/token?grant_type=authorization_code&code={code}&client_id={client_id}&client_secret={client_secret}&redirect_uri={redirect_uri}
-  // https://gitee.com/oauth/authorize?client_id=c2c0c137422ab80e3a13ee7e242ae230b4825f5cf8cde692ce72ae99cea32f78&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2FloginWithGitee.html&response_type=code
-  // const res = await axios.get({
-  //   url: 'https://gitee.com/oauth/token',
-  //   params: {
-  //     grant_type: 'authorization_code',
-  //     code,
-  //     client_id: 'c2c0c137422ab80e3a13ee7e242ae230b4825f5cf8cde692ce72ae99cea32f78',
-  //     redirect_uri: 'http://localhost:5173/loginWithGitee.html',
-  //   },
-  // })
-  // console.log('res', res)
+  try {
+    const response = await axios.post('https://gitee.com/oauth/token', {
+      grant_type: 'authorization_code',
+      code,
+      client_id: 'c2c0c137422ab80e3a13ee7e242ae230b4825f5cf8cde692ce72ae99cea32f78',
+      redirect_uri: 'http://localhost:5173/loginWithGitee.html',
+      client_secret: '9d5f56dc5b8fc1ac9dc88a96ba322b0368ec4e94c49d594a5649fe492f4c6d1e',
+    })
+    // const response = {
+    //   status: 200,
+    //   data: {
+    //     access_token: '8efd697cebcdc7e684f92d361b389432',
+    //     token_type: 'bearer',
+    //     expires_in: 86400,
+    //     refresh_token: '969efe7099e8208dbd761881f1ef474c892b9dc78b5db3612de0e528922c4869',
+    //     scope: 'user_info',
+    //     created_at: 1712910568,
+    //   },
+    // }
+    if (response.status !== 200) return res.send({ code: 500, error })
+    const { access_token, token_type, refresh_token } = response.data
+    const userInfo = await axios.get(`https://gitee.com/api/v5/user?access_token=${access_token}`)
+    if (userInfo.status !== 200) return res.send({ code: 500, error })
+    // 创建一个用户
+    const findUser = await User.findOne({ username: userInfo.data.name })
+    if (findUser) {
+      let token = createToken({ login: true, name: findUser.name, id: findUser.id })
+      return res.send({ code: 200, message: '登录成功', data: { token, userInfo: findUser } })
+    }
+    const user = await User.create({
+      id: generateUUID(),
+      username: userInfo.data.name,
+      password: '123456',
+      avatar: userInfo.data.avatar_url,
+      status: 1,
+      createdTime: new Date(),
+      updatedTime: new Date(),
+      // email: userInfo.data.email
+    })
+    // 生成token
+    let token = createToken({ login: true, name: user.name, id: user.id })
+    res.send({ code: 200, message: '登录成功', data: { token, userInfo: user } })
+  } catch (error) {
+    res.send({ code: 500, error })
+  }
 })
 
 module.exports = router
