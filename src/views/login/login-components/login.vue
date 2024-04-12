@@ -52,4 +52,15 @@ const submitForm = async () => {
 
 onMounted(async () => {})
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.login-form {
+  width: 70%;
+    &--submit {
+      width: 100%;
+    }
+    &--other {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+</style>

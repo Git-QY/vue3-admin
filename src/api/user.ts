@@ -13,6 +13,14 @@ export interface RegisterType {
   code: string
 }
 
+// 忘记密码表单类型规范
+export interface ForgetType{
+  email: string
+  code: string
+  newPassword: string
+  nextPassword: string
+}
+
 // 响应类型规范
 interface response {
   code: number;
@@ -43,6 +51,26 @@ export default {
     return request({
       url: `/users/code?email=${email}`,
       method:'get'
+    })
+  },
+
+  // 忘记密码模块部分
+
+  // 校验邮箱验证码 会返回一个token 再带这个token去修改密码
+  checkEmailCode(data:{email:string;code:string}): Promise<response> {
+    return request({
+      url: `/users/checkEmailCode`,
+      method:'post',
+      data
+    })
+  },
+  // 修改密码
+  // token 来自邮箱验证码
+  forget(data:{email:string;token:string;newPassword:string;nextPassword:string}): Promise<response> {
+    return request({
+      url: `/users/forget`,
+      method:'post',
+      data
     })
   }
 }
