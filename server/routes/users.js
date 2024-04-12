@@ -241,13 +241,24 @@ router.post('/login/email', async (req, res) => {
  * @apiVersion 0.0.1
  *
  */
-
+const axios = require('axios')
 router.post('/login/third', async (req, res) => {
   const { type, code } = req.body
   if (!type || !code) return res.send({ code: 500, message: '缺少必填参数' })
   // 根据返回的code获取用户信息来创建用户
   // 根据开放接口获取用户信息
   // https://gitee.com/oauth/token?grant_type=authorization_code&code={code}&client_id={client_id}&client_secret={client_secret}&redirect_uri={redirect_uri}
+  // https://gitee.com/oauth/authorize?client_id=c2c0c137422ab80e3a13ee7e242ae230b4825f5cf8cde692ce72ae99cea32f78&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2FloginWithGitee.html&response_type=code
+  const res = await axios.get({
+    url: 'https://gitee.com/oauth/token',
+    params: {
+      grant_type: 'authorization_code',
+      code,
+      client_id: 'c2c0c137422ab80e3a13ee7e242ae230b4825f5cf8cde692ce72ae99cea32f78',
+      redirect_uri: 'http://localhost:5173/loginWithGitee.html',
+    },
+  })
+  console.log('res', res)
 })
 
 module.exports = router
