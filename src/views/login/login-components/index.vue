@@ -28,5 +28,25 @@ const getComponent = (name: string) => {
 }
 </script>
 <style lang="scss">
-@import './index.scss';
+.qy-login {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  width: 400px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  min-height: 400px;
+
+  .login-logo {
+    text-align: center;
+
+    img {
+      height: 40px;
+      margin: 10px 0;
+    }
+  }
+}
 </style>
