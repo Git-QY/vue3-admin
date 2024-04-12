@@ -20,7 +20,54 @@ function verifyToken(token, screat = '123456') {
   })
 }
 
+// 定义全局校验 token 的中间件
+async function checkToken(req, res, next) {
+  // 定义不需要 token 验证的接口路径
+  const whiteList = [
+    '/users/login', 
+    '/users/code',
+    '/users/register',
+    '/users/checkCode',
+    '/users/checkEmailCode',
+    '/users/forget',
+    '/users/login/email',
+    '/users/login/third',
+    // '/users/code',
+    // '/users/code',
+    // '/users/code',
+    // '/users/code',
+    // '/users/code',
+    // '/users/code',
+    /^\/utils/,
+  ] // 使用正则表达式来匹配 /xx 开头的路径
+  const path = req.path
+  // 如果当前请求路径在白名单内，则不需要 token 验证，直接通过
+  if (whiteList.some(item => (item instanceof RegExp ? item.test(path) : item === path))) {
+    return next()
+  }
+  // 是否可以设置一个headers参数 可以直接跳过token校验 但是要考虑到安全问题怎么处理
+  // 检查是否存在 skipToken 参数
+  const skipToken = req.headers.skipToken
+  if (skipToken) {
+    return next()
+  }
+  // 否则，检查请求头是否包含 token
+  const token = req.headers.token
+  if (!token) {
+    return res.json({ code: 401, message: '请先登录' })
+  }
+  try {
+    // 验证 token 是否有效
+    const data = await verifyToken(token)
+    req.user = data
+    next()
+  } catch (err) {
+    return res.json({ code: 401, message: err.msg })
+  }
+}
+
 module.exports = {
   createToken,
   verifyToken,
+  checkToken,
 }

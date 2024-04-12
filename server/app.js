@@ -3,6 +3,7 @@ var express = require('express') // 引入Express框架
 var path = require('path') // 引入路径处理模块
 var cookieParser = require('cookie-parser') // 引入处理Cookie的模块
 var logger = require('morgan') // 引入日志记录模块
+var { checkToken } = require('./utils/token')
 
 require('./mongodb')
 
@@ -30,6 +31,8 @@ app.all('*', function (req, res, next) {
   res.header('X-Powered-By', '3.2.1')
   next()
 })
+
+app.use(checkToken) // 验证token
 
 app.use('/', indexRouter) // 使用主页路由中间件
 app.use('/users', usersRouter) // 使用用户路由中间件
