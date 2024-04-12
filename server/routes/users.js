@@ -192,4 +192,62 @@ router.post('/forget', async (req, res) => {
     res.send({ code: 500, message: error })
   }
 })
+
+// 邮箱验证码登录
+router.post('/login/email', async (req, res) => {
+  // 获取邮箱验证
+  const { email, code } = req.body
+  // 验证邮箱验证码
+  if (check[email] === code) {
+    try {
+      // 拿到用户信息
+      const user = await User.findOne({ email })
+      // 返回token
+      const token = createToken({ login: true, name: user.username, id: user.id })
+      res.send({ code: 200, message: '登录成功', data: { token, userInfo: user } })
+    } catch (error) {
+      res.send({ code: 500, message: error })
+    }
+  }
+})
+
+// 第三方登录
+/**
+ * @api {post} /users/login/third 第三方登录
+ * @apiHeader {String} token token
+ * @apiDescription   
+  1 创建第三方应用 填写回调地址(项目的一个页面来获取code)<br>
+  2 点击第三方提供的链接跳转 会自动给回调地址拼接上code<br>
+  3 根据回调地址获取code code用过第三方的开放接口获取用户信息<br>
+  4 根据用户信息生成账号 成功登录<br>
+  5 在我们的回调地址页面 页面会更具监听是否成功登陆来跳转
+ * @apiGroup users
+ * @apiBody {String} type 第三方登录的类型(目前只支持gitee)
+ * @apiBody {String} code 获取用户信息的code
+ * @apiSuccess {String} code 状态码
+ * @apiSuccess {String} message 消息
+ * @apiSuccess {String} data 数据
+ * @apiSuccessExample {json} Success-Response:
+ * {
+ *   "code": 200,
+ *   "message": "登录成功"
+ *   "data": {}
+ * }
+ * @apiErrorExample {json} Error-Response:
+ * {
+ *   "code": 500,
+ *   "message": "登录失败"
+ * }
+ * @apiVersion 0.0.1
+ *
+ */
+
+router.post('/login/third', async (req, res) => {
+  const { type, code } = req.body
+  if (!type || !code) return res.send({ code: 500, message: '缺少必填参数' })
+  // 根据返回的code获取用户信息来创建用户
+  // 根据开放接口获取用户信息
+  // https://gitee.com/oauth/token?grant_type=authorization_code&code={code}&client_id={client_id}&client_secret={client_secret}&redirect_uri={redirect_uri}
+})
+
 module.exports = router
