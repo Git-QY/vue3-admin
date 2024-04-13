@@ -2,6 +2,16 @@
   <div class="qy-login">
     <div class="login-logo">{{pane === forget ? '忘记密码' : pane === register ? '注册' : '登录'}}</div>
     <component :is="pane"></component>
+    <footer class="footer">
+      <el-divider class="divider">
+        <span>其他登录方式</span>
+      </el-divider>
+      <div class="third-login-items">
+        <div class="item" @click="giteeLogin">
+          <img style="width: 100%;height: 100%;" src="@/assets/images/giteeLogo.png" alt="">
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -26,8 +36,13 @@ const getComponent = (name: string) => {
   }
   return markRaw(componentMap[name] || login)
 }
+
+// 通过gitee登录
+const giteeLogin = ()=>{
+  console.log('e')
+}
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .qy-login {
   display: flex;
   flex-direction: column;
@@ -47,6 +62,26 @@ const getComponent = (name: string) => {
     img {
       height: 40px;
       margin: 10px 0;
+    }
+  }
+  .footer{
+    width: 80%;
+  }
+  .divider::v-deep .el-divider__text{
+    color: #acadaf;
+    background-color: transparent !important;
+  }
+  .third-login-items{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .item{
+      width: 30px;
+      height: 30px;
+      :hover{
+        cursor: pointer;
+      }
     }
   }
 }
