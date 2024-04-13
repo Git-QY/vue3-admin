@@ -1,16 +1,21 @@
 <template>
   <div class="forget-form">
-    <el-form :model="forgetform" :ref="forgetFormRef" :rules="forgetrules">
-      <el-form-item label="" prop="email">
+    <el-form 
+    label-position="top"
+    :model="forgetform" 
+    :ref="forgetFormRef" 
+    :rules="forgetrules"
+    >
+      <el-form-item label="邮箱" prop="email">
         <el-input v-model="forgetform.email" placeholder="请输入邮箱"> </el-input>
       </el-form-item>
       <!-- 获取邮箱code 点击发送 -->
       <verifycode-field v-model="forgetform.code" :disabled="verifycodeDisabled" :send="getEmailCode"></verifycode-field>
       <div v-if="isverified">
-        <el-form-item label="" prop="password">
+        <el-form-item label="密码" prop="password">
           <el-input type="password" v-model.trim="forgetform.newPassword" placeholder="请输入密码" autocomplete="new-password" show-password> </el-input>
         </el-form-item>
-        <el-form-item label="" prop="password">
+        <el-form-item label="确认密码" prop="password">
           <el-input type="password" v-model.trim="forgetform.nextPassword" placeholder="确认密码" autocomplete="new-password" show-password> </el-input>
         </el-form-item>
       </div>
@@ -80,17 +85,18 @@ const verifyEmail = async ()=>{
   }
   try{
     loading.value = true
+    await setTimeout(()=>{console.log('延迟一秒')},1000)
     const res = await api.checkEmailCode({email:forgetform.value.email, code:forgetform.value.code})
     if(res.code === 200){
       // console.log(res,'邮箱验证通过')
       isverified.value = true
       token.value = res.data
+      loading.value = false
     }
   } catch(error:any){
     ElMessage.error(error.message)
-  } finally{
     loading.value = false
-  }
+  } 
 }
 
 // 修改密码
@@ -108,11 +114,11 @@ const modifyPassword = async ()=>{
     const res  = await api.forget({ email: forgetform.value.email, token: token.value, newPassword: forgetform.value.newPassword,nextPassword: forgetform.value.nextPassword})
     if(res.code === 200){
       ElMessage.success('密码修改成功，快去登录吧')
+      loading.value = false
       forget.setPane('login')
     }
   } catch(error:any){
     ElMessage.error(error.message)
-  } finally{
     loading.value = false
   }
 }

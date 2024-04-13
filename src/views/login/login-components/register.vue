@@ -1,15 +1,31 @@
 <template>
   <div class="register-form">
-    <el-form :model="registerform" ref="registerFormRef" :rules="registerrules">
-      <el-form-item label="" prop="username">
-        <el-input v-model.trim="registerform.username" placeholder="请输入用户名"> </el-input>
+    <el-form 
+    label-position="top"
+    :model="registerform" 
+    ref="registerFormRef" 
+    :rules="registerrules"
+    >
+      <el-form-item label="用户名" prop="username">
+        <el-input 
+        v-model.trim="registerform.username" 
+        placeholder="请输入用户名" 
+        :suffix-icon="User"
+        > </el-input>
       </el-form-item>
-      <el-form-item label="" prop="password">
-        <el-input type="password" v-model.trim="registerform.password" placeholder="请输入密码" autocomplete="new-password" show-password> </el-input>
+      <el-form-item label="密码" prop="password">
+        <el-input 
+        type="password" 
+        v-model.trim="registerform.password" 
+        placeholder="请输入密码" 
+        autocomplete="new-password" 
+        show-password
+        :suffix-icon="Lock"
+        > </el-input>
       </el-form-item>
       <!-- 邮箱 -->
-      <el-form-item label="" prop="email">
-        <el-input v-model="registerform.email" placeholder="请输入邮箱"> </el-input>
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="registerform.email" placeholder="请输入邮箱" :suffix-icon="Message"> </el-input>
       </el-form-item>
       <!-- 获取邮箱code 点击发送 -->
       <verifycode-field v-model="registerform.code" :disabled="verifycodeDisabled" :send="getEmailCode"></verifycode-field>
@@ -28,7 +44,7 @@ import api, { RegisterType } from '@/api/user.ts'
 import { FormRules, ElMessage } from 'element-plus'
 import { ref, reactive, inject, computed } from 'vue'
 import verifycodeField from './components/verifycode-field.vue'
-
+import { User,Lock,Message} from '@element-plus/icons-vue'
 // 注册form表单
 const registerform = ref<RegisterType>({ username: '', password: '', email: '', code: '' })
 // 注册表单验证
