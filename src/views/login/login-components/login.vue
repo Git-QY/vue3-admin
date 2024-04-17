@@ -52,6 +52,7 @@ const submitForm = async () => {
     if(res.code === 200){
       ElMessage.success('登录成功')
       userStore.token = res.data.token
+      userStore.userInfo = res.data.userInfo
       router.push('/')
       loading.value = false
     }
