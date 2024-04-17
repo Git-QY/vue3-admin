@@ -2,12 +2,18 @@ import { RouteRecordRaw, Router, createRouter, createWebHistory, createWebHashHi
 import { useUserStore } from '@/store'
 import { ElMessage } from 'element-plus'
 import layout from '@/views/layout/index.vue'
+//引入进度条和进度条样式
+import nProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 const routes: RouteRecordRaw[] = [
+
   {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/login/index.vue'),
   },
+
+  { path: '/test', name: 'Test', component: () => import('@/views/test/index.vue') },
   {
     path: '/',
     redirect: '/home',
@@ -62,8 +68,9 @@ const router: Router = createRouter({
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
+  nProgress.start()
   if (!useUserStore().token) {
-    if (to.path === '/login') {
+    if (to.path === '/login' || to.path === '/loginWithGitee') {
       next()
     } else {
       ElMessage.error('还未登录，请先登录')
@@ -73,5 +80,7 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-
+router.afterEach(() => {
+  nProgress.done()
+})
 export default router
