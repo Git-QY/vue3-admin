@@ -268,25 +268,26 @@ router.post('/login/third', async (req, res) => {
     const { access_token, token_type, refresh_token } = response.data
     const userInfo = await axios.get(`https://gitee.com/api/v5/user?access_token=${access_token}`)
     if (userInfo.status !== 200) return res.send({ code: 500, error })
-    // 创建一个用户
-    const findUser = await User.findOne({ username: userInfo.data.name })
-    if (findUser) {
-      let token = createToken({ login: true, name: findUser.name, id: findUser.id })
-      return res.send({ code: 200, message: '登录成功', data: { token, userInfo: findUser } })
+    // 当前查询的第三方用户如果存在邮箱
+    const findEmailUser = await User.findOne({ email: userInfo.data.email })
+    // 提示邮箱已在当前系统中存在请使用邮箱登录
+    // ****
+    let thirdUser = null
+
+    thirdUser = await User.findOne({ username: userInfo.data.name })
+    if (!thirdUser) {
+      thirdUser = await User.create({
+        id: generateUUID(),
+        username: userInfo.data.name,
+        password: '123456',
+        avatar: userInfo.data.avatar_url,
+        status: 1,
+        createdTime: new Date(),
+        updatedTime: new Date(),
+      })
     }
-    const user = await User.create({
-      id: generateUUID(),
-      username: userInfo.data.name,
-      password: '123456',
-      avatar: userInfo.data.avatar_url,
-      status: 1,
-      createdTime: new Date(),
-      updatedTime: new Date(),
-      // email: userInfo.data.email
-    })
-    // 生成token
-    let token = createToken({ login: true, name: user.name, id: user.id })
-    res.send({ code: 200, message: '登录成功', data: { token, userInfo: user } })
+    let token = createToken({ login: true, name: thirdUser.username, id: thirdUser.id })
+    res.send({ code: 200, message: '登录成功', data: { token, userInfo: thirdUser } })
   } catch (error) {
     res.send({ code: 500, error })
   }
