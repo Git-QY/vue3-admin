@@ -40,15 +40,15 @@
 </template>
 
 <script lang="ts" setup>
-import api, { RegisterType } from '@/api/user.ts'
+import api, { ReqRegisterType } from '@/api/modules/user'
 import { FormRules, ElMessage } from 'element-plus'
 import { ref, reactive, inject, computed } from 'vue'
 import verifycodeField from './components/verifycode-field.vue'
 import { User,Lock,Message} from '@element-plus/icons-vue'
 // 注册form表单
-const registerform = ref<RegisterType>({ username: '', password: '', email: '', code: '' })
+const registerform = ref<ReqRegisterType>({ username: '', password: '', email: '', code: '' })
 // 注册表单验证
-const registerrules = reactive<FormRules<RegisterType>>({
+const registerrules = reactive<FormRules<ReqRegisterType>>({
   username: [{ required: true, max: 10, min: 4, message: '请输入4-10位用户名', trigger: 'blur ' }],
   password: [{ required: true, max: 10, min: 6, message: '请输入6-10位密码', trigger: 'blur' }],
   email: [{ required: true, type: 'email', message: '请输入邮箱', trigger: 'blur' }],

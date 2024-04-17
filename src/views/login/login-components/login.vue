@@ -24,14 +24,14 @@
 </template>
 
 <script setup lang="ts">
-import api, { LoginType } from '@/api/user.ts'
+import api, { ReqLoginType } from '@/api/modules/user'
 import router from '@/router';
 import { ElMessage } from 'element-plus';
 import { User,Lock } from '@element-plus/icons-vue'
 import { ref, reactive, onMounted, inject } from 'vue'
 import { useUserStore } from '@/store';
 const userStore = useUserStore()
-const form = ref<LoginType>({ username: '', password: '' })
+const form = ref<ReqLoginType>({ username: '', password: '' })
 const rules = reactive({
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
