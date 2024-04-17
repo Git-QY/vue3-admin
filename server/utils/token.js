@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-// 秘钥
 //生成token
 function createToken(playload, screat = '123456') {
   playload.ctime = Date.now()
@@ -19,12 +18,11 @@ function verifyToken(token, screat = '123456') {
     })
   })
 }
-
 // 定义全局校验 token 的中间件
 async function checkToken(req, res, next) {
   // 定义不需要 token 验证的接口路径
   const whiteList = [
-    '/users/login', 
+    '/users/login',
     '/users/code',
     '/users/register',
     '/users/checkCode',

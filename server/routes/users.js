@@ -3,6 +3,7 @@ var router = express.Router()
 const { User, userValidationRules, validationResult } = require('../mongodb/models/user')
 const { generateUUID, sendMail } = require('../utils/index')
 const { createToken, verifyToken } = require('../utils/token')
+const { encryptHash, hashWithSalt } = require('../utils/auth')
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: '可以访问用户的接口' })
@@ -41,7 +42,7 @@ router.post('/register', async function (req, res) {
   if (emailUser) return res.send({ code: 400, message: '该邮箱已注册' })
   // 判断邮箱验证码是否正确 失效时间1分钟
   if (check[email] === code) {
-    await User.create({ ...req.body, id: generateUUID() }) // 创建新用户
+    await User.create({ ...req.body, id: generateUUID(), password: hashWithSalt(password) }) // 创建新用户
     res.send({ code: 200, message: '注册成功' })
   } else {
     return res.send({ code: 400, message: '验证码错误' })
@@ -64,9 +65,10 @@ router.post('/checkCode', async function (req, res) {
 })
 // 用户登录
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body
+  let { username, password } = req.body
   if (!username || !password) return res.send({ code: 500, message: '用户名或密码不能为空' })
   try {
+    password = hashWithSalt(password)
     const user = await User.findOne({ username, password: password })
     if (!user) return res.send({ code: 403, message: '用户名或密码错误' })
     const { status, id } = user
@@ -85,7 +87,7 @@ router.post('/add', userValidationRules(true), async (req, res) => {
   }
   try {
     const { body } = req
-    await User.create({ ...body, id: generateUUID() }) // 创建新用户
+    await User.create({ ...body, id: generateUUID(), password: hashWithSalt(encryptHash('123456')) }) // 创建新用户
     res.send({ code: 200, message: '创建成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
@@ -186,7 +188,7 @@ router.post('/forget', async (req, res) => {
     // 校验token
     const result = await verifyToken(token, 'checkEmailCode')
     if (result.email !== email) return res.send({ code: 400, message: 'token标识错误' })
-    await User.updateOne({ id: user.id }, { ...req.body, updatedTime: Date.now(), password: newPassword })
+    await User.updateOne({ id: user.id }, { ...req.body, updatedTime: Date.now(), password: hashWithSalt(newPassword) })
     res.send({ code: 200, message: '密码修改成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
@@ -279,7 +281,7 @@ router.post('/login/third', async (req, res) => {
       thirdUser = await User.create({
         id: generateUUID(),
         username: userInfo.data.name,
-        password: '123456',
+        password: hashWithSalt(encryptHash('123456')),
         avatar: userInfo.data.avatar_url,
         status: 1,
         createdTime: new Date(),
