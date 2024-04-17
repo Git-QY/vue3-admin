@@ -5,6 +5,7 @@ import layout from '@/views/layout/index.vue'
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/home' },
   { path: '/login', name: 'Login', component: () => import('@/views/login/index.vue') },
+  { path: '/test', name: 'Test', component: () => import('@/views/test/index.vue') },
 
   {
     path:'/loginWithGitee',
