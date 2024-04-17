@@ -64,6 +64,7 @@ router.post('/checkCode', async function (req, res) {
 })
 // 用户登录
 router.post('/login', async (req, res) => {
+  console.log("登录")
   const { username, password } = req.body
   if (!username || !password) return res.send({ code: 500, message: '用户名或密码不能为空' })
   try {

@@ -9,4 +9,14 @@ export default defineConfig({
       "@": path.resolve("./src"), // @代替src
     },
   },
+  server:{
+    proxy:{
+      '/test':{
+        target:'http://localhost:3000',
+        changeOrigin:true,
+        ws:false,
+        rewrite:(path) => path.replace('/test','')
+      }
+    }
+  }
 });

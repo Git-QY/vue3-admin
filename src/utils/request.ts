@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 const instance: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/', // 基础 URL
+  baseURL: '/test/', // 基础 URL
   timeout: 50000, // 请求超时时间
 })
 // 请求拦截器
