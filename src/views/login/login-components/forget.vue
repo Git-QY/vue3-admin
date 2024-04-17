@@ -36,15 +36,15 @@
 </template>
 
 <script setup lang="ts">
-import api ,{ForgetType} from '@/api/user.ts'
+import api ,{ReqForgetType} from '@/api/modules/user'
 import { ref, reactive, inject, computed } from 'vue'
 import verifycodeField from './components/verifycode-field.vue'
 import { ElMessage, FormRules } from 'element-plus';
 import CryptoJS from 'crypto-js'
 // 忘记密码form表单
-const forgetform = ref<ForgetType>({ email: '', code: '', newPassword: '', nextPassword:''})
+const forgetform = ref<ReqForgetType>({ email: '', code: '', newPassword: '', nextPassword:''})
 // 表单验证
-const forgetrules = reactive<FormRules<ForgetType>>({
+const forgetrules = reactive<FormRules<ReqForgetType>>({
   email: [{ required: true, type: 'email', message: '请输入正确格式的邮箱', trigger: ['change','blur'] }],
   code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
   newPassword: [{ required: true, max: 10, min: 6, message: '请输入6-10位密码', trigger: 'blur' }],
