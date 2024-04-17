@@ -3,11 +3,9 @@ var express = require('express') // 引入Express框架
 var path = require('path') // 引入路径处理模块
 var cookieParser = require('cookie-parser') // 引入处理Cookie的模块
 var logger = require('morgan') // 引入日志记录模块
+var { checkToken } = require('./utils/token')
 
-require('./mongodb')
-
-var indexRouter = require('./routes/index') // 引入主页路由模块
-var usersRouter = require('./routes/users') // 引入用户路由模块
+require('./mongodb') // 链接mongodb
 
 var app = express() // 创建Express应用程序实例
 
@@ -31,23 +29,24 @@ app.all('*', function (req, res, next) {
   next()
 })
 
-app.use('/', indexRouter) // 使用主页路由中间件
-app.use('/users', usersRouter) // 使用用户路由中间件
+app.use(checkToken) // 验证token
+
+require('./utils/route')(app) // 自动注册路由
 
 // 捕获404错误并转发到错误处理程序
-// app.use(function (req, res, next) {
-//   next(createError(404))
-// })
+app.use(function (req, res, next) {
+  next(createError(404))
+})
 
 // 错误处理程序
-// app.use(function (err, req, res, next) {
-//   // 设置本地变量，仅在开发环境中提供错误信息
-//   res.locals.message = err.message
-//   res.locals.error = req.app.get('env') === 'development' ? err : {}
+app.use(function (err, req, res, next) {
+  // 设置本地变量，仅在开发环境中提供错误信息
+  res.locals.message = err.message
+  res.locals.error = req.app.get('env') === 'development' ? err : {}
 
-//   // 渲染错误页面
-//   res.status(err.status || 500)
-//   res.render('error')
-// })
+  // 渲染错误页面
+  res.status(err.status || 500)
+  res.render('error')
+})
 
 module.exports = app // 导出Express应用程序实例

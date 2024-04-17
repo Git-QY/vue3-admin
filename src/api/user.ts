@@ -72,5 +72,14 @@ export default {
       method:'post',
       data
     })
+  },
+
+  // 第三方登录接口
+  thirdLogin(data: { type: string; code: string }): Promise<response> {
+    return request({
+      url: '/users/login/third',
+      method: 'post',
+      data,
+    })
   }
 }

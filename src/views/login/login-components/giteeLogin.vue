@@ -3,8 +3,6 @@
 
 <template>
   <div>
-    首页
-    <svg-icon iconName="icon-yisuoping" />
   </div>
 </template>
 
