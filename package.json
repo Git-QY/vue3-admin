@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@types/crypto-js": "^4.2.2",
     "axios": "^1.6.8",
+    "crypto-js": "^4.2.0",
     "element-plus": "^2.6.3",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",

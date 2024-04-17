@@ -45,6 +45,7 @@ import { FormRules, ElMessage } from 'element-plus'
 import { ref, reactive, inject, computed } from 'vue'
 import verifycodeField from './components/verifycode-field.vue'
 import { User,Lock,Message} from '@element-plus/icons-vue'
+import CryptoJS from 'crypto-js'
 // 注册form表单
 const registerform = ref<RegisterType>({ username: '', password: '', email: '', code: '' })
 // 注册表单验证
@@ -75,7 +76,8 @@ const submitForm = async () => {
   if (!res) return
   loading.value = true
   try {
-    const res = await api.register(registerform.value)
+    const password = CryptoJS.SHA256(registerform.value.password).toString()
+    const res = await api.register({username: registerform.value.username, password: password, email: registerform.value.email, code: registerform.value.code})
     if (res.code === 200) {
       registerConfig.setPane('login')
       ElMessage.success('注册成功，快去登录吧')

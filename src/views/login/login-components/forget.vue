@@ -40,7 +40,7 @@ import api ,{ForgetType} from '@/api/user.ts'
 import { ref, reactive, inject, computed } from 'vue'
 import verifycodeField from './components/verifycode-field.vue'
 import { ElMessage, FormRules } from 'element-plus';
-
+import CryptoJS from 'crypto-js'
 // 忘记密码form表单
 const forgetform = ref<ForgetType>({ email: '', code: '', newPassword: '', nextPassword:''})
 // 表单验证
@@ -111,7 +111,9 @@ const modifyPassword = async ()=>{
   }
   try{
     loading.value = true
-    const res  = await api.forget({ email: forgetform.value.email, token: token.value, newPassword: forgetform.value.newPassword,nextPassword: forgetform.value.nextPassword})
+    const newPassword = CryptoJS.SHA256(forgetform.value.newPassword).toString()
+    const nextPassword = CryptoJS.SHA256(forgetform.value.nextPassword).toString()
+    const res  = await api.forget({ email: forgetform.value.email, token: token.value, newPassword: newPassword,nextPassword: nextPassword})
     if(res.code === 200){
       ElMessage.success('密码修改成功，快去登录吧')
       loading.value = false

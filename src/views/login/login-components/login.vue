@@ -30,6 +30,7 @@ import { ElMessage } from 'element-plus';
 import { User,Lock } from '@element-plus/icons-vue'
 import { ref, reactive, onMounted, inject } from 'vue'
 import { useUserStore } from '@/store';
+import CryptoJS from 'crypto-js'
 const userStore = useUserStore()
 const form = ref<LoginType>({ username: '', password: '' })
 const rules = reactive({
@@ -46,7 +47,8 @@ const submitForm = async () => {
   if (!res) return
   loading.value = true
   try {
-    const res = await api.login(form.value)
+    const password = CryptoJS.SHA256(form.value.password).toString()
+    const res = await api.login({username: form.value.username, password: password})
     if(res.code === 200){
       ElMessage.success('登录成功')
       userStore.token = res.data.token
