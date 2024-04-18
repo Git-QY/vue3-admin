@@ -25,6 +25,7 @@ const userInfo = userStore.userInfo
 
 const handleLogout = () => {
   router.push('/login')
+  userStore.reset()
 }
 </script>
 
