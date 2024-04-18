@@ -10,6 +10,7 @@ import pinia from '@/store' // 注册Pinia
 import ElementPlus from 'element-plus' // ElementPlus
 import * as ElementPlusIconsVue from '@element-plus/icons-vue' // ElementPlus图标
 import 'element-plus/dist/index.css' // ElementPlus样式
+import './permission'
 
 // 注册公共组件
 import SvgIcon from '@/components/Icon/svgIcon.vue' // svg图标组件
