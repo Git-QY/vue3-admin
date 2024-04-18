@@ -1,9 +1,76 @@
 <template>
-  <div class="layout-aside">侧边栏通用组件</div>
+  <Logo />
+  <el-menu active-text-color="#ffd04b" :collapse="isCollapse" background-color="#304156" class="el-menu-vertical-demo" :default-active="activePath" text-color="#fff" :router="true">
+    <template v-for="(item, index) in menuItems">
+      <template v-if="item.children">
+        <SubMenu :item="item" :key="index" />
+      </template>
+      <template v-else>
+        <MenuItem :item="item" :key="index" />
+      </template>
+    </template>
+  </el-menu>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-</script>
+<script setup lang="ts">
+import SubMenu from './SubMenu.vue'
+import MenuItem from './MenuItem.vue'
+import Logo from '../logo/index.vue'
+import { computed, ref } from 'vue'
+import { useStoreApp } from '@/store'
+import { useRouter } from 'vue-router'
 
-<style lang="scss" scoped></style>
+const store = useStoreApp()
+const router = useRouter()
+
+const activePath = computed(() => {
+  return router.currentRoute.value.path
+})
+
+const isCollapse = computed(() => {
+  return store.isCollapse
+})
+
+const menuItems = ref([
+  {
+    name: '首页',
+    path: '/home',
+    hidden: false,
+    icon: 'HomeFilled',
+  },
+  {
+    name: '系统管理',
+    path: 'system',
+    hidden: false,
+    icon: 'Tools',
+    children: [
+      {
+        name: '用户管理',
+        path: '/user',
+        hidden: false,
+      },
+      {
+        name: '角色管理',
+        path: '/roles',
+        hidden: false,
+      },
+    ],
+  },
+])
+</script>
+<style lang="scss" scoped>
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  height: 100%;
+}
+.el-menu {
+  border-right: none;
+}
+.el-menu-item.is-active {
+  background-color: #001528 !important;
+  color: #409eff;
+  span {
+    color: #fff !important;
+  }
+}
+</style>

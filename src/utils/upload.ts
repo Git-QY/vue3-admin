@@ -1,4 +1,5 @@
-import sparkMD5 from 'spark-md5'
+import SparkMD5 from 'spark-md5';
+
 const chunkSize: number = 1 * 1024 * 1024
 
 /**
@@ -30,7 +31,7 @@ export function calculationChunksMd5(chunks: Blob[]): Promise<string> {
     // 创建FileReader对文件进行读取
     const reader = new FileReader()
     // 创建sparkMd5的ArrayBuffer对象，进行增量计算md5值
-    const spark = new sparkMD5.ArrayBuffer()
+    const spark = new SparkMD5.ArrayBuffer()
     let readIndex = 0
 
     function loadNext() {
