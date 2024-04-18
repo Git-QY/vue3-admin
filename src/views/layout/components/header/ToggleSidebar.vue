@@ -1,18 +1,13 @@
 <template>
   <el-icon>
-    <component :is="store.isCollapse ? 'Expand' : 'Fold'" @click="handleCollapse" />
+    <component :is="globalStore.isCollapse ? 'Expand' : 'Fold'" @click="handleCollapse" />
   </el-icon>
 </template>
 
 <script setup lang="ts">
-import { useStoreApp } from '@/store'
-
-const store = useStoreApp()
-
-const handleCollapse = () => {
-  store.isCollapse = !store.isCollapse
-  
-}
+import { useGlobalStore } from '@/store'
+const globalStore = useGlobalStore()
+const handleCollapse = () => globalStore.changeCollapse()
 </script>
 
 <style scoped></style>

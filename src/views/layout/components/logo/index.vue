@@ -8,10 +8,10 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStoreApp } from '@/store'
+import { useGlobalStore } from '@/store'
 const router = useRouter()
-const store = useStoreApp()
-const isCollapse = computed(() => store.isCollapse)
+const globalStore = useGlobalStore()
+const isCollapse = computed(() => globalStore.isCollapse)
 const goHome = () => {
   router.push('/')
 }
