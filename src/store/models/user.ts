@@ -18,6 +18,10 @@ export const useUserStore = defineStore('user', {
     setUserState(...args: any) {
       this.$patch({ [args[0]]: args[1] })
     },
+    reset() {
+      this.token = ''
+      this.userInfo = {}
+    },
   },
   persist: true,
 })
