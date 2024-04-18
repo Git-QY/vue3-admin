@@ -8,6 +8,7 @@
       <template v-else>
         <MenuItem :item="item" :key="index" />
       </template>
+      <!-- <aside-item :item="item"></aside-item> -->
     </template>
   </el-menu>
 </template>
@@ -15,12 +16,14 @@
 <script setup lang="ts">
 import SubMenu from './SubMenu.vue'
 import MenuItem from './MenuItem.vue'
+// import asideItem from './aside-item.vue'
+
 import Logo from '../logo/index.vue'
 import { computed, ref } from 'vue'
-import { useStoreApp } from '@/store'
+import { useGlobalStore } from '@/store'
 import { useRouter } from 'vue-router'
 
-const store = useStoreApp()
+const globalStore = useGlobalStore()
 const router = useRouter()
 
 const activePath = computed(() => {
@@ -28,7 +31,7 @@ const activePath = computed(() => {
 })
 
 const isCollapse = computed(() => {
-  return store.isCollapse
+  return globalStore.isCollapse
 })
 
 const menuItems = ref([
