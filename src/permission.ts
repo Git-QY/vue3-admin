@@ -5,7 +5,7 @@ import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store'
 // 路由守卫
 
-const whiteList = ['/login', '/loginWithGitee']
+const whiteList = ['/login']
 router.beforeEach((to, from, next) => {
   nProgress.start()
   if (useUserStore().token) {
