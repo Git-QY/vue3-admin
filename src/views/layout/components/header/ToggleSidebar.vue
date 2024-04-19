@@ -1,6 +1,6 @@
 <template>
-  <el-icon>
-    <component :is="globalStore.isCollapse ? 'Expand' : 'Fold'" @click="handleCollapse" />
+  <el-icon @click="handleCollapse">
+    <component :is="globalStore.isCollapse ? 'Expand' : 'Fold'" />
   </el-icon>
 </template>
 

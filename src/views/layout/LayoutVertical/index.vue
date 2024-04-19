@@ -4,8 +4,8 @@
     <el-container>
       <el-aside width="200px"><Aside /></el-aside>
       <el-container>
-        <el-header> <Header /></el-header>
-        <el-main><NavTab /> <Main /></el-main>
+        <el-header> <Header /><NavTab /> </el-header>
+        <el-main><Main /></el-main>
       </el-container>
     </el-container>
   </div>
@@ -37,8 +37,9 @@ import NavTab from '../components/navTab/index.vue'
 
 .el-header {
   background-color: #fff;
-  height: 48px;
+  height: 80px;
   line-height: 48px;
+  padding: 0;
 }
 
 .el-main {
