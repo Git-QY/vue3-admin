@@ -9,7 +9,7 @@ const schemaRules = {
   menuType: { type: String, required: true }, // 菜单类型 0目录 1菜单 2按钮
   icon: { type: String, required: false }, // 菜单图标
   path: { type: String, required: false }, // 路由路径
-  filePath: { type: String, required: false }, // 文件路径
+  component: { type: String, required: false }, // 页面路径
   sort: { type: Number, default: true }, // 排序
   perms: { type: String, default: true }, // 权限标识
   createdTime: { type: Date, default: Date.now }, // 创建时间，默认为当前时间

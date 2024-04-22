@@ -49,12 +49,17 @@ const menuItems = ref([
     children: [
       {
         name: '用户管理',
-        path: '/user',
+        path: '/system/user',
         hidden: false,
       },
       {
         name: '角色管理',
-        path: '/roles',
+        path: '/system/role',
+        hidden: false,
+      },
+      {
+        name: '菜单管理',
+        path: '/system/menu',
         hidden: false,
       },
     ],
