@@ -7,16 +7,30 @@
     :rules="forgetrules"
     >
       <el-form-item label="邮箱" prop="email">
-        <el-input v-model="forgetform.email" placeholder="请输入邮箱"> </el-input>
+        <el-input v-model="forgetform.email" placeholder="请输入邮箱" :suffix-icon="Message"> </el-input>
       </el-form-item>
       <!-- 获取邮箱code 点击发送 -->
       <verifycode-field v-model="forgetform.code" :disabled="verifycodeDisabled" :send="getEmailCode"></verifycode-field>
       <div v-if="isverified">
         <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model.trim="forgetform.newPassword" placeholder="请输入密码" autocomplete="new-password" show-password> </el-input>
+          <el-input 
+          type="password" 
+          v-model.trim="forgetform.newPassword" 
+          placeholder="请输入密码" 
+          autocomplete="new-password" 
+          show-password 
+          :suffix-icon="Lock"
+          > </el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="password">
-          <el-input type="password" v-model.trim="forgetform.nextPassword" placeholder="确认密码" autocomplete="new-password" show-password> </el-input>
+          <el-input 
+          type="password" 
+          v-model.trim="forgetform.nextPassword" 
+          placeholder="确认密码" 
+          autocomplete="new-password" 
+          show-password 
+          :suffix-icon="Lock"
+          > </el-input>
         </el-form-item>
       </div>
       <el-form-item>
@@ -39,7 +53,8 @@
 import api ,{ForgetType} from '@/api/user.ts'
 import { ref, reactive, inject, computed } from 'vue'
 import verifycodeField from './components/verifycode-field.vue'
-import { ElMessage, FormRules } from 'element-plus';
+import { ElMessage, FormRules } from 'element-plus'
+import { Lock,Message} from '@element-plus/icons-vue'
 import CryptoJS from 'crypto-js'
 // 忘记密码form表单
 const forgetform = ref<ForgetType>({ email: '', code: '', newPassword: '', nextPassword:''})
