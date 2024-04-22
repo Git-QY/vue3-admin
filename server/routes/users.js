@@ -81,9 +81,9 @@ router.post('/login', async (req, res) => {
 })
 // 新增用户
 router.post('/add', userValidationRules(true), async (req, res) => {
-  const error = validationResult(req)
-  if (!error.isEmpty()) {
-    return res.send({ code: 500, message: error.array().map(item => item.msg) })
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   }
   try {
     const { body } = req
@@ -111,7 +111,7 @@ router.delete('/delete', async (req, res) => {
 router.put('/update', userValidationRules(false), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.send({ code: 500, message: error.array().map(item => item.msg) })
+    return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   }
   try {
     const { id } = req.body

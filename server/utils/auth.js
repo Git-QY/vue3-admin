@@ -95,9 +95,19 @@ function hashWithSalt(text) {
  */
 // 目前使用2次不可逆加密
 
+// 验证函数
+const validate = (req, res, next) => {
+  const errors = validationResult(req)
+  if (errors.isEmpty()) {
+    return next()
+  }
+  return res.send({ code: 500, message: errors.array().map(item => item.msg) })
+}
+
 module.exports = {
   encrypt,
   decrypt,
   encryptHash,
   hashWithSalt,
+  validate,
 }

@@ -35,12 +35,24 @@ router.post('/list', async (req, res) => {
 router.put('/update', roleValidationRules(), async (req, res) => {
   const { body } = req
   try {
-    await Role.updateOne({ id: body.id }, { ...body })
+    await Role.updateOne({ id: body.id }, { ...body, updatedTime: Date.now() })
     res.send({ code: 200, message: '更新成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
   }
 })
+// 跟新角色状态
+router.put('/update/status', async (req, res) => {
+  const { status, id } = req.body
+  if (!status || !id) return res.send({ code: 500, message: '缺少参数' })
+  try {
+    await Role.updateOne({ id }, { status, updatedTime: Date.now() })
+    res.send({ code: 200, message: '更新成功' })
+  } catch (error) {
+    res.send({ code: 500, message: error })
+  }
+})
+// 是否可以实现单独更新某一个字段的接口
 // 删除角色
 router.delete('/delete', async (req, res) => {
   const { id } = req.body

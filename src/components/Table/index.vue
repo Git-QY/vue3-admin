@@ -1,67 +1,85 @@
 <template>
-  <div class="table-wrapper">
+  <div class="page">
     <!-- 基础page配置 搜索表格分页 -->
     <!-- 搜索模块 -->
-    <Search @search="$emit('search', $event)"></Search>
+
     <!-- 表格模块 -->
-    <Table 
-    :tableHeader="tableHeader" 
-    :tableData="tableData"
-    @edit="$emit('edit', $event)"
-    @delete="$emit('delete', $event)">
-    ></Table>
+    <div class="page-table">
+      <el-table :data="props.data ?? tableData" :border="true" v-bind="props.table">
+        <template v-for="item in tableColumns">
+          <slot v-if="item.type == 'slot'" :name="item.prop" :item="item"></slot>
+          <el-table-column v-else v-bind="item"></el-table-column>
+        </template>
+        <template #empty>
+          <slot name="empty"><div>暂无数据</div></slot>
+        </template>
+      </el-table>
+    </div>
     <!-- 分页模块 -->
-    <Pagination
-      :background="background" 
-      :small="small"
-      :layout="layout" 
-      :total="total"
-      :page-count="pageCount" 
-      :page-sizes="pageSizes" 
-      :page-size="pageSize"
-      :current-page="currentPage" 
-      @size-change="$emit('size-change', $event)"
-      @current-change="$emit('current-change', $event)"
-      @prev-click="$emit('prev-click', $event)"
-      @next-click="$emit('next-click', $event)"
-      @update:page-size="$emit('update:page-size', $event)"
-    >
-    </Pagination>
+    <div class="page-pagination">
+      <div class="page-pagination-ri"></div>
+      <div class="page-pagination-lf">
+        <pagination :page="props.page" @set-page="setPage" @set-pageSize="setPageSize"></pagination>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import Pagination from './components/pagination.vue'
-import Search from './components/search.vue'
-import Table from './components/table.vue'
-import { TableHeaderItem } from './type';
-defineProps({
-  // 表格表头
-  tableHeader:{type:Array<TableHeaderItem>},
-  // 表格数据
-  tableData:{type:Array},
-  // 是否为分页按钮添加背景色
-  background: {type: Boolean},
-  // 是否使用小型分页样式
-  small: {type: Boolean},
-  // 组件布局
-  layout: {type: String},
-  // 数据总条数
-  total: {type: Number},
-  // 页数超过多少就自动隐藏
-  pageCount: {type: Number},
-  // 分页选择每页多少数据
-  pageSizes: {type: Array<number>},
-  // 每页显示条数
-  pageSize: {type: Number},
-  // 当前页码
-  currentPage: {type: Number},
-})
+import { ref, computed, onMounted, reactive } from 'vue'
+import pagination from './components/pagination.vue'
+import { tableProps, columnsProps } from './type'
+import { defaultConfig, deepMerge } from './config'
 
+const prop = defineProps({
+  data: { type: Array },
+  table: { type: Object },
+  searchForm: { type: Object },
+  api: { type: Function },
+  columns: { type: Array },
+  page: { type: Object },
+}) as tableProps
+const props = reactive(deepMerge(defaultConfig, prop))
+
+// 表格
+const tableColumns = computed(() => props.columns.filter((item: columnsProps) => !item.hide))
+const tableData = ref([])
+const loading = ref(false)
+const getList = async () => {
+  if (!props.api) return
+  loading.value = true
+  const params = { page: props.page, ...props.searchForm }
+  try {
+    const res = await props.api(params)
+    console.log(res)
+
+    tableData.value = res.data
+    props.page.total = res.page.total
+  } catch (error) {
+  } finally {
+    loading.value = false
+  }
+}
+// 分页
+const setPage = (page: number) => {
+  props.page.page = page
+  getList()
+}
+const setPageSize = (pageSize: number) => {
+  props.page.pageSize = pageSize
+  getList()
+}
+onMounted(getList)
 </script>
 
 <style lang="scss" scoped>
-.table-wrapper{
-  width: 100%;
+.page {
+  &-table {
+    margin: 20px 0;
+  }
+  &-pagination {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 </style>
