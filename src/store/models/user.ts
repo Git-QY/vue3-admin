@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
+import { useGlobalStore } from './global'
 
 interface UserState {
   token: string
   userInfo: any
 }
-
 export const useUserStore = defineStore('user', {
   state: (): UserState => {
     return {
@@ -19,8 +19,10 @@ export const useUserStore = defineStore('user', {
       this.$patch({ [args[0]]: args[1] })
     },
     reset() {
+      const globalStore = useGlobalStore()
       this.token = ''
       this.userInfo = {}
+      globalStore.tabList = []
     },
   },
   persist: true,

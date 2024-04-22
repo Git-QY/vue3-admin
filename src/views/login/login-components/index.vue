@@ -41,6 +41,7 @@ onMounted(async ()=>{
         loading.value = false
         ElMessage.success('登录成功')
         userStore.token = data.data.token
+        userStore.userInfo = data.data.userInfo
         router.push('/')
       }
     } catch(err:any){

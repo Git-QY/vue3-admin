@@ -4,13 +4,16 @@ type LayoutType = 'vertical' | 'columns' | 'classic' | 'horizontal' | string
 interface globalState {
   layout: LayoutType
   isCollapse: Boolean
+  tabList: Array<any>
+  activePath: string
 }
-
 export const useGlobalStore = defineStore('global', {
   state: (): globalState => {
     return {
       layout: 'vertical', // 布局方式
       isCollapse: false,
+      tabList: [],
+      activePath: '/home',
     }
   },
   getters: {},
@@ -21,6 +24,12 @@ export const useGlobalStore = defineStore('global', {
     },
     changeCollapse() {
       this.isCollapse = !this.isCollapse
+    },
+    addTab(state: any, tab: any) {
+      const isSome = state.some((item: any) => item.path === tab.path)
+      if (!isSome) {
+        this.tabList.push(tab)
+      }
     },
   },
   persist: true,

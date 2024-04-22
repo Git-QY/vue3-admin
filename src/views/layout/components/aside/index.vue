@@ -1,6 +1,15 @@
 <template>
   <Logo />
-  <el-menu active-text-color="#ffd04b" :collapse="isCollapse" background-color="#304156" class="el-menu-vertical-demo" :default-active="activePath" text-color="#fff" :router="true">
+  <el-menu
+    active-text-color="#ffd04b"
+    @select="setActivePath"
+    :collapse="isCollapse"
+    background-color="#304156"
+    class="el-menu-vertical-demo"
+    :default-active="activePath"
+    text-color="#fff"
+    :router="true"
+  >
     <template v-for="(item, index) in menuItems">
       <template v-if="item.children">
         <SubMenu :item="item" :key="index" />
@@ -29,6 +38,9 @@ const router = useRouter()
 const activePath = computed(() => {
   return router.currentRoute.value.path
 })
+const setActivePath = (path: string) => {
+  globalStore.activePath = path
+}
 
 const isCollapse = computed(() => {
   return globalStore.isCollapse
@@ -49,12 +61,17 @@ const menuItems = ref([
     children: [
       {
         name: '用户管理',
-        path: '/user',
+        path: '/system/user',
         hidden: false,
       },
       {
         name: '角色管理',
-        path: '/roles',
+        path: '/system/role',
+        hidden: false,
+      },
+      {
+        name: '菜单管理',
+        path: '/system/menu',
         hidden: false,
       },
     ],

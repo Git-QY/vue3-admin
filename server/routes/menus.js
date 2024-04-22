@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { generateUUID } = require('../utils/index')
 const { Menu, menuValidationRules } = require('../mongodb/models/menu')
+
 // 新增菜单
 router.post('/add', menuValidationRules(), async (req, res, next) => {
   const { body } = req
@@ -59,4 +60,5 @@ router.get('/detail', async (req, res, next) => {
     res.send({ code: 500, message: error })
   }
 })
+
 module.exports = router

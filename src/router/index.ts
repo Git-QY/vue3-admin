@@ -2,7 +2,6 @@ import { RouteRecordRaw, Router, createRouter, createWebHistory, createWebHashHi
 import layout from '@/views/layout/index.vue'
 import 'nprogress/nprogress.css'
 const routes: RouteRecordRaw[] = [
-
   {
     path: '/login',
     name: 'Login',
@@ -29,25 +28,25 @@ const routes: RouteRecordRaw[] = [
     path: '/system',
     name: 'system',
     component: layout,
-    meta: {
-      title: '系统管理',
-    },
+    meta: { title: '系统管理' },
     children: [
       {
-        path: '/user',
+        path: 'user',
         name: 'user',
-        component: () => import('@/views/system/users/index.vue'),
-        meta: {
-          title: '用户管理',
-        },
+        component: () => import('@/views/system/user/index.vue'),
+        meta: { title: '用户管理' },
       },
       {
-        path: '/roles',
-        name: 'roles',
-        component: () => import('@/views/system/roles/index.vue'),
-        meta: {
-          title: '角色管理',
-        },
+        path: 'role',
+        name: 'role',
+        component: () => import('@/views/system/role/index.vue'),
+        meta: { title: '角色管理' },
+      },
+      {
+        path: 'menu',
+        name: 'menu',
+        component: () => import('@/views/system/menu/index.vue'),
+        meta: { title: '菜单管理' },
       },
     ],
   },
