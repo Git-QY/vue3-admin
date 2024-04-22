@@ -22,4 +22,4 @@ const roleValidationRules = () => [
   body('status').optional().isString().withMessage('状态必须为字符串').bail().isIn(['0', '1']).withMessage('状态值错误'),
 ]
 
-module.exports = { Menu, schemaRules, roleValidationRules }
+module.exports = { Role, schemaRules, roleValidationRules }
