@@ -34,6 +34,7 @@ const handleLogout = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid #e0e4ef;
   .navigation {
     display: flex;
     align-items: center;
@@ -53,7 +54,11 @@ i {
   font-size: 19px;
   cursor: pointer;
 }
-::v-deep .user-name {
+:deep(.user-name) {
   cursor: pointer;
+  margin-right: 20px;
+  &:hover {
+    background-color: #f5f5f5;
+  }
 }
 </style>
