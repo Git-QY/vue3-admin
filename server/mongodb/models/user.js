@@ -13,6 +13,8 @@ const schemaRules = {
   password: { type: String, required: true }, // 密码，必需
   createdTime: { type: Date, default: Date.now }, // 创建时间
   updatedTime: { type: Date, default: Date.now }, // 最后更新时间
+  // 用户备注
+  remark: { type: String, default: '' },
   // 邮箱
   email: { type: String },
   // 状态

@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ username, password: password })
     if (!user) return res.send({ code: 403, message: '用户名或密码错误' })
     const { status, id } = user
-    if (status === 0) return res.send({ code: 403, message: '该用户已被禁用' })
+    if (status == 0) return res.send({ code: 403, message: '该用户已被禁用' })
     let token = createToken({ login: true, name: username, id })
     res.send({ code: 200, message: '登录成功', data: { token, userInfo: user } })
   } catch (error) {

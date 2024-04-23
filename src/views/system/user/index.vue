@@ -1,22 +1,24 @@
 <template>
   <div>
-    <page-table v-bind="tableConfig" ref="tableRef">
-      <template #btnleft>
-        <el-button type="primary" @click="onAdd">新增</el-button>
-      </template>
-      <template #query-createdTime="{ item }">具名插槽</template>
-      <template #operate="{ item }">
-        <el-table-column v-slot="{ row }" v-bind="item">
-          <el-button type="primary" link @click="onEdit(row)">编辑</el-button>
-          <el-button type="danger" link @click="onDelete(row.id)">删除</el-button>
-        </el-table-column>
-      </template>
-      <template #status="{ item }">
-        <el-table-column v-slot="{ row }" v-bind="item">
-          <el-switch v-model="row.status" active-text="启用" inactive-text="停用" active-value="1" inactive-value="0" :inline-prompt="true" @click="onChangeStatus(row)"> </el-switch>
-        </el-table-column>
-      </template>
-    </page-table>
+    <Page main="/system/user">
+      <page-table v-bind="tableConfig" ref="tableRef">
+        <template #btnleft>
+          <el-button type="primary" @click="onAdd">新增</el-button>
+        </template>
+        <template #query-createdTime="{ item }">具名插槽</template>
+        <template #operate="{ item }">
+          <el-table-column v-slot="{ row }" v-bind="item">
+            <el-button type="primary" link @click="onEdit(row)">编辑</el-button>
+            <el-button type="danger" link @click="onDelete(row.id)">删除</el-button>
+          </el-table-column>
+        </template>
+        <template #status="{ item }">
+          <el-table-column v-slot="{ row }" v-bind="item">
+            <el-switch v-model="row.status" active-text="启用" inactive-text="停用" active-value="1" inactive-value="0" :inline-prompt="true" @click="onChangeStatus(row)"> </el-switch>
+          </el-table-column>
+        </template>
+      </page-table>
+    </Page>
   </div>
 </template>
 
@@ -26,6 +28,9 @@ import pageTable from '@/components/Table/index.vue'
 import request from '@/utils/request'
 import api, { User } from '@/api/user'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const tableConfig = reactive({
   table: { rowKey: 'id' },
@@ -63,8 +68,9 @@ const tableConfig = reactive({
   ],
 })
 const tableRef = ref(null as any)
+
 const onAdd = () => {
-  console.log('add')
+  router.push('/system/user/add')
 }
 const onEdit = (row: User) => {
   console.log(row)
