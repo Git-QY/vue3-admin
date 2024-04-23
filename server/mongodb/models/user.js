@@ -16,7 +16,7 @@ const schemaRules = {
   // 邮箱
   email: { type: String },
   // 状态
-  status: { type: Number, default: 1 }, // 1: 正常，0: 禁用
+  status: { type: String, default: '1' }, // 1: 正常，0: 禁用
   // 头像
   avatar: { type: String, default: '' },
   // 性别

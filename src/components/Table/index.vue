@@ -2,10 +2,20 @@
   <div class="page">
     <!-- 基础page配置 搜索表格分页 -->
     <!-- 搜索模块 -->
-
+    <search :columns="props.columns" v-model="props.searchForm" :maxShow="3" @on-search="handleSearch">
+      <!-- 获取全部插槽映射 -->
+      <template v-for="(_, slot) in $slots" v-slot:[slot]="{ item }">
+        <slot :name="slot" :item="item"></slot>
+      </template>
+    </search>
+    <!-- 按钮模块 -->
+    <div clss="page-btn">
+      <div class="page-btn--lf"><slot name="btnleft" /></div>
+      <div class="page-btn--ri"><slot name="btnRight" /></div>
+    </div>
     <!-- 表格模块 -->
     <div class="page-table">
-      <el-table :data="props.data ?? tableData" :border="true" v-bind="props.table">
+      <el-table :data="props.data ?? tableData" :border="true" v-bind="props.table" v-loading="loading">
         <template v-for="item in tableColumns">
           <slot v-if="item.type == 'slot'" :name="item.prop" :item="item"></slot>
           <el-table-column v-else v-bind="item"></el-table-column>
@@ -17,8 +27,8 @@
     </div>
     <!-- 分页模块 -->
     <div class="page-pagination">
-      <div class="page-pagination-ri"></div>
-      <div class="page-pagination-lf">
+      <div class="page-pagination--lf"></div>
+      <div class="page-pagination--ri">
         <pagination :page="props.page" @set-page="setPage" @set-pageSize="setPageSize"></pagination>
       </div>
     </div>
@@ -27,6 +37,7 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, reactive } from 'vue'
+import search from './components/search.vue'
 import pagination from './components/pagination.vue'
 import { tableProps, columnsProps } from './type'
 import { defaultConfig, deepMerge } from './config'
@@ -40,6 +51,11 @@ const prop = defineProps({
   page: { type: Object },
 }) as tableProps
 const props = reactive(deepMerge(defaultConfig, prop))
+// 搜索
+const handleSearch = () => {
+  props.page.page = 1
+  getList()
+}
 
 // 表格
 const tableColumns = computed(() => props.columns.filter((item: columnsProps) => !item.hide))
@@ -70,6 +86,12 @@ const setPageSize = (pageSize: number) => {
   getList()
 }
 onMounted(getList)
+// 暴露方法
+const refresh = () => {
+  getList()
+}
+
+defineExpose({ refresh })
 </script>
 
 <style lang="scss" scoped>
@@ -77,6 +99,7 @@ onMounted(getList)
   &-table {
     margin: 20px 0;
   }
+  &-btn,
   &-pagination {
     display: flex;
     justify-content: space-between;

@@ -1,10 +1,14 @@
 <template>
   <div>
-    <page-table v-bind="tableConfig">
+    <page-table v-bind="tableConfig" ref="tableRef">
+      <template #btnleft>
+        <el-button type="primary" @click="onAdd">新增</el-button>
+      </template>
+      <template #query-createdTime="{ item }">具名插槽</template>
       <template #operate="{ item }">
         <el-table-column v-slot="{ row }" v-bind="item">
           <el-button type="primary" link @click="onEdit(row)">编辑</el-button>
-          <el-button type="danger" link @click="onDelete({ id: row.id })">删除</el-button>
+          <el-button type="danger" link @click="onDelete(row.id)">删除</el-button>
         </el-table-column>
       </template>
       <template #status="{ item }">
@@ -21,6 +25,7 @@ import { reactive, ref } from 'vue'
 import pageTable from '@/components/Table/index.vue'
 import request from '@/utils/request'
 import api, { User } from '@/api/user'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const tableConfig = reactive({
   table: { rowKey: 'id' },
@@ -30,32 +35,62 @@ const tableConfig = reactive({
     return request.post('/users/list', { ...data, xx: 123 })
   },
   page: {
-    pageSize: 1,
+    pageSize: 2,
     pageSizes: [1, 2, 3, 4, 5],
   },
   columns: [
     { type: 'selection', fixed: 'left', 'reserve-selection': true, width: 40 },
     { prop: 'id', label: 'ID', 'show-overflow-tooltip': true },
-    { prop: 'username', label: '用户名' },
+    { prop: 'username', label: '用户名', query: {} },
     { prop: 'password', label: '密码', width: 100, 'show-overflow-tooltip': true },
     { prop: 'avatar', label: '头像', type: 'upload', rules: 'must' },
-    { prop: 'email', label: '邮箱', rules: 'email' },
-    { prop: 'status', label: '状态', type: 'slot' },
-    { prop: 'createdTime', label: '创建时间', type: 'date', width: 200 },
+    { prop: 'email', label: '邮箱', query: {} },
+    {
+      prop: 'status',
+      label: '状态',
+      type: 'slot',
+      query: {
+        type: 'select',
+        options: [
+          { label: '启用', value: '1' },
+          { label: '停用', value: '0' },
+        ],
+      },
+    },
+    { prop: 'createdTime', label: '创建时间', type: 'date', width: 200, query: { type: 'slot' } },
     { prop: 'updatedTime', label: '更新时间', type: 'date', hide: true, width: 200 },
     { prop: 'operate', label: '操作', type: 'slot', fixed: 'right', width: 200 },
   ],
 })
-
+const tableRef = ref(null as any)
+const onAdd = () => {
+  console.log('add')
+}
 const onEdit = (row: User) => {
   console.log(row)
 }
 const onDelete = (id: string) => {
-  console.log(id)
+  ElMessageBox.confirm('确定删除吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      const res = await api.deleteUser(id)
+      ElMessage.success(res.message)
+      tableRef.value.refresh()
+    })
+    .catch(() => {
+      ElMessage.info('取消删除')
+    })
 }
 const onChangeStatus = async (row: User) => {
-  const res = await api.updateUser(row)
-  console.log(res)
+  try {
+    const res = await api.updateUserField({ id: row.id, fieldName: 'status', fieldValue: row.status })
+    ElMessage.success(res.message)
+  } catch (error: any) {
+    ElMessage.error(error)
+  }
 }
 </script>
 

@@ -35,7 +35,7 @@ export interface User {
   createdAt: Date
   updatedAt: Date
   email: string
-  status: boolean
+  status: string
   avatar?: string
 }
 
@@ -100,6 +100,22 @@ export default {
       url: `/users/update`,
       method: 'put',
       data,
+    })
+  },
+  // 更新某一个字段
+  updateUserField(data: { id: string; fieldName: string; fieldValue: any }): Promise<response> {
+    return request({
+      url: `/users/update/field`,
+      method: 'put',
+      data,
+    })
+  },
+  // 删除用户
+  deleteUser(id: string): Promise<response> {
+    return request({
+      url: `/users/delete`,
+      method: 'delete',
+      data: { id },
     })
   },
 }

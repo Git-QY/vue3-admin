@@ -93,21 +93,9 @@ function hashWithSalt(text) {
  * 2、如果是2次不可逆加密 这样是可以  但会后端不可能知道原始密码  只能走忘记密码接口
  * 3、如果沿用第一种加密  后端解密后再进行不可逆加密 这样的话前端是密文传输 数据库也是密文  但是这样的也是不可能知道原始密码  那样还不如直接使用2
  */
-// 目前使用2次不可逆加密
-
-// 验证函数
-const validate = (req, res, next) => {
-  const errors = validationResult(req)
-  if (errors.isEmpty()) {
-    return next()
-  }
-  return res.send({ code: 500, message: errors.array().map(item => item.msg) })
-}
-
 module.exports = {
   encrypt,
   decrypt,
   encryptHash,
   hashWithSalt,
-  validate,
 }
