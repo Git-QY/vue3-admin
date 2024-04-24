@@ -93,7 +93,6 @@ router.post('/add', userValidationRules(true), async (req, res) => {
     res.send({ code: 500, message: error })
   }
 })
-
 // 删除用户
 router.delete('/delete', async (req, res) => {
   try {

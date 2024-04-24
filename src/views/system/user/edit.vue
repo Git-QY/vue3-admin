@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page-main">
     <el-form ref="formRef" :rules="rules" :model="form" label-width="80px" status-icon>
       <el-row :gutter="20">
         <el-col :span="12">
@@ -21,9 +21,9 @@
         <el-col :span="12">
           <el-form-item label="性别" prop="sex">
             <el-radio-group v-model="form.sex">
-              <el-radio label="0">女</el-radio>
-              <el-radio label="1">男</el-radio>
-              <el-radio label="2">保密</el-radio>
+              <el-radio value="0">女</el-radio>
+              <el-radio value="1">男</el-radio>
+              <el-radio value="2">保密</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -39,6 +39,10 @@
         </el-col>
       </el-row>
     </el-form>
+    <div class="footer-btn">
+      <el-button type="primary">保存</el-button>
+      <el-button>返回</el-button>
+    </div>
   </div>
 </template>
 

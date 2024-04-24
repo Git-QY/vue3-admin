@@ -22,7 +22,7 @@ const schemaRules = {
   // 头像
   avatar: { type: String, default: '' },
   // 性别
-  sex: { type: String, required: true }, // 0: 女: 男，2: 未知
+  sex: { type: String  }, // 0: 女: 男，2: 未知
   // 角色id
   roleIds: { type: Array, default: [] },
 }

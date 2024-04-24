@@ -3,7 +3,7 @@ const router = express.Router()
 const { Role, schemaRules, roleValidationRules } = require('../mongodb/models/role')
 const { generateUUID } = require('../utils/index')
 
-// 创建角色
+// 创建角色  (主要是获取菜单资源数据)
 router.post('/add', roleValidationRules(), async (req, res) => {
   const { body } = req
   try {
