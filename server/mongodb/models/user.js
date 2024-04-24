@@ -13,12 +13,18 @@ const schemaRules = {
   password: { type: String, required: true }, // 密码，必需
   createdTime: { type: Date, default: Date.now }, // 创建时间
   updatedTime: { type: Date, default: Date.now }, // 最后更新时间
+  // 用户备注
+  remark: { type: String, default: '' },
   // 邮箱
   email: { type: String },
   // 状态
-  status: { type: Number, default: 1 }, // 1: 正常，0: 禁用
+  status: { type: String, default: '1' }, // 1: 正常，0: 禁用
   // 头像
   avatar: { type: String, default: '' },
+  // 性别
+  sex: { type: String  }, // 0: 女: 男，2: 未知
+  // 角色id
+  roleIds: { type: Array, default: [] },
 }
 
 // 定义用户模型
@@ -29,6 +35,7 @@ const User = mongoose.model('User', userSchema)
 
 // 预校验规则
 const userValidationRules = isNewUser => [
+  body('id').notEmpty().withMessage('id不能为空').bail().isString().withMessage('id必须为字符串'),
   body('username')
     .notEmpty()
     .withMessage('用户名不能为空')
@@ -40,9 +47,9 @@ const userValidationRules = isNewUser => [
       // 新增用户时候确保唯一性
       const query = { username: value }
       if (!isNewUser) {
-        query._id = { $ne: req.user._id }
+        query._id = { $ne: req.body._id }
       }
-      const user = await User.findOne({ username: value })
+      const user = await User.findOne(query)
       if (user) {
         throw new Error('用户名已存在')
       }
@@ -55,6 +62,10 @@ const userValidationRules = isNewUser => [
   body('email').optional().isEmail().withMessage('邮箱格式不正确'),
   // 状态
   body('state').optional().isIn([0, 1]).withMessage('状态值不合法'),
+  // 性别
+  body('sex').notEmpty().withMessage('性别不能为空').bail().isString().withMessage('性别必须为字符串').bail().isIn(['0', '1', '2']).withMessage('性别值不合法'),
+  // 角色id集合
+  body('roleIds').optional().isArray().withMessage('角色id集合必须为数组'),
 ]
 
 // 导出用户模型

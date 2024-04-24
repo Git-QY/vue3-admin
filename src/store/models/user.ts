@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useGlobalStore } from './global'
+import router from '@/router'
 
 interface UserState {
   token: string
@@ -23,6 +24,10 @@ export const useUserStore = defineStore('user', {
       this.token = ''
       this.userInfo = {}
       globalStore.tabList = []
+    },
+    logout() {
+      router.push('/login')
+      this.reset()
     },
   },
   persist: true,

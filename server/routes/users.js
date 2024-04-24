@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ username, password: password })
     if (!user) return res.send({ code: 403, message: '用户名或密码错误' })
     const { status, id } = user
-    if (status === 0) return res.send({ code: 403, message: '该用户已被禁用' })
+    if (status == 0) return res.send({ code: 403, message: '该用户已被禁用' })
     let token = createToken({ login: true, name: username, id })
     res.send({ code: 200, message: '登录成功', data: { token, userInfo: user } })
   } catch (error) {
@@ -81,9 +81,9 @@ router.post('/login', async (req, res) => {
 })
 // 新增用户
 router.post('/add', userValidationRules(true), async (req, res) => {
-  const error = validationResult(req)
-  if (!error.isEmpty()) {
-    return res.send({ code: 500, message: error.array().map(item => item.msg) })
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   }
   try {
     const { body } = req
@@ -107,12 +107,26 @@ router.delete('/delete', async (req, res) => {
     res.send({ code: 500, message: error })
   }
 })
+// 单独更新某一个字段
+const canUpdateField = ['status']
+router.put('/update/field', async (req, res) => {
+  const { fieldName, fieldValue, id } = req.body
+  // 字段的类型格式验证(后续添加)
+  if (!canUpdateField.includes(fieldName)) return res.send({ code: 500, message: '该字段不允许更新' })
+  if (!fieldName || !fieldValue || !id) return res.send({ code: 500, message: '缺少参数' })
+  try {
+    const updateField = {}
+    updateField[fieldName] = fieldValue
+    await User.updateOne({ id }, { ...updateField, updatedTime: Date.now() })
+    res.send({ code: 200, message: '更新成功' })
+  } catch (error) {
+    res.send({ code: 500, message: error })
+  }
+})
 // 修改用户
 router.put('/update', userValidationRules(false), async (req, res) => {
   const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.send({ code: 500, message: error.array().map(item => item.msg) })
-  }
+  if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   try {
     const { id } = req.body
     await User.updateOne({ id }, { ...req.body, updatedTime: Date.now() })
@@ -123,12 +137,11 @@ router.put('/update', userValidationRules(false), async (req, res) => {
 })
 // 查询用户列表
 router.post('/list', async (req, res) => {
-  const { username, page = { pageSize: 10, page: 1 } } = req.body
-  const query = {}
+  const { username, email, page = { pageSize: 10, page: 1 } } = req.body
+  const query = { ...req.body }
   // 添加 username 模糊查询条件
-  if (username) {
-    query.username = { $regex: username }
-  }
+  if (username) query.username = { $regex: username }
+  if (email) query.email = { $regex: email }
   try {
     const users = await User.find(query)
       .skip((page.page - 1) * page.pageSize)

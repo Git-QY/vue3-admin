@@ -35,6 +35,14 @@ const routes: RouteRecordRaw[] = [
         name: 'user',
         component: () => import('@/views/system/user/index.vue'),
         meta: { title: '用户管理' },
+        children: [
+          {
+            path: 'add',
+            name: 'addUser',
+            component: () => import('@/views/system/user/edit.vue'),
+            meta: { title: '添加用户' },
+          },
+        ],
       },
       {
         path: 'role',

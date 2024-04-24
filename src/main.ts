@@ -13,8 +13,7 @@ import 'element-plus/dist/index.css' // ElementPlus样式
 import './permission'
 
 // 注册公共组件
-import SvgIcon from '@/components/Icon/svgIcon.vue' // svg图标组件
-app.component('SvgIcon', SvgIcon)
+import Components from '@/components/index.ts'
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
@@ -23,4 +22,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(router)
 app.use(pinia)
 app.use(ElementPlus)
+app.use(Components)
 app.mount('#app')
