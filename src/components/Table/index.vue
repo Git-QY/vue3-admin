@@ -18,6 +18,11 @@
       <el-table :data="props.data ?? tableData" :border="true" v-bind="props.table" v-loading="loading">
         <template v-for="item in tableColumns">
           <slot v-if="item.type == 'slot'" :name="item.prop" :item="item"></slot>
+          <!-- upload -->
+          <el-table-column v-else-if="item.type == 'upload'" v-bind="item" v-slot="{ row }">
+            <fileIcon :data="row[item.prop]"></fileIcon>
+          </el-table-column>
+
           <el-table-column v-else v-bind="item"></el-table-column>
         </template>
         <template #empty>
@@ -39,6 +44,7 @@
 import { ref, computed, onMounted, reactive } from 'vue'
 import search from './components/search.vue'
 import pagination from './components/pagination.vue'
+import fileIcon from '@/components/FormItem/fileIcon.vue'
 import { tableProps, columnsProps } from './type'
 import { defaultConfig, deepMerge } from './config'
 

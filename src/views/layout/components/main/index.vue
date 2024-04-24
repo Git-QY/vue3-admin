@@ -1,7 +1,6 @@
 <template>
   <div class="layout-main">
-    <!-- 内容存放组件 -->
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 

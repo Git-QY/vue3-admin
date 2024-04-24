@@ -3,6 +3,7 @@ var router = express.Router()
 var path = require('path')
 var fs = require('fs')
 const multipart = require('connect-multiparty')
+const { url } = require('inspector')
 const multipartMiddleware = multipart()
 
 // 判断数据库是否有相同hash的数据 有则实现秒传  （待实现）
@@ -10,10 +11,12 @@ const multipartMiddleware = multipart()
 const CHUNK_DIR = 'public/uploads/'
 router.post('/upload', multipartMiddleware, (req, res) => {
   const file = req.files.file
+  console.log(file)
   const newPath = path.resolve(CHUNK_DIR, file.originalFilename)
   fs.copyFileSync(file.path, newPath)
   fs.unlinkSync(file.path) // 删除原始文件
-  res.send({ code: 200, msg: '上传成功' })
+  const url = `http://localhost:3000/uploads/${file.originalFilename}`
+  res.send({ code: 200, msg: '上传成功', data: { url, name: file.originalFilename } })
 })
 router.post('/chunk-upload', multipartMiddleware, (req, res) => {
   console.log('req.body', req.body, req.files)

@@ -1,5 +1,6 @@
 <template>
   <div class="page-main">
+    {{ form }}
     <el-form ref="formRef" :rules="rules" :model="form" label-width="80px" status-icon>
       <el-row :gutter="20">
         <el-col :span="12">
@@ -16,7 +17,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="用户头像" prop="avatar"> 上传 </el-form-item>
+          <el-form-item label="用户头像" prop="avatar"> <Upload v-model="form.avatar" limit="1"></Upload> </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="性别" prop="sex">
@@ -39,24 +40,60 @@
         </el-col>
       </el-row>
     </el-form>
-    <div class="footer-btn">
-      <el-button type="primary">保存</el-button>
-      <el-button>返回</el-button>
+    <div class="page-main--footer">
+      <el-button type="primary" @click="onAdd" :loading="loading">保存</el-button>
+      <el-button @click="onBack">返回</el-button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
+import api, { User } from '@/api/user'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
-const rules = reactive({})
-const form = ref({
+const rules = reactive({
+  username: [{ required: true, message: '请输入用户名称', trigger: 'blur' }],
+  status: [{ required: true, message: '请选择用户状态', trigger: 'blur' }],
+  //  邮箱 正则
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { type: 'email', message: '请输入正确的邮箱', trigger: ['blur', 'change'] },
+  ],
+  sex: [{ required: true, message: '请选择性别', trigger: 'blur' }],
+})
+const form = ref<User>({
   username: '',
   status: '',
   email: '',
   remark: '',
   sex: '',
+  avatar: [],
 })
+const formRef = ref(null as any)
+const loading = ref(false)
+const onAdd = async () => {
+  const res = await formRef.value.validate()
+  if (!res) return
+  try {
+    loading.value = true
+    await api.addUser({
+      ...form.value,
+      avatar: form.value.avatar[0] || '',
+    })
+    ElMessage.success('添加成功')
+    onBack()
+  } catch (error: any) {
+    ElMessage.error(error)
+  } finally {
+    loading.value = false
+  }
+}
+const onBack = () => {
+  router.go(-1)
+}
 </script>
 
 <style lang="scss" scoped></style>
