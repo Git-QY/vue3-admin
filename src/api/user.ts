@@ -21,12 +21,6 @@ export interface ForgetType {
   nextPassword: string
 }
 
-// 响应类型规范
-interface response {
-  code: number
-  data?: any
-  message: string
-}
 // 用户
 export interface User {
   id: string
