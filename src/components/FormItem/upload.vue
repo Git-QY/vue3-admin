@@ -1,7 +1,7 @@
 <template>
   <!-- 原生上传组件 -->
   <div class="upload-card">
-    <div class="upload-card--item" v-for="(item, index) in fileList" :key="index">
+    <div class="upload-card--item" v-for="(item, index) in showFlieList" :key="index">
       <!-- <img :src="item.url" :alt="item.name" /> -->
       <fileIcon :data="item.url" :width="100" :height="100"></fileIcon>
       <!-- 遮罩层 -->
@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { upload } from '@/api/utils'
 import { ElMessage } from 'element-plus'
 import fileIcon from '@/components/FormItem/fileIcon.vue'
@@ -28,13 +28,22 @@ interface File {
 }
 
 const props = defineProps({
-  modelValue: { type: [String, Array] }, // 绑定值
+  modelValue: { type: Array }, // 绑定值
   multiple: { type: Boolean, default: false }, // 是否多选
   limit: { type: Number, default: 10 }, // 最大上传数量
   beforeUpload: { type: Function }, // 上传前的钩子
 })
 const emits = defineEmits(['update:modelValue'])
 
+const showFlieList = computed(() => {
+  if (!props.modelValue) return []
+  return props.modelValue.map((item: any) => {
+    return {
+      url: item,
+      name: item.split('/').pop(),
+    }
+  })
+})
 const fileList = ref<any[]>([]) // 文件列表
 const fileRef = ref<any>(null)
 
@@ -42,7 +51,6 @@ const onUpload = () => {
   fileRef.value.click()
   fileRef.value.value = null // 防止相同文件上传的问题
 }
-
 const onChange = async (e: any) => {
   let files = e.target.files
   if (props.limit < files.length) return ElMessage.warning('超出最大上传数量')

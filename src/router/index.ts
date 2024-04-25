@@ -42,6 +42,12 @@ const routes: RouteRecordRaw[] = [
             component: () => import('@/views/system/user/edit.vue'),
             meta: { title: '添加用户' },
           },
+          {
+            path: 'edit',
+            name: 'editUser',
+            component: () => import('@/views/system/user/edit.vue'),
+            meta: { title: '编辑用户' },
+          },
         ],
       },
       {

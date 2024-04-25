@@ -78,7 +78,7 @@ const onAdd = () => {
   router.push('/system/user/add')
 }
 const onEdit = (row: User) => {
-  console.log(row)
+  router.push(`/system/user/edit?id=${row.id}`)
 }
 const onDelete = (id: string) => {
   ElMessageBox.confirm('确定删除吗？', '提示', {

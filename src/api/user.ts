@@ -122,4 +122,12 @@ export default {
       data,
     })
   },
+  // 根据id获取用户
+  detailUser(id: string): Promise<response> {
+    return request({
+      url: `/users/detail`,
+      method: 'get',
+      params: { id },
+    })
+  },
 }
