@@ -40,7 +40,7 @@ const routes: RouteRecordRaw[] = [
             path: 'add',
             name: 'addUser',
             component: () => import('@/views/system/user/edit.vue'),
-            meta: { title: '添加用户' },
+            meta: { title: '添加用户', hidden: true },
           },
         ],
       },

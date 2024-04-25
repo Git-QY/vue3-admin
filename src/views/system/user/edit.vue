@@ -17,7 +17,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="用户头像" prop="avatar"> <Upload v-model="form.avatar" limit="1"></Upload> </el-form-item>
+          <el-form-item label="用户头像" prop="avatar"> <Upload v-model="form.avatar" :limit="1"></Upload> </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="性别" prop="sex">
