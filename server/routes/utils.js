@@ -3,8 +3,8 @@ var router = express.Router()
 var path = require('path')
 var fs = require('fs')
 const multipart = require('connect-multiparty')
-const { url } = require('inspector')
 const multipartMiddleware = multipart()
+const readline = require('readline')
 
 // 判断数据库是否有相同hash的数据 有则实现秒传  （待实现）
 // 断点续传（待实现）就是多数据进行重新切片只上传未上传的切片
@@ -70,6 +70,27 @@ router.post('/chunk-merge', async (req, res) => {
     console.log('error', error)
     res.send({ code: 400, msg: error })
   }
+})
+// 读取5级行政架构
+router.get('/area', (req, res) => {
+  let { parentId = 0 } = req.query
+  const results = []
+  let filePath = path.resolve(__dirname, `../public/resources/area_code_2023.csv`)
+  const rl = readline.createInterface({
+    input: fs.createReadStream(filePath),
+    crlfDelay: Infinity,
+  })
+  const Allresults = []
+  rl.on('line', line => {
+    const [code, name, level, parent, enable] = line.split(',')
+    if (parent == parentId) {
+      results.push({ _id: code, parent, level, code, name, enable })
+    }
+  })
+  // 监听读取流的 close 事件
+  rl.on('close', async () => {
+    res.send({ code: 200, data: results, msg: '查询成功', total: results.length })
+  })
 })
 
 module.exports = router

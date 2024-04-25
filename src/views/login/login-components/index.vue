@@ -1,6 +1,7 @@
 <template>
-  <div class="qy-login" v-loading="loading">
-    <div class="login-logo">{{pane === forget ? '忘记密码' : pane === register ? '注册' : '登录'}}</div>
+  <div class="login" v-loading="loading">
+    <p class="login-title">vue3-admin 后台管理</p>
+    <div class="login-logo">{{ pane === forget ? '忘记密码' : pane === register ? '注册' : '登录' }}</div>
     <component :is="pane"></component>
     <footer class="footer">
       <el-divider class="divider">
@@ -8,7 +9,7 @@
       </el-divider>
       <div class="third-login-items">
         <div class="item" @click="giteeLogin">
-          <img style="width: 100%;height: 100%;" src="@/assets/images/giteeLogo.png" alt="">
+          <img style="width: 100%; height: 100%" src="@/assets/images/giteeLogo.png" alt="" />
         </div>
       </div>
     </footer>
@@ -17,7 +18,7 @@
 
 <script setup lang="ts">
 import { ref, markRaw, provide, onMounted } from 'vue'
-import { useRoute,useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import login from './login.vue'
 import forget from './forget.vue'
 import register from './register.vue'
@@ -31,20 +32,20 @@ const router = useRouter()
 // 第三方登录登录中加载状态
 const loading = ref(false)
 
-onMounted(async ()=>{
+onMounted(async () => {
   const code = route.query.code as string
-  if(code){
-    try{
+  if (code) {
+    try {
       loading.value = true
-      const data = await api.thirdLogin({type:'gitee',code})
-      if(data.code === 200){
+      const data = await api.thirdLogin({ type: 'gitee', code })
+      if (data.code === 200) {
         loading.value = false
         ElMessage.success('登录成功')
         userStore.token = data.data.token
         userStore.userInfo = data.data.userInfo
         router.push('/')
       }
-    } catch(err:any){
+    } catch (err: any) {
       ElMessage.error(err.message)
       loading.value = false
     }
@@ -69,16 +70,16 @@ const getComponent = (name: string) => {
 }
 
 // 通过gitee登录
-const giteeLogin = async ()=>{
+const giteeLogin = async () => {
   const client_id = 'c2c0c137422ab80e3a13ee7e242ae230b4825f5cf8cde692ce72ae99cea32f78'
   // const client_secret = '9d5f56dc5b8fc1ac9dc88a96ba322b0368ec4e94c49d594a5649fe492f4c6d1e'
   const redirect_uri = 'http://localhost:5173/loginWithGitee.html'
   const response_type = 'code'
-  window.location.href = (`https://gitee.com/oauth/authorize?client_id=${client_id}&response_type=${response_type}&redirect_uri=${redirect_uri}`)
+  window.location.href = `https://gitee.com/oauth/authorize?client_id=${client_id}&response_type=${response_type}&redirect_uri=${redirect_uri}`
 }
 </script>
 <style lang="scss" scoped>
-.qy-login {
+.login {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -86,10 +87,10 @@ const giteeLogin = async ()=>{
   width: 400px;
   padding: 40px 10px;
   border-radius: 16px;
-  background: #f5f5f5;
-  box-shadow:  5px 5px 9px #a6a6a6,
-             -5px -5px 9px #ffffff;
-
+  height: 400px;
+  &-title {
+    font-weight: 600;
+  }
 
   .login-logo {
     text-align: center;
@@ -99,22 +100,22 @@ const giteeLogin = async ()=>{
       margin: 10px 0;
     }
   }
-  .footer{
+  .footer {
     width: 80%;
   }
-  .divider::v-deep .el-divider__text{
+  .divider::v-deep .el-divider__text {
     color: #acadaf;
     background-color: transparent !important;
   }
-  .third-login-items{
+  .third-login-items {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    .item{
+    .item {
       width: 30px;
       height: 30px;
-      :hover{
+      :hover {
         cursor: pointer;
       }
     }

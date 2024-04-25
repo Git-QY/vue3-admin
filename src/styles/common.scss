@@ -1,0 +1,10 @@
+//消除google浏览器记住密码自动填充黄色框背景
+:-webkit-autofill,
+:-webkit-autofill:hover,
+:-webkit-autofill:focus,
+:-webkit-autofill:active {
+  // 字体颜色
+  -webkit-text-fill-color: #606266 !important;
+  // 背景色
+  transition: background-color 5000s ease-in-out 0s;
+}

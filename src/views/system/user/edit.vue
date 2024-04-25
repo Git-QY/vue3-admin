@@ -89,7 +89,7 @@ onMounted(() => {
 })
 const getDetail = async () => {
   const id: any = route.query.id
-  if (!id) return ElMessage.error('请传入id')
+  if (!id) return
   try {
     const res = await api.detailUser(id)
     form.value = { ...res.data, avatar: res.data.avatar ? [res.data.avatar] : [] }
