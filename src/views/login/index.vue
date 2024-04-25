@@ -8,10 +8,16 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import Login from './login-components/index.vue'
+// api
+import { getImage } from '@/api/utils'
 
 const bgImg = ref('')
 const getImg = () => {
-  bgImg.value = 'https://api.likepoems.com/img/bing/'
+  // bgImg.value = 'https://api.likepoems.com/img/mc/?json'
+  getImage().then(res => {
+    console.log(res)
+    bgImg.value = res.url
+  })
 }
 onMounted(() => {
   getImg()
