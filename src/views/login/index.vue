@@ -32,6 +32,9 @@ onMounted(() => {
   &-img {
     width: 70%;
     height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #fff;
   }
   &-content {
     flex: 1;
