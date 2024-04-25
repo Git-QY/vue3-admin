@@ -1,10 +1,10 @@
 <template>
   <div class="login-form">
     <el-form label-position="top" :model="form" ref="loginFormRef" :rules="rules">
-      <el-form-item label="用户名" prop="username">
+      <el-form-item label="" prop="username">
         <el-input v-model="form.username" placeholder="请输入用户名" :suffix-icon="User"> </el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
+      <el-form-item label="" prop="password">
         <el-input type="password" v-model="form.password" placeholder="请输入密码" :suffix-icon="Lock"> </el-input>
       </el-form-item>
       <el-form-item>
