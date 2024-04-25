@@ -23,14 +23,16 @@ export interface ForgetType {
 
 // 用户
 export interface User {
-  id: string
+  id?: string
   username: string
-  password: string
-  createdAt: Date
-  updatedAt: Date
+  password?: string
+  createdTime?: Date
+  updateTime?: Date
   email: string
   status: string
-  avatar?: string
+  avatar?: any
+  remark?: string
+  sex?: string
 }
 
 export default {
@@ -110,6 +112,14 @@ export default {
       url: `/users/delete`,
       method: 'delete',
       data: { id },
+    })
+  },
+  // 新增用户
+  addUser(data: User): Promise<response> {
+    return request({
+      url: `/users/add`,
+      method: 'post',
+      data,
     })
   },
 }

@@ -22,4 +22,6 @@ const LayoutComponent: Record<LayoutType, Component> = {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+@import url(./index.scss);
+</style>

@@ -22,7 +22,7 @@ const schemaRules = {
   // 头像
   avatar: { type: String, default: '' },
   // 性别
-  sex: { type: String  }, // 0: 女: 男，2: 未知
+  sex: { type: String }, // 0: 女: 男，2: 未知
   // 角色id
   roleIds: { type: Array, default: [] },
 }
@@ -35,7 +35,6 @@ const User = mongoose.model('User', userSchema)
 
 // 预校验规则
 const userValidationRules = isNewUser => [
-  body('id').notEmpty().withMessage('id不能为空').bail().isString().withMessage('id必须为字符串'),
   body('username')
     .notEmpty()
     .withMessage('用户名不能为空')
@@ -58,7 +57,6 @@ const userValidationRules = isNewUser => [
     .isLength({ min: 3, max: 20 })
     .bail()
     .withMessage('用户名长度为 3 到 20 个字符'),
-  body('password').notEmpty().withMessage('密码不能为空').bail().isString().withMessage('密码必须为字符串').bail().isLength({ min: 6 }).withMessage('密码长度为 6 个字符以上'),
   body('email').optional().isEmail().withMessage('邮箱格式不正确'),
   // 状态
   body('state').optional().isIn([0, 1]).withMessage('状态值不合法'),
@@ -66,6 +64,8 @@ const userValidationRules = isNewUser => [
   body('sex').notEmpty().withMessage('性别不能为空').bail().isString().withMessage('性别必须为字符串').bail().isIn(['0', '1', '2']).withMessage('性别值不合法'),
   // 角色id集合
   body('roleIds').optional().isArray().withMessage('角色id集合必须为数组'),
+  // 头像
+  body('avatar').optional().isString().withMessage('头像必须为字符串').bail().isLength({ min: 1, max: 100 }).withMessage('头像长度不合法'),
 ]
 
 // 导出用户模型
