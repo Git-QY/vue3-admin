@@ -44,7 +44,12 @@
       <div>
         <el-form :model="drawerform" :rules="drawerFormRules" ref="drawerFormRef" label-width="auto" style="max-width: 600px">
           <el-form-item label="父级名称" prop="parentName">
-            <el-input v-model="drawerform.parentName" />
+            <!-- <el-input v-model="drawerform.parentName" /> -->
+            <el-tree-select
+              v-model="drawerform.parentName"
+              :data="data"
+              :render-after-expand="false"
+            /> 
           </el-form-item>
           <el-form-item label="菜单名称" prop="menuName">
             <el-input v-model="drawerform.menuName" />
@@ -100,6 +105,33 @@ import { ElMessage, ElMessageBox, FormRules } from 'element-plus'
 onMounted(() => {
   getMenuList()
 })
+
+const data = [
+  {
+    value: '1',
+    label: '系统管理',
+    children: [
+      {
+        value: '1-1',
+        label: 'Level two 1-1',
+      },
+    ],
+  },
+  {
+    value: '2',
+    label: 'Level one 2',
+    children: [
+      {
+        value: '2-1',
+        label: 'Level two 2-1',
+      },
+      {
+        value: '2-2',
+        label: 'Level two 2-2',
+      },
+    ],
+  },
+]
 
 // 获取全部菜单
 const getMenuList = async () => {
