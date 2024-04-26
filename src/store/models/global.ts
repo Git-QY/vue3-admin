@@ -1,7 +1,9 @@
 // 全局通用状态管理
 import { defineStore } from 'pinia'
-type LayoutType = 'vertical' | 'columns' | 'classic' | 'horizontal' | string
+import { LanguageType, LayoutType } from '../interface'
 interface globalState {
+  language: LanguageType
+  theme: string
   layout: LayoutType
   isCollapse: Boolean
   tabList: Array<any>
@@ -10,6 +12,8 @@ interface globalState {
 export const useGlobalStore = defineStore('global', {
   state: (): globalState => {
     return {
+      language: 'Chinese', // 语言
+      theme: '', // 主题
       layout: 'vertical', // 布局方式
       isCollapse: false,
       tabList: [],

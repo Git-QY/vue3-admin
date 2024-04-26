@@ -38,7 +38,7 @@ const tableConfig = reactive({
     return request.post('/users/list', { ...data, xx: 123 })
   },
   page: {
-    pageSize: 2,
+    pageSize: 5,
     pageSizes: [1, 2, 3, 4, 5],
   },
   columns: [

@@ -1,35 +1,33 @@
 <template>
-  <div>
-    <!-- 表格搜索组件 -->
-    <el-form ref="formRef" :model="props.modelValue" @submit.native.prevent labelWidth="80px" label-position="left">
-      <el-row :gutter="20">
-        <!-- 展开的内容 -->
-        <template v-for="item in searchColumns" :key="item.prop">
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" v-if="!item.hidden">
-            <!-- 怎么把search的插槽映射到table组件上 -->
-            <slot v-if="item.type === 'slot'" :name="`query-${item.prop}`" :item="item" :modelValue="props.modelValue[item.prop]"> </slot>
-            <!-- 下拉选择 -->
-            <el-form-item v-else-if="item.type === 'select'" :label="item.label" :prop="item.prop">
-              <el-select v-model="props.modelValue[item.prop]" :placeholder="item.placeholder" :filterable="item.filterable">
-                <el-option v-for="option in item.options" :key="option.value" :label="option.label" :value="option.value" />
-              </el-select>
-            </el-form-item>
+  <!-- 表格搜索组件 -->
+  <el-form ref="formRef" :model="props.modelValue" @submit.native.prevent labelWidth="80px" label-position="left">
+    <el-row :gutter="20">
+      <!-- 展开的内容 -->
+      <template v-for="item in searchColumns" :key="item.prop">
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" v-if="!item.hidden">
+          <!-- 怎么把search的插槽映射到table组件上 -->
+          <slot v-if="item.type === 'slot'" :name="`query-${item.prop}`" :item="item" :modelValue="props.modelValue[item.prop]"> </slot>
+          <!-- 下拉选择 -->
+          <el-form-item v-else-if="item.type === 'select'" :label="item.label" :prop="item.prop">
+            <el-select v-model="props.modelValue[item.prop]" :placeholder="item.placeholder" :filterable="item.filterable">
+              <el-option v-for="option in item.options" :key="option.value" :label="option.label" :value="option.value" />
+            </el-select>
+          </el-form-item>
 
-            <el-form-item v-else :label="item.label" :prop="item.prop">
-              <el-input v-model="props.modelValue[item.prop]" :placeholder="item.placeholder" />
-            </el-form-item>
-          </el-col>
-        </template>
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-          <el-form-item labelWidth="0">
-            <el-button type="primary" @click="onSearch">查询</el-button>
-            <el-button @click="onReset">重置</el-button>
-            <el-button type="primary" link @click="toggleCollapse" v-if="showIsCollapsed">{{ isCollapsed ? '展开' : '收起' }} </el-button>
+          <el-form-item v-else :label="item.label" :prop="item.prop">
+            <el-input v-model="props.modelValue[item.prop]" :placeholder="item.placeholder" />
           </el-form-item>
         </el-col>
-      </el-row>
-    </el-form>
-  </div>
+      </template>
+      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+        <el-form-item labelWidth="0">
+          <el-button type="primary" @click="onSearch">查询</el-button>
+          <el-button @click="onReset">重置</el-button>
+          <el-button type="primary" link @click="toggleCollapse" v-if="showIsCollapsed">{{ isCollapsed ? '展开' : '收起' }} </el-button>
+        </el-form-item>
+      </el-col>
+    </el-row>
+  </el-form>
 </template>
 
 <script setup lang="ts">
@@ -55,7 +53,7 @@ const searchColumns = ref(
 )
 
 // 响应式数据：是否折叠，默认为 false
-const isCollapsed = ref(false)
+const isCollapsed = ref(true)
 // 响应式数据：是否显示折叠按钮
 // 1. 只有当搜索栏的数量小于 maxShow 时，才显示折叠按钮
 // 2. 否则，不显示折叠按钮
