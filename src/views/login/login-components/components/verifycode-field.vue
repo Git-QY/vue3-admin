@@ -1,7 +1,7 @@
 <template>
   <div class="verifycode-field">
     <!-- 获取邮箱code 点击发送 -->
-    <el-form-item label="验证码" prop="code">
+    <el-form-item label="" prop="code">
       <el-input v-model="inputValue" :placeholder="placeholder" @input="onInput">
         <!-- <template #prefix>
           <el-icon class="el-input__icon"><svg-icon iconName="icon-yanzhengma" /></el-icon>

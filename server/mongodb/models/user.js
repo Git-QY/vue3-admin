@@ -25,6 +25,10 @@ const schemaRules = {
   sex: { type: String }, // 0: 女: 男，2: 未知
   // 角色id
   roleIds: { type: Array, default: [] },
+  // 是否是管理员
+  isAdmin: { type: Boolean, default: false },
+  // 省市区
+  
 }
 
 // 定义用户模型

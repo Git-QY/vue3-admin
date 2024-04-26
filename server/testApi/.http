@@ -37,4 +37,13 @@ Content-Type: application/json
   "code": "76c171ec3664839b910f38b7561c2fd9fd68b958064119e27333f69501c5c074"
 }
 
+### // 读取5级架构地区
+
+GET {{host}}/utils/area HTTP/1.1
+Content-Type: application/json
+
+{
+  "parentId":null
+}
+
 

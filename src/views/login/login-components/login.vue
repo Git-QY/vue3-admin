@@ -1,15 +1,10 @@
 <template>
   <div class="login-form">
-    <el-form 
-      label-position="top"
-      :model="form" 
-      ref="loginFormRef" 
-      :rules="rules"
-      >
-      <el-form-item label="用户名" prop="username">
+    <el-form label-position="top" :model="form" ref="loginFormRef" :rules="rules">
+      <el-form-item label="" prop="username">
         <el-input v-model="form.username" placeholder="请输入用户名" :suffix-icon="User"> </el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
+      <el-form-item label="" prop="password">
         <el-input type="password" v-model="form.password" placeholder="请输入密码" :suffix-icon="Lock"> </el-input>
       </el-form-item>
       <el-form-item>
@@ -25,11 +20,11 @@
 
 <script setup lang="ts">
 import api, { LoginType } from '@/api/user.ts'
-import router from '@/router';
-import { ElMessage } from 'element-plus';
-import { User,Lock } from '@element-plus/icons-vue'
+import router from '@/router'
+import { ElMessage } from 'element-plus'
+import { User, Lock } from '@element-plus/icons-vue'
 import { ref, reactive, onMounted, inject } from 'vue'
-import { useUserStore } from '@/store';
+import { useUserStore } from '@/store'
 import CryptoJS from 'crypto-js'
 const userStore = useUserStore()
 const form = ref<LoginType>({ username: '', password: '' })
@@ -48,15 +43,15 @@ const submitForm = async () => {
   loading.value = true
   try {
     const password = CryptoJS.SHA256(form.value.password).toString()
-    const res = await api.login({username: form.value.username, password: password})
-    if(res.code === 200){
+    const res = await api.login({ username: form.value.username, password: password })
+    if (res.code === 200) {
       ElMessage.success('登录成功')
       userStore.token = res.data.token
       userStore.userInfo = res.data.userInfo
       router.push('/')
       loading.value = false
     }
-  } catch (error:any) {
+  } catch (error: any) {
     loading.value = false
     ElMessage.error(error.message)
   }
@@ -67,12 +62,12 @@ onMounted(async () => {})
 <style lang="scss" scoped>
 .login-form {
   width: 70%;
-    &--submit {
-      width: 100%;
-    }
-    &--other {
-      display: flex;
-      justify-content: space-between;
-    }
+  &--submit {
+    width: 100%;
   }
+  &--other {
+    display: flex;
+    justify-content: space-between;
+  }
+}
 </style>

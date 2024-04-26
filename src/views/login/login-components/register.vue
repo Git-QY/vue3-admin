@@ -6,14 +6,14 @@
     ref="registerFormRef" 
     :rules="registerrules"
     >
-      <el-form-item label="用户名" prop="username">
+      <el-form-item label="" prop="username">
         <el-input 
         v-model.trim="registerform.username" 
         placeholder="请输入用户名" 
         :suffix-icon="User"
         > </el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
+      <el-form-item label="" prop="password">
         <el-input 
         type="password" 
         v-model.trim="registerform.password" 
@@ -24,7 +24,7 @@
         > </el-input>
       </el-form-item>
       <!-- 邮箱 -->
-      <el-form-item label="邮箱" prop="email">
+      <el-form-item label="" prop="email">
         <el-input v-model="registerform.email" placeholder="请输入邮箱" :suffix-icon="Message"> </el-input>
       </el-form-item>
       <!-- 获取邮箱code 点击发送 -->

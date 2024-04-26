@@ -2,12 +2,15 @@
   <div class="page">
     <!-- 基础page配置 搜索表格分页 -->
     <!-- 搜索模块 -->
-    <search :columns="props.columns" v-model="props.searchForm" :maxShow="3" @on-search="handleSearch">
-      <!-- 获取全部插槽映射 -->
-      <template v-for="(_, slot) in $slots" v-slot:[slot]="{ item }">
-        <slot :name="slot" :item="item"></slot>
-      </template>
-    </search>
+    <div class="page-search">
+      <search :columns="props.columns" v-model="props.searchForm" :maxShow="3" @on-search="handleSearch">
+        <!-- 获取全部插槽映射 -->
+        <template v-for="(_, slot) in $slots" v-slot:[slot]="{ item }">
+          <slot :name="slot" :item="item"></slot>
+        </template>
+      </search>
+    </div>
+
     <!-- 按钮模块 -->
     <div clss="page-btn">
       <div class="page-btn--lf"><slot name="btnleft" /></div>
@@ -102,6 +105,13 @@ defineExpose({ refresh })
 
 <style lang="scss" scoped>
 .page {
+  margin: 20px 20px 0;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  &-search {
+  }
   &-table {
     margin: 20px 0;
   }

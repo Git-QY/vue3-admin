@@ -38,7 +38,7 @@ const tableConfig = reactive({
     return request.post('/users/list', { ...data, xx: 123 })
   },
   page: {
-    pageSize: 2,
+    pageSize: 5,
     pageSizes: [1, 2, 3, 4, 5],
   },
   columns: [
@@ -78,7 +78,7 @@ const onAdd = () => {
   router.push('/system/user/add')
 }
 const onEdit = (row: User) => {
-  console.log(row)
+  router.push(`/system/user/edit?id=${row.id}`)
 }
 const onDelete = (id: string) => {
   ElMessageBox.confirm('确定删除吗？', '提示', {

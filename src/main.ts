@@ -12,6 +12,8 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue' // ElementPlus图
 import 'element-plus/dist/index.css' // ElementPlus样式
 import './permission'
 
+import i18n from '@/language/i18n'
+
 // 注册公共组件
 import Components from '@/components/index.ts'
 
@@ -23,4 +25,5 @@ app.use(router)
 app.use(pinia)
 app.use(ElementPlus)
 app.use(Components)
+app.use(i18n)
 app.mount('#app')

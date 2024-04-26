@@ -15,6 +15,7 @@ const globalStore = useGlobalStore()
 const tabList = ref(globalStore.tabList)
 const addTab = () => {
   const { meta, path } = route
+  if (meta.hidden) return
   const tab = {
     path,
     title: meta.title,
@@ -48,10 +49,21 @@ const onTabRemove = (targetName: any) => {
   globalStore.activePath = globalStore.activePath
   router.push(globalStore.activePath)
 }
+
+function getParentRoutePath(route: any) {
+  const segments = route.path.split('/')
+  segments.pop()
+  return segments.join('/')
+}
 watch(
   () => route.path,
   () => {
-    globalStore.activePath = route.path
+    let activePath = route.path
+    if (route.meta.hidden) {
+      activePath = getParentRoutePath(route)
+    }
+    globalStore.activePath = activePath
+
     addTab()
   },
 )

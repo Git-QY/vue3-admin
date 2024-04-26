@@ -1,21 +1,30 @@
 <template>
-  <el-space size="large" class="header-container">
-    <div class="navigation">
-      <ToggleSidebar class="fold-btn" />
-      <Breadcrumb class="action" />
+  <div class="header">
+    <div class="header-left">
+      <el-space size="large">
+        <ToggleSidebar class="fold-btn" />
+        <Breadcrumb class="action" />
+      </el-space>
     </div>
-    <el-tooltip class="user-tooltip" effect="light" placement="top">
-      <template #content>
-        <el-button text class="exit" @click="handleLogout">退出登录</el-button>
-      </template>
-      <span class="user-name">{{ userInfo.username }}</span>
-    </el-tooltip>
-  </el-space>
+    <div class="header-right">
+      <el-space size="large">
+        <Language />
+        <el-tooltip effect="light" placement="top">
+          <template #content>
+            <el-button text class="exit" @click="handleLogout">退出登录</el-button>
+          </template>
+          <span>{{ userInfo.username }}</span>
+        </el-tooltip>
+      </el-space>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import ToggleSidebar from './ToggleSidebar.vue'
-import Breadcrumb from './Breadcrumb.vue'
+import ToggleSidebar from './components/ToggleSidebar.vue'
+import Breadcrumb from './components/Breadcrumb.vue'
+import Language from './components/Language.vue'
+
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store'
 
@@ -30,35 +39,16 @@ const handleLogout = () => {
 </script>
 
 <style scoped lang="scss">
-.header-container {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #e0e4ef;
-  .navigation {
+  &-left,
+  &-right {
+    padding: 0 20px;
     display: flex;
     align-items: center;
-    .fold-btn {
-      padding: 0 10px;
-    }
-    .action {
-      margin-left: 10px;
-    }
-  }
-  .exit {
-    cursor: pointer;
-  }
-}
-
-i {
-  font-size: 19px;
-  cursor: pointer;
-}
-:deep(.user-name) {
-  cursor: pointer;
-  margin-right: 20px;
-  &:hover {
-    background-color: #f5f5f5;
   }
 }
 </style>

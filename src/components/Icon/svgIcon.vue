@@ -18,6 +18,10 @@ const props = defineProps({
     type: String,
     default: '#838d94',
   },
+  size: {
+    type: Number,
+    default: 16,
+  },
 })
 // 图标在 iconfont 中的名字
 const iconClassName = computed(() => {
@@ -30,11 +34,14 @@ const svgClass = computed(() => {
   }
   return 'svg-icon'
 })
+const SIZE = computed(() => {
+  return props.size + 'px'
+})
 </script>
 <style scoped>
 .svg-icon {
-  width: 1em;
-  height: 1em;
+  width: v-bind('SIZE');
+  height: v-bind('SIZE');
   position: relative;
   fill: currentColor;
   vertical-align: -2px;

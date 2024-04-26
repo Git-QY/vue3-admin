@@ -11,21 +11,21 @@
     :router="true"
   >
     <template v-for="(item, index) in menuItems">
-      <template v-if="item.children">
+      <!-- <template v-if="item.children">
         <SubMenu :item="item" :key="index" />
       </template>
       <template v-else>
         <MenuItem :item="item" :key="index" />
-      </template>
-      <!-- <aside-item :item="item"></aside-item> -->
+      </template> -->
+      <aside-item :item="item"></aside-item>
     </template>
   </el-menu>
 </template>
 
 <script setup lang="ts">
-import SubMenu from './SubMenu.vue'
-import MenuItem from './MenuItem.vue'
-// import asideItem from './aside-item.vue'
+// import SubMenu from './SubMenu.vue'
+// import MenuItem from './MenuItem.vue'
+import asideItem from './aside-item.vue'
 
 import Logo from '../logo/index.vue'
 import { computed, ref } from 'vue'

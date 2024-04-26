@@ -1,5 +1,5 @@
 <template>
-  <div>123</div>
+  <div>{{ $t('menus.home') }}</div>
 </template>
 
 <script lang="ts" setup>

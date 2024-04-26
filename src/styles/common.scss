@@ -1,16 +1,22 @@
-// .page-main {
-//   position: relative;
-//   height: 100%;
-//   &--box {
-//     background-color: #fff;
-//     border-radius: 5px;
-//     margin-bottom: 40px;
-//   }
-//   &--footer {
-//     position: absolute;
-//     bottom: 0;
-//     background-color: #fff;
-//     height: 40px;
-//     width: 100%;
-//   }
-// }
+//消除google浏览器记住密码自动填充黄色框背景
+:-webkit-autofill,
+:-webkit-autofill:hover,
+:-webkit-autofill:focus,
+:-webkit-autofill:active {
+  // 字体颜色
+  -webkit-text-fill-color: #606266 !important;
+  // 背景色
+  transition: background-color 5000s ease-in-out 0s;
+}
+.page-form {
+  margin: 20px 20px 0;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+//
+.my-dropdown .el-tooltip__trigger:first-child:focus-visible {
+  outline: unset;
+}
