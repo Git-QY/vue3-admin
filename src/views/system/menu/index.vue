@@ -85,7 +85,7 @@
     <template #footer>
       <div style="flex: auto">
         <el-button @click="isDrawerShow = false">取消</el-button>
-        <el-button type="primary" @click="confirmAdd">{{ isAdd ? '新增' : '修改' }}</el-button>
+        <el-button type="primary" @click="confirmSubmit">{{ isAdd ? '新增' : '修改' }}</el-button>
       </div>
     </template>
   </el-drawer>
@@ -93,7 +93,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { menulist,addMenu,deleteMenu } from '@/api/menu'
+import { menulist,addMenu,deleteMenu,updateMenu } from '@/api/menu'
 import { DrawerForm } from './index'
 import { ElMessage, ElMessageBox, FormRules } from 'element-plus'
 
@@ -190,17 +190,23 @@ const drawerFormRules = reactive<FormRules<DrawerForm>>({
     { required: true, message: '权限标识不能为空', trigger: 'blur' },
   ],
 })
-// 确认添加新的菜单
-const confirmAdd = async () => {
+// 确认添加/编辑菜单
+const confirmSubmit = async () => {
   drawerFormRef.value?.validate(async (valid:Boolean) => {
     if(valid){
-      const data = await addMenu(drawerform.value)
-      if(data.code === 200){
-        ElMessage.success('添加成功')
-        isDrawerShow.value = false
-        getMenuList()
-        drawerFormRef.value?.resetFields()
+      if(isAdd.value){
+        const data = await addMenu(drawerform.value)
+        if(data.code === 200){
+          ElMessage.success('添加成功')
+        }
+      } else {
+        const data = await updateMenu(drawerform.value)
+        if(data.code === 200){
+          ElMessage.success('修改成功')
+        }
       }
+      isDrawerShow.value = false
+      getMenuList()
     } else {
       console.log('error')
     }
