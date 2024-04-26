@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 新增 -->
-    <el-button type="primary" @click="isDrawerShow = true; isAdd = true; drawerFormRef?.resetFields()">新增</el-button>
+    <el-button type="primary" @click="onAdd">新增</el-button>
     <el-table :data="tableData" row-key="id" border style="margin: 10px 0" v-loading="loading" max-height="800px">
       <el-table-column prop="menuName" label="菜单名称" show-overflow-tooltip />
       <el-table-column prop="menuType" label="菜单类型">
@@ -150,7 +150,7 @@ const VisibleEnum = (visible: string) => {
 // 增加/编辑菜单form DOM
 const drawerFormRef = ref<HTMLFormElement | null>()
 
-// 增加菜单抽屉显隐
+// 菜单抽屉显隐
 const isDrawerShow = ref(false)
 
 // 增加/编辑菜单表单form
@@ -163,7 +163,7 @@ const drawerform = ref<DrawerForm>({
   status: '1',
   visible: '1'
 })
-// 增加菜单表单form验证表单
+// 菜单表单form验证表单
 const drawerFormRules = reactive<FormRules<DrawerForm>>({
   parentName: [
     { required: true, message: '父级名称不能为空', trigger: 'blur' },
@@ -213,15 +213,30 @@ const confirmSubmit = async () => {
   })
 }
 
-// 编辑菜单
-const onEdit = (row:any)=>{
-  isAdd.value = false
-  drawerform.value = row
+// 新增菜单
+const onAdd = ()=>{
+  isAdd.value = true
+  drawerform.value = {
+    parentName:'',
+    menuName: '',
+    menuType: '0',
+    sort: 0,
+    perms: '',
+    status: '1',
+    visible: '1'
+  }
   isDrawerShow.value = true
+}
+
+// 编辑菜单
+const onEdit = (row:DrawerForm)=>{
+  console.log(row,'row???')
+  isAdd.value = false
+  isDrawerShow.value = true
+  drawerform.value = {...row}
 }
 // 删除菜单
 const onDelete = async(id:string)=>{
-  console.log(id)
   ElMessageBox.confirm('确定删除吗？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
