@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { LanguageType, LayoutType } from '../interface'
 interface globalState {
+  isFullscreen: Boolean
   language: LanguageType
   theme: string
   layout: LayoutType
@@ -12,6 +13,7 @@ interface globalState {
 export const useGlobalStore = defineStore('global', {
   state: (): globalState => {
     return {
+      isFullscreen: false, // 是否全屏
       language: 'Chinese', // 语言
       theme: '', // 主题
       layout: 'vertical', // 布局方式

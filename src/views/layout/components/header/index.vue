@@ -9,6 +9,7 @@
     <div class="header-right">
       <el-space size="large">
         <Language />
+        <FullScreen />
         <el-tooltip effect="light" placement="top">
           <template #content>
             <el-button text class="exit" @click="handleLogout">退出登录</el-button>
@@ -24,6 +25,7 @@
 import ToggleSidebar from './components/ToggleSidebar.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
 import Language from './components/Language.vue'
+import FullScreen from './components/FullScreen.vue'
 
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store'
