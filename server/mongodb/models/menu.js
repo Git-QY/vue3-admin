@@ -39,4 +39,4 @@ const menuValidationRules = () => [
   body('visible').notEmpty().withMessage('是否隐藏不能为空').bail().isString().withMessage('是否隐藏必须为字符串').bail().isIn(['1', '0']).withMessage('是否隐藏只能是1,0'),
 ]
 
-module.exports = { Menu, schemaRules, menuValidationRules }
+module.exports = { Menu, schemaRules, menuValidationRules, validationResult }
