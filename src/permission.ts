@@ -6,12 +6,15 @@ import { useUserStore } from '@/store'
 // 路由守卫
 
 const whiteList = ['/login']
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   nProgress.start()
-  if (useUserStore().token) {
+  const userStore = useUserStore()
+  if (userStore.token) {
     if (to.path === '/login') {
       next({ path: '/' })
     } else {
+      // 没写addRouter 先请求menus
+      await userStore.setMenus()
       next()
     }
   } else {

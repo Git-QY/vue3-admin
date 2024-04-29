@@ -28,6 +28,17 @@
       </el-radio-button>
     </el-radio-group>
   </template>
+  <template v-if="item.type === 'icon-selector'">
+    <IconSelector v-model="form[item.prop]" style="width: 100%">
+      <template #default="{ value }">
+        <el-input :value="value" v-bind="item.props" readonly>
+          <template #prefix>
+            <svg-icon :iconName="`icon-${value}`" />
+          </template>
+        </el-input>
+      </template>
+    </IconSelector>
+  </template>
   <template v-if="item.type === 'upload'">
     <Upload v-model="form[item.prop]" v-bind="item.props"></Upload>
   </template>
@@ -45,6 +56,7 @@
 </template>
 
 <script setup lang="ts">
+import IconSelector from '@/components/Icon/iconSelector.vue'
 import Region from '@/components/FormItem/region.vue'
 defineProps<{ item: any; form: any }>()
 </script>

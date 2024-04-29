@@ -3,16 +3,11 @@
     <template #btnleft>
       <el-button type="primary" @click="onAdd">新增</el-button>
     </template>
-    <template #query-createdTime="{ item }">具名插槽</template>
     <template #operate="{ item }">
       <el-table-column v-slot="{ row }" v-bind="item">
         <el-button type="primary" link @click="onEdit(row)">编辑</el-button>
         <el-button type="danger" link @click="onDelete(row.id)">删除</el-button>
       </el-table-column>
-    </template>
-    <!-- 权限 -->
-    <template #permissions="{ item }">
-      <el-button type="primary" link>查看</el-button>
     </template>
   </page-table>
   <!-- 添加弹窗 -->

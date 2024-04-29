@@ -1,16 +1,22 @@
 import { defineStore } from 'pinia'
 import { useGlobalStore } from './global'
 import router from '@/router'
+import { Menu, listMenu } from '@/api'
+import { listToTree } from '@/utils'
 
 interface UserState {
   token: string
   userInfo: any
+  menus: Menu[]
+  menusTree: Menu[]
 }
 export const useUserStore = defineStore('user', {
   state: (): UserState => {
     return {
       userInfo: {},
       token: '',
+      menus: [],
+      menusTree: [],
     }
   },
   getters: {},
@@ -29,6 +35,17 @@ export const useUserStore = defineStore('user', {
       router.push('/login')
       this.reset()
     },
+    async setMenus() {
+      try {
+        const res = await listMenu()
+        this.menus = res.data
+        this.menusTree = listToTree(this.menus.map((item: Menu) => ({ ...item, label: item.menuName, value: item.id })))
+        return this.menus
+      } catch (error) {}
+    },
   },
-  persist: true,
+  persist: {
+    paths: ['token', 'userInfo'],
+    storage: localStorage,
+  },
 })
