@@ -1,1 +1,82 @@
-<template>角色</template>
+<template>
+  <page-table v-bind="tableConfig" ref="tableRef">
+    <template #btnleft>
+      <el-button type="primary" @click="onAdd">新增</el-button>
+    </template>
+    <template #query-createdTime="{ item }">具名插槽</template>
+    <template #operate="{ item }">
+      <el-table-column v-slot="{ row }" v-bind="item">
+        <el-button type="primary" link @click="onEdit(row)">编辑</el-button>
+        <el-button type="danger" link @click="onDelete(row.id)">删除</el-button>
+      </el-table-column>
+    </template>
+    <!-- 权限 -->
+    <template #permissions="{ item }">
+      <el-button type="primary" link>查看</el-button>
+    </template>
+  </page-table>
+  <!-- 添加弹窗 -->
+  <roleDialog ref="roleDialogRef" :title="title" :confirm="refresh"></roleDialog>
+</template>
+
+<script lang="ts" setup>
+import { reactive, ref } from 'vue'
+import request from '@/utils/request'
+import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
+import roleDialog from './roleDialog.vue'
+import { Role, deleteRole } from '@/api/role'
+
+const tableConfig = reactive({
+  table: { rowKey: 'id' },
+  searchForm: {},
+  // 可以通过pomise构建需要的格式
+  api: (data: any) => {
+    return request.post('/roles/list', data)
+  },
+  columns: [
+    { prop: 'id', label: 'ID', 'show-overflow-tooltip': true },
+    { prop: 'roleName', label: '角色名', query: {} },
+    // remark
+    { prop: 'remark', label: '备注' },
+    { prop: 'status', label: '状态' },
+    // 权限集合
+    { prop: 'permissions', label: '权限集合', type: 'slot' },
+    { prop: 'createdTime', label: '创建时间' },
+    { prop: 'updatedTime', label: '更新时间' },
+    { prop: 'operate', label: '操作', type: 'slot', fixed: 'right', width: 200 },
+  ],
+})
+const tableRef = ref(null as any)
+const roleDialogRef = ref(null as any)
+const title = ref('新增')
+
+const onAdd = () => {
+  roleDialogRef.value.open()
+  title.value = '新增'
+}
+const onEdit = (row: Role) => {
+  title.value = '编辑'
+  roleDialogRef.value.open(row)
+}
+const onDelete = (id: string) => {
+  ElMessageBox.confirm('确定删除吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      await deleteRole(id)
+      ElMessage.success('删除成功')
+      refresh()
+    })
+    .catch(() => {
+      ElMessage.info('取消删除')
+    })
+}
+// 刷新表格
+const refresh = () => {
+  tableRef.value.refresh()
+}
+</script>
+
+<style lang="scss" scoped></style>

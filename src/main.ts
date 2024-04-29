@@ -4,6 +4,7 @@ import '@/assets/iconfont/iconfont.js' // 引入iconfont图标库
 import APP from './App.vue'
 
 const app: App = createApp(APP) // 创建vue实例
+import i18n from '@/language/i18n'
 import router from '@/router' // 注册路由
 import pinia from '@/store' // 注册Pinia
 
@@ -12,7 +13,6 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue' // ElementPlus图
 import 'element-plus/dist/index.css' // ElementPlus样式
 import './permission'
 
-import i18n from '@/language/i18n'
 
 // 注册公共组件
 import Components from '@/components/index.ts'

@@ -50,9 +50,10 @@ app.use(function (err, req, res, next) {
 })
 
 // 设置全局变量
-const { validate } = require('./utils/auth')
 const { generateUUID } = require('./utils')
-global.$validate = validate
+const { verifyToken } = require('./utils/token')
+
 global.$generateUUID = generateUUID
+global.$verifyToken = verifyToken
 
 module.exports = app // 导出Express应用程序实例
