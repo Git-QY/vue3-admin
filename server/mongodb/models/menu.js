@@ -11,13 +11,14 @@ const schemaRules = {
   component: { type: String, required: false }, // 页面路径
   sort: { type: Number, default: true }, // 排序
   perms: { type: String, default: true }, // 权限标识
-  createdTime: { type: Date, default: Date.now }, // 创建时间，默认为当前时间
-  updatedTime: { type: Date, default: Date.now }, // 最后更新时间，默认为当前时间
+  createTime: { type: Date, default: Date.now }, // 创建时间，默认为当前时间
+  updateTime: { type: Date, default: Date.now }, // 最后更新时间，默认为当前时间
   status: { type: String, default: '1' }, // 状态 1正常 0停用
-  visible: { type: String, default: true }, // 是否隐藏
+  visible: { type: Boolean, default: true }, // 是否隐藏
   isLink: { type: String, default: '' }, // 外链地址 存在则是外联
   isKeepAlive: { type: Boolean, default: true }, // 是否缓存 1缓存 0不缓存
   isFold: { type: Boolean, default: true }, // 是否折叠
+  remark: { type: String, default: '' }, // 备注
 }
 // 定义用户模型
 const menuSchema = new mongoose.Schema(schemaRules)

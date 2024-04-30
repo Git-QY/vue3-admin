@@ -4,7 +4,7 @@
     <el-row :gutter="20">
       <!-- 展开的内容 -->
       <template v-for="item in searchColumns" :key="item.prop">
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" v-if="!item.hidden">
+        <el-col :span="24 / (maxShow + 1)" v-if="!item.hidden">
           <!-- 怎么把search的插槽映射到table组件上 -->
           <slot v-if="item.type === 'slot'" :name="`query-${item.prop}`" :item="item" :modelValue="props.modelValue[item.prop]"> </slot>
           <!-- 下拉选择 -->
@@ -19,7 +19,7 @@
           </el-form-item>
         </el-col>
       </template>
-      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" style="margin-left: auto">
+      <el-col :span="24 / (maxShow + 1)" style="margin-left: auto">
         <el-form-item labelWidth="0">
           <el-button type="primary" @click="onSearch">查询</el-button>
           <el-button @click="onReset">重置</el-button>
@@ -32,7 +32,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { columnsProps } from '../type'
 const props = defineProps<{ columns: any; modelValue: any; maxShow: number }>()
 
 // 搜索栏

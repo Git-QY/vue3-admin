@@ -64,7 +64,7 @@ export class Enum {
    * @returns
    */
   add(value: any, label: string) {
-    this.enumMap.set(value, { label })
+    this.enumMap.set(value, label)
     return this
   }
 

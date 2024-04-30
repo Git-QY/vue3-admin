@@ -14,6 +14,7 @@ const schemaRules = {
   // 创建人（解析token 获取）
   createBy: { type: String, default: '' },
   // 更新人
+  updateBy: { type: String, default: '' },
   createTime: { type: Date, default: Date.now },
   updateTime: { type: Date, default: Date.now },
 }
@@ -38,7 +39,6 @@ const roleValidationRules = () => [
         query.id = { $ne: req.body.id }
       }
       const role = await Role.findOne(query)
-      console.log(role)
       if (role) {
         throw new Error('角色标识存在')
       }

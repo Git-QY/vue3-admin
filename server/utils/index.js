@@ -29,7 +29,6 @@ function sendMail(email, code, call) {
   })
 }
 
-
 module.exports = {
   generateUUID,
   sendMail,

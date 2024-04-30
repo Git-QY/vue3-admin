@@ -1,3 +1,4 @@
+import { deepClone } from '@/utils'
 export const defaultConfig = {
   searchForm: {},
   table: {}, // 表格配置

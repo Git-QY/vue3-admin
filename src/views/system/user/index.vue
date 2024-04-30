@@ -3,8 +3,9 @@
     <page-table v-bind="tableConfig" ref="tableRef">
       <template #btnleft>
         <el-button type="primary" @click="onAdd">新增</el-button>
+        <el-button type="primary" @click="onAssignRole">分配角色</el-button>
       </template>
-      <template #query-createdTime="{ item }">具名插槽</template>
+      <template #query-createTime="{ item }">具名插槽</template>
       <template #operate="{ item }">
         <el-table-column v-slot="{ row }" v-bind="item">
           <el-button type="primary" link @click="onEdit(row)">编辑</el-button>
@@ -17,6 +18,7 @@
         </el-table-column>
       </template>
     </page-table>
+    <RoleAssignmentDialog ref="roleAssignmentDialogRef" :refresh="getList" />
   </Page>
 </template>
 
@@ -27,9 +29,9 @@ import request from '@/utils/request'
 import api, { User } from '@/api/user'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 import { useRouter } from 'vue-router'
-
+// RoleAssignmentDialog
+import RoleAssignmentDialog from './RoleAssignmentDialog.vue'
 const router = useRouter()
-
 const tableConfig = reactive({
   table: { rowKey: 'id' },
   searchForm: {},
@@ -42,7 +44,7 @@ const tableConfig = reactive({
     pageSizes: [1, 2, 3, 4, 5],
   },
   columns: [
-    { type: 'selection', fixed: 'left', 'reserve-selection': true, width: 40 },
+    { type: 'selection', fixed: 'left', width: 40 },
     { prop: 'id', label: 'ID', 'show-overflow-tooltip': true },
     { prop: 'username', label: '用户名', query: {} },
     // { prop: 'password', label: '密码', width: 100, 'show-overflow-tooltip': true },
@@ -61,19 +63,18 @@ const tableConfig = reactive({
       },
     },
     {
-      prop: 'createdTime',
+      prop: 'createTime',
       label: '创建时间',
       type: 'date',
       width: 200,
-      formatter: (row: any) => dayjs(row.createdTime).format('YYYY-MM-DD HH:mm:ss'),
+      formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss'),
       query: { type: 'slot' },
     },
-    { prop: 'updatedTime', label: '更新时间', type: 'date', hide: true, width: 200 },
+    { prop: 'updateTime', label: '更新时间', type: 'date', hide: true, width: 200 },
     { prop: 'operate', label: '操作', type: 'slot', fixed: 'right', width: 200 },
   ],
 })
 const tableRef = ref(null as any)
-
 const onAdd = () => {
   router.push('/system/user/add')
 }
@@ -102,6 +103,16 @@ const onChangeStatus = async (row: User) => {
   } catch (error: any) {
     ElMessage.error(error)
   }
+}
+// getList
+const getList = () => {
+  tableRef.value.refresh()
+}
+// 分配角色
+const roleAssignmentDialogRef = ref<HTMLFormElement | null>(null)
+const onAssignRole = () => {
+  if (tableRef.value?.selectData.length == 0) return ElMessage.warning('请先选择用户')
+  roleAssignmentDialogRef.value?.open(tableRef.value?.selectData)
 }
 </script>
 

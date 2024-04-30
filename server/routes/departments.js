@@ -14,7 +14,7 @@ const { Department, departmentValidationRules, validationResult } = require('../
 // updateBy: { type: String, default: null }, // 更新者
 // updateTime: { type: Date, default: Date.now },
 /**
- * @api {post} /department/add 新增部门
+ * @api {post} /departments/add 新增部门
  * @apiDescription 新增部门信息
  * @apiGroup 部门接口
  * @apiBody {String} deptName 部门名称
@@ -57,7 +57,7 @@ router.post('/add', departmentValidationRules(true), async (req, res) => {
   }
 })
 /**
- * @api {delete} /department/delete 删除部门
+ * @api {delete} /departments/delete 删除部门
  * @apiGroup 部门接口
  * @apiParam {String} id 部门id
  * @apiSuccessExample {json} Success-Response:
@@ -85,7 +85,7 @@ router.delete('/delete', async (req, res) => {
   }
 })
 /**
- * @api {put} /department/update 修改部门
+ * @api {put} /departments/update 修改部门
  * @apiName 修改部门
  * @apiGroup 部门接口
  * @apiBody {String} id 部门id
@@ -131,7 +131,7 @@ router.put('/update', departmentValidationRules(false), async (req, res) => {
   }
 })
 /**
- * @api {post} /department/list 部门列表
+ * @api {post} /departments/list 部门列表
  * @apiDescription 获取全部列表 跟根据parentId获取相应的下级
  * @apiGroup 部门接口
  * @apiBody {String} any 全部参数可检索 deptName支持模糊

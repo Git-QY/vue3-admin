@@ -1,6 +1,6 @@
 <template>
   <!-- 、添加编辑弹窗 -->
-  <el-dialog v-model="dialogVisible" :title="props.title" :width="props.width">
+  <el-dialog v-model="dialogVisible" :title="props.title" :width="props.width" @close="close">
     <Form :columns="columns" v-model="form" ref="formRef"></Form>
     <!-- 按钮 -->
     <template #footer>
@@ -13,8 +13,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import { addRole, updateRole } from '@/api/role'
+import { ref, reactive, toRaw } from 'vue'
+import { addRole, updateRole } from '@/api'
 import { ElMessage } from 'element-plus'
 
 const props = defineProps({
@@ -45,12 +45,13 @@ const columns = reactive([
 ])
 const form = ref({
   id: '',
-  name: '',
+  roleName: '',
   remark: '',
   status: '',
   perms: '',
   sort: 0,
 })
+const _form = toRaw(form.value) // 获取初始表单数据
 // 命令式
 const dialogVisible = ref(false)
 const open = (row: any) => {
@@ -60,9 +61,8 @@ const open = (row: any) => {
   dialogVisible.value = true
 }
 const close = () => {
+  form.value = { ..._form } // 恢复表单初始数据
   dialogVisible.value = false
-  // 重置表单
-  form.value = { id: '', name: '', remark: '', status: '', perms: '', sort: 0 }
   formRef.value.resetForm()
 }
 const formRef = ref(null as any)

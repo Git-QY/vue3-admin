@@ -38,6 +38,7 @@ import { ref, onMounted } from 'vue'
 import { listMenu, Menu, deleteMenu } from '@/api'
 import { listToTree, deepClone } from '@/utils'
 import { AllEnum } from '@/utils/enums.ts'
+console.log("🚀 ~ AllEnum:", AllEnum)
 import menuDialog from './menuDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 

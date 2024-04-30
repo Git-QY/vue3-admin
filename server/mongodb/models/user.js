@@ -11,8 +11,8 @@ const schemaRules = {
     maxlength: 20,
   }, // 用户名，必需且唯一
   password: { type: String, required: true }, // 密码，必需
-  createdTime: { type: Date, default: Date.now }, // 创建时间
-  updatedTime: { type: Date, default: Date.now }, // 最后更新时间
+  createTime: { type: Date, default: Date.now }, // 创建时间
+  updateTime: { type: Date, default: Date.now }, // 最后更新时间
   // 用户备注
   remark: { type: String, default: '' },
   // 邮箱

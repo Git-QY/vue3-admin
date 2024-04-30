@@ -101,6 +101,8 @@ const columns = reactive<columnsProps[]>([
     props: { placeholder: '存在外联则确定为外链地址' },
     span: 24,
   },
+  // remark
+  { prop: 'remark', label: '备注', type: 'textarea', span: 24 },
 ])
 const treeData = reactive([{ label: '顶级菜单', value: '0', children: userStore.menusTree }])
 const form = ref<any>({
@@ -151,13 +153,13 @@ watch(
     let fields: string[] = []
     switch (newVal) {
       case '0':
-        fields = ['parentId', 'menuType', 'icon', 'menuName', 'perms', 'path', 'sort', 'visible', 'isFold', 'isLink', 'status']
+        fields = ['parentId', 'menuType', 'icon', 'menuName', 'perms', 'path', 'sort', 'visible', 'isFold', 'isLink', 'status', 'remark']
         break
       case '1':
-        fields = ['parentId', 'menuType', 'icon', 'menuName', 'perms', 'path', 'component', 'sort', 'visible', 'isKeepAlive', 'isFold', 'isLink', 'status']
+        fields = ['parentId', 'menuType', 'icon', 'menuName', 'perms', 'path', 'component', 'sort', 'visible', 'isKeepAlive', 'isFold', 'isLink', 'status', 'remark']
         break
       case '2':
-        fields = ['parentId', 'menuType', 'menuName', 'sort', 'visible', 'perms', 'isLink', 'status']
+        fields = ['parentId', 'menuType', 'menuName', 'sort', 'visible', 'perms', 'isLink', 'status', 'remark']
         break
 
       default:
