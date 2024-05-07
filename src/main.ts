@@ -11,7 +11,7 @@ import pinia from '@/store' // 注册Pinia
 import ElementPlus from 'element-plus' // ElementPlus
 import * as ElementPlusIconsVue from '@element-plus/icons-vue' // ElementPlus图标
 import 'element-plus/dist/index.css' // ElementPlus样式
-import './permission'
+import './router/permission'
 
 
 // 注册公共组件

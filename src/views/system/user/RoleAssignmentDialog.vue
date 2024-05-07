@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="visible" title="分配角色" @confirm="onConfirm" @cancel="onCancel" width="40%" ref="dialogRef" :loading="loading">
+  <Dialog v-model="visible" title="分配角色" @confirm="onConfirm" @cancel="onCancel" ref="dialogRef" :loading="loading">
     <template #content>
       <page-table v-bind="tableConfig" ref="tableRef"></page-table>
     </template>
@@ -50,7 +50,15 @@ const tableConfig = {
   columns: [
     { type: 'selection', fixed: 'left', 'reserve-selection': true, width: 40 },
     { prop: 'roleName', label: '角色名', query: {} },
-    { prop: 'status', label: '状态' },
+    {
+      prop: 'status',
+      label: '状态',
+      type: 'tag',
+      options: [
+        { label: '启用', value: 1, type: 'success' },
+        { label: '禁用', value: 0, type: 'danger' },
+      ],
+    },
   ],
 }
 defineExpose({ open })

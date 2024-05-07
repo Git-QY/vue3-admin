@@ -10,73 +10,27 @@
     text-color="#fff"
     :router="true"
   >
-    <template v-for="(item, index) in menuItems">
-      <!-- <template v-if="item.children">
-        <SubMenu :item="item" :key="index" />
-      </template>
-      <template v-else>
-        <MenuItem :item="item" :key="index" />
-      </template> -->
+    <template v-for="item in menuItems">
       <aside-item :item="item"></aside-item>
     </template>
   </el-menu>
 </template>
 
 <script setup lang="ts">
-// import SubMenu from './SubMenu.vue'
-// import MenuItem from './MenuItem.vue'
-import asideItem from './aside-item.vue'
-
-import Logo from '../logo/index.vue'
 import { computed, ref } from 'vue'
-import { useGlobalStore } from '@/store'
+import asideItem from './aside-item.vue'
+import Logo from '../logo/index.vue'
+import { useGlobalStore, useAuthStore } from '@/store'
 import { useRouter } from 'vue-router'
 
 const globalStore = useGlobalStore()
+const authStore = useAuthStore()
 const router = useRouter()
+const setActivePath = (path: string) => (globalStore.activePath = path)
+const activePath = computed(() => router.currentRoute.value.path)
+const isCollapse = computed(() => globalStore.isCollapse)
 
-const activePath = computed(() => {
-  return router.currentRoute.value.path
-})
-const setActivePath = (path: string) => {
-  globalStore.activePath = path
-}
-
-const isCollapse = computed(() => {
-  return globalStore.isCollapse
-})
-
-const menuItems = ref([
-  {
-    name: '首页',
-    path: '/home',
-    hidden: false,
-    icon: 'HomeFilled',
-  },
-  {
-    name: '系统管理',
-    path: 'system',
-    hidden: false,
-    icon: 'Tools',
-    children: [
-      {
-        name: '用户管理',
-        path: '/system/user',
-        hidden: false,
-      },
-      {
-        name: '角色管理',
-        path: '/system/role',
-        hidden: false,
-      },
-      {
-        name: '菜单管理',
-        path: '/system/menu',
-        hidden: false,
-      },
-    ],
-  },
-])
+const menuItems = computed(() => authStore.getLeftMenuTree())
 </script>
 <style lang="scss" scoped>
 .el-menu-vertical-demo:not(.el-menu--collapse) {

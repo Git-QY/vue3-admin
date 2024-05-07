@@ -5,7 +5,7 @@
     <el-table-column prop="menuName" label="菜单名称" show-overflow-tooltip />
     <el-table-column prop="menuType" label="菜单类型">
       <template #default="{ row }">
-        <el-tag type="primary">{{ AllEnum.MenuType.getLabel(row.menuType) }}</el-tag>
+        <el-tag :type="row.menuType == 0 ? 'info' : row.menuType == 1 ? 'success' : 'danger'">{{ AllEnum.MenuType.getLabel(row.menuType) }}</el-tag>
       </template>
     </el-table-column>
     <el-table-column prop="sort" label="排序" width="60" />
@@ -20,7 +20,7 @@
     <el-table-column prop="status" label="状态">
       <template #default="{ row }"> </template>
     </el-table-column>
-    <el-table-column prop="visible" label="是否隐藏">
+    <el-table-column prop="isHidden" label="是否隐藏">
       <template #default="{ row }"> </template>
     </el-table-column>
     <el-table-column prop="perms" label="权限标识" />
@@ -38,7 +38,7 @@ import { ref, onMounted } from 'vue'
 import { listMenu, Menu, deleteMenu } from '@/api'
 import { listToTree, deepClone } from '@/utils'
 import { AllEnum } from '@/utils/enums.ts'
-console.log("🚀 ~ AllEnum:", AllEnum)
+console.log('🚀 ~ AllEnum:', AllEnum)
 import menuDialog from './menuDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 

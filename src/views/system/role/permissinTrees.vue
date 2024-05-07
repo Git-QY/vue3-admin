@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import { ref, toRef, nextTick } from 'vue'
 import { useUserStore } from '@/store'
-import { Role, permissionsAggregateRole, updateRoleField } from '@/api'
+import { Role, listMenuByRoleIds, updateRoleField } from '@/api'
 import { ElMessage } from 'element-plus'
 const userStore = useUserStore()
 const handleClose = (done: any) => {
@@ -40,10 +40,11 @@ const curItem = ref<Role>({} as Role)
 const open = async (row: Role) => {
   curItem.value = row
   treeRef.value?.setCheckedKeys([], false)
-  const res = await permissionsAggregateRole({ ids: [row.id] })
+  const res = await listMenuByRoleIds({ ids: [row.id as string] })
+  console.log("🚀 ~ open ~ res:", res)
   drawer.value = true
   nextTick(() => {
-    treeRef.value?.setCheckedKeys(res.data, false)
+    treeRef.value?.setCheckedKeys(res.data.permissions, false)
   })
 }
 const close = () => {

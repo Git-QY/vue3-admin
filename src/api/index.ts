@@ -1,5 +1,19 @@
 import request from '@/utils/request'
-
+// 用户
+export interface User {
+  id?: string
+  username: string
+  password?: string
+  createTime?: Date
+  updateTime?: Date
+  email: string
+  status: string
+  avatar?: any
+  remark?: string
+  sex?: string
+}
+// 根据用户id获取菜单权限
+export const listMenuByUserId = (id: string): Promise<response> => request({ url: `/users/menus/${id}`, method: 'get' })
 // 菜单
 export interface Menu {
   id?: string
@@ -12,7 +26,7 @@ export interface Menu {
   sort?: string
   perms: string
   status: string
-  visible: string
+  visible: Boolean
   isLink?: string
   isKeepAlive?: string
   isFold: string
@@ -48,4 +62,5 @@ export const updateRole = (data?: Role): Promise<response> => request({ url: '/r
 export const deleteRole = (id: string): Promise<response> => request({ url: '/roles/delete', method: 'delete', params: { id } })
 export const detailRole = (data?: Role): Promise<response> => request({ url: '/roles/detail', method: 'get', data })
 export const updateRoleField = (data: { id: string; fieldName: string; fieldValue: any }): Promise<response> => request({ url: `/roles/update/field`, method: 'put', data })
-export const permissionsAggregateRole = (data: { ids: string[] }): Promise<response> => request({ url: '/roles/aggregate/permissions', method: 'post', data })
+// 根据角色ids获取菜单权限
+export const listMenuByRoleIds = (data: { ids: string[] }): Promise<response> => request({ url: '/roles/aggregate/permissions', method: 'post', data })

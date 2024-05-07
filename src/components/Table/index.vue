@@ -25,6 +25,9 @@
           <el-table-column v-else-if="item.type == 'upload'" v-bind="item" v-slot="{ row }">
             <fileIcon :data="row[item.prop]"></fileIcon>
           </el-table-column>
+          <el-table-column v-else-if="item.type == 'tag'" v-bind="item" v-slot="{ row }">
+            <el-tag :type="getLabel(item.options, row[item.prop], true).type">{{ getLabel(item.options, row[item.prop]) }}</el-tag>
+          </el-table-column>
           <!-- tag -->
           <el-table-column v-else v-bind="item"></el-table-column>
         </template>
@@ -50,7 +53,7 @@ import pagination from './components/pagination.vue'
 import fileIcon from '@/components/FormItem/fileIcon.vue'
 import { tableProps, columnsProps } from './type'
 import { defaultConfig, deepMerge } from './config'
-import { deepClone } from '@/utils'
+import { deepClone, getLabel } from '@/utils'
 
 const prop = defineProps({
   data: { type: Array },

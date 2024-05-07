@@ -34,7 +34,15 @@ const tableConfig = reactive({
     { prop: 'id', label: 'ID', 'show-overflow-tooltip': true },
     { prop: 'roleName', label: '角色名', query: {} },
     { prop: 'remark', label: '备注' },
-    { prop: 'status', label: '状态' },
+    {
+      prop: 'status',
+      label: '状态',
+      type: 'tag',
+      options: [
+        { label: '启用', value: '1', type: 'success' },
+        { label: '禁用', value: '0', type: 'danger' },
+      ],
+    },
     { prop: 'createTime', label: '创建时间', formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') },
     { prop: 'updateTime', label: '更新时间', formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') },
     { prop: 'operate', label: '操作', type: 'slot', fixed: 'right', width: 200 },

@@ -114,3 +114,13 @@ export function listToTree(data: any[]) {
   })
   return root
 }
+export function getLabel(data: { value: any; label: string }[], value: any, isItem = false): any {
+  try {
+    // 使用 Array.prototype.find() 方法在数组 data 中查找匹配 value 的对象，并返回该对象的 label 属性值
+    const item = data.find(item => item.value == value)
+    return isItem ? item : item!.label
+  } catch (error) {
+    // 如果出现错误（例如 data 为 null 或 undefined），则返回 value 的字符串表示
+    return value && value.toString()
+  }
+}

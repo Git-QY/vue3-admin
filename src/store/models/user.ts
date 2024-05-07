@@ -3,7 +3,6 @@ import { useGlobalStore } from './global'
 import router from '@/router'
 import { Menu, listMenu } from '@/api'
 import { listToTree } from '@/utils'
-
 interface UserState {
   token: string
   userInfo: any
@@ -35,7 +34,7 @@ export const useUserStore = defineStore('user', {
       router.push('/login')
       this.reset()
     },
-    async setMenus() {
+    async getMenus() {
       try {
         const res = await listMenu()
         this.menus = res.data
@@ -45,7 +44,7 @@ export const useUserStore = defineStore('user', {
     },
   },
   persist: {
-    paths: ['token', 'userInfo'],
+    paths: ['token', 'userInfo', 'menusTree'],
     storage: localStorage,
   },
 })

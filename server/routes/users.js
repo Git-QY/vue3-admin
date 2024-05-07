@@ -2,6 +2,8 @@ var express = require('express')
 var router = express.Router()
 const { User, userValidationRules, validationResult } = require('../mongodb/models/user')
 const { Role } = require('../mongodb/models/role')
+const { Menu } = require('../mongodb/models/menu')
+
 const { generateUUID, sendMail } = require('../utils/index')
 const { createToken, verifyToken } = require('../utils/token')
 const { encryptHash, hashWithSalt } = require('../utils/auth')
@@ -370,6 +372,30 @@ router.post('/assign/roles', async (req, res) => {
     // 批量更新
     await User.updateMany({ id: { $in: userIds } }, { $set: { roleIds: roleIds } })
     res.send({ code: 200, message: '角色分配成功' })
+  } catch (error) {
+    res.send({ code: 500, message: error })
+  }
+})
+// 根据用户id获取菜单权限
+router.get('/menus/:userId', async (req, res) => {
+  const { userId } = req.params
+  try {
+    const user = await User.findOne({ id: userId })
+    if (!user) return res.send({ code: 404, message: '用户不存在' })
+    console.log("🚀 ~ router.get ~ user:", user)
+    // 如果是userId为admin时，直接返回所有权限
+    if (user.isAdmin) {
+      const menus = await Menu.find()
+      return res.send({ code: 200, data: menus, message: '获取成功' })
+    }
+    const lists = await Role.aggregate([
+      { $match: { id: { $in: user.roleIds }, status: '1' } },
+      { $project: { permissions: 1, _id: 0 } }, // 投影：只返回permissions字段
+      { $unwind: '$permissions' }, // 将permissions字段拆分为多个文档
+      { $group: { _id: null, permissions: { $addToSet: '$permissions' } } }, // 将permissions字段合并为一个数组
+      { $lookup: { from: 'menus', localField: 'permissions', foreignField: 'id', as: 'menus' } }, // 关联菜单表
+    ])
+    return res.send({ code: 200, data: lists.length ? lists[0].menus : [], message: '获取成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
   }

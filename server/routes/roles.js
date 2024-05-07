@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { Role, validationResult, roleValidationRules } = require('../mongodb/models/role')
 const { generateUUID } = require('../utils/index')
+const { Menu } = require('../mongodb/models/menu')
 
 // 创建角色  (主要是获取菜单资源数据)
 router.post('/add', roleValidationRules(), async (req, res) => {
@@ -42,6 +43,15 @@ router.delete('/delete', async (req, res) => {
   try {
     await Role.deleteOne(id)
     res.send({ code: 200, message: '删除成功' })
+  } catch (error) {
+    res.send({ code: 500, message: error })
+  }
+})
+router.put('/update', roleValidationRules(), async (req, res) => {
+  const { id, ...body } = req.body
+  try {
+    await Role.updateOne({ id }, { ...body, updateTime: Date.now(), updateBy: req.user.name })
+    res.send({ code: 200, message: '更新成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
   }
@@ -98,9 +108,15 @@ router.post('/aggregate/permissions', async (req, res) => {
   const { ids } = req.body
   if (!ids || !Array.isArray(ids)) return res.send({ code: 500, message: '参数错误' })
   try {
-    const roles = await Role.find({ id: { $in: ids } }).select('permissions')
-    const permissions = roles.reduce((acc, role) => acc.concat(role.permissions), [])
-    res.send({ code: 200, data: permissions, message: '获取成功' })
+    const lists = await Role.aggregate([
+      { $match: { id: { $in: ids }, status: '1' } },
+      { $project: { permissions: 1, _id: 0 } }, // 投影：只返回permissions字段
+      { $unwind: '$permissions' }, // 将permissions字段拆分为多个文档
+      { $group: { _id: null, permissions: { $addToSet: '$permissions' } } }, // 将permissions字段合并为一个数组
+      { $lookup: { from: 'menus', localField: 'permissions', foreignField: 'id', as: 'menus' } }, // 关联菜单表
+    ])
+
+    return res.send({ code: 200, data: lists.length ? lists[0] : [], message: '获取成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
   }
