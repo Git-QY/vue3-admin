@@ -18,7 +18,7 @@ router.beforeEach(async (to, from, next) => {
   if (isToken) {
     if (to.path === '/login') return next({ path: '/' }) // 没写addRouter 先请求menus
     if (hasRouteFlag) return next()
-    // await userStore.getMenus() // 获取全部菜单
+    await userStore.getMenus() // 获取全部菜单
     await authStore.getPermissionsMenus(userStore.userInfo.id, router) // 获取当前用户有权限的菜单按钮集合并且生成路由表
     console.log(router)
     hasRouteFlag = true

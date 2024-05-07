@@ -15,7 +15,6 @@ const globalStore = useGlobalStore()
 const tabList = ref(globalStore.tabList)
 const addTab = () => {
   const { meta, path } = route
-  console.log("🚀 ~ addTab ~ route:", route)
   if (meta.hidden) return
   const tab = {
     path,

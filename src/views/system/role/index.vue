@@ -1,13 +1,13 @@
 <template>
   <page-table v-bind="tableConfig" ref="tableRef">
     <template #btnleft>
-      <el-button type="primary" @click="onAdd">新增</el-button>
+      <el-button type="primary" v-auth="['system.role.add']" @click="onAdd">新增</el-button>
     </template>
     <template #operate="{ item }">
       <el-table-column v-slot="{ row }" v-bind="item">
-        <el-button type="primary" link @click="onEdit(row)">编辑</el-button>
-        <el-button type="primary" link @click="onPermissions(row)">分配权限</el-button>
-        <el-button type="danger" link @click="onDelete(row.id)">删除</el-button>
+        <el-button type="primary" v-auth="['system.role.edit']" link @click="onEdit(row)">编辑</el-button>
+        <el-button type="primary" v-auth="['system:role:assign']" link @click="onPermissions(row)">分配权限</el-button>
+        <el-button type="danger" v-auth="['system:role:delete']" link @click="onDelete(row.id)">删除</el-button>
       </el-table-column>
     </template>
   </page-table>

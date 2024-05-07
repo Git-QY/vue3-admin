@@ -2,14 +2,14 @@
   <Page main="/system/user">
     <page-table v-bind="tableConfig" ref="tableRef">
       <template #btnleft>
-        <el-button type="primary" @click="onAdd">新增</el-button>
-        <el-button type="primary" @click="onAssignRole">分配角色</el-button>
+        <el-button type="primary" @click="onAdd" v-auth="['system:user:add']">新增</el-button>
+        <el-button type="primary" @click="onAssignRole" v-auth="['system:user:assign']">批量分配角色</el-button>
       </template>
-      <template #query-createTime="{ item }">具名插槽</template>
+      <!-- <template #query-createTime="{ item }">具名插槽</template> -->
       <template #operate="{ item }">
         <el-table-column v-slot="{ row }" v-bind="item">
-          <el-button type="primary" link @click="onEdit(row)">编辑</el-button>
-          <el-button type="danger" link @click="onDelete(row.id)">删除</el-button>
+          <el-button type="primary" link @click="onEdit(row)" v-auth="['system:user:update']">编辑</el-button>
+          <el-button type="danger" link @click="onDelete(row.id)" v-auth="['system:user:delete']">删除</el-button>
         </el-table-column>
       </template>
       <template #status="{ item }">
@@ -68,7 +68,6 @@ const tableConfig = reactive({
       type: 'date',
       width: 200,
       formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss'),
-      query: { type: 'slot' },
     },
     { prop: 'updateTime', label: '更新时间', type: 'date', hide: true, width: 200 },
     { prop: 'operate', label: '操作', type: 'slot', fixed: 'right', width: 200 },

@@ -1,6 +1,6 @@
 <template>
   <!-- 新增 -->
-  <el-button type="primary" @click="onAdd">新增</el-button>
+  <el-button type="primary" @click="onAdd" v-auth="['system:menu:add']">新增</el-button>
   <el-table :data="tableData" row-key="id" border style="margin: 10px 0" v-loading="loading" max-height="800px">
     <el-table-column prop="menuName" label="菜单名称" show-overflow-tooltip />
     <el-table-column prop="menuType" label="菜单类型">
@@ -25,9 +25,9 @@
     </el-table-column>
     <el-table-column prop="perms" label="权限标识" />
     <el-table-column prop="buttons" v-slot="{ row }" label="操作" fixed="right">
-      <el-button type="primary" link @click="onAdd(row)">添加</el-button>
-      <el-button type="primary" link @click="onEdit(row)">编辑</el-button>
-      <el-button type="danger" link @click="onDelete(row.id)">删除</el-button>
+      <el-button type="primary" link @click="onAdd(row)" v-auth="['system:menu:add']">添加</el-button>
+      <el-button type="primary" link @click="onEdit(row)" v-auth="['system:menu:edit']">编辑</el-button>
+      <el-button type="danger" link @click="onDelete(row.id)" v-auth="['system:menu:delete']">删除</el-button>
     </el-table-column>
   </el-table>
   <menuDialog ref="menuDialogRef" :tree-data="tableData" :title="title" :confirm="getList"></menuDialog>
