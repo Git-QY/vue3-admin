@@ -68,6 +68,5 @@ function generateRouter(router: Router, menus: Menu[]) {
         meta: { name: menuName },
       }
     })
-  console.log('🚀 ~ generateRouter ~ newMenus:', newMenus)
   listToTree(deepClone(newMenus)).forEach(route => router.addRoute(route))
 }

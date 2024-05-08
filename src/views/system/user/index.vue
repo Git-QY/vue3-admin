@@ -26,6 +26,7 @@
 import { reactive, ref } from 'vue'
 import pageTable from '@/components/Table/index.vue'
 import request from '@/utils/request'
+import { DICTS } from '@/utils/enums'
 import api, { User } from '@/api/user'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 import { useRouter } from 'vue-router'
@@ -45,7 +46,6 @@ const tableConfig = reactive({
   },
   columns: [
     { type: 'selection', fixed: 'left', width: 40 },
-    { prop: 'id', label: 'ID', 'show-overflow-tooltip': true },
     { prop: 'username', label: '用户名', query: {} },
     // { prop: 'password', label: '密码', width: 100, 'show-overflow-tooltip': true },
     { prop: 'avatar', label: '头像', type: 'upload', rules: 'must' },
@@ -54,13 +54,7 @@ const tableConfig = reactive({
       prop: 'status',
       label: '状态',
       type: 'slot',
-      query: {
-        type: 'select',
-        options: [
-          { label: '启用', value: '1' },
-          { label: '停用', value: '0' },
-        ],
-      },
+      query: { type: 'select', options: DICTS.userStatus },
     },
     {
       prop: 'createTime',
@@ -69,7 +63,7 @@ const tableConfig = reactive({
       width: 200,
       formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss'),
     },
-    { prop: 'updateTime', label: '更新时间', type: 'date', hide: true, width: 200 },
+    { prop: 'updateTime', label: '更新时间', type: 'date', width: 200, formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') },
     { prop: 'operate', label: '操作', type: 'slot', fixed: 'right', width: 200 },
   ],
 })

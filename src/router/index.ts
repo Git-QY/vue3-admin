@@ -63,6 +63,7 @@ const routes: RouteRecordRaw[] = [
   //     },
   //   ],
   // },
+  { path: '/:pathMatch(.*)*', component: () => import('@/views/error/404.vue') },
 ]
 
 // 路由实例

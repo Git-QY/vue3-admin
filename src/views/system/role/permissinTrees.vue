@@ -41,7 +41,6 @@ const open = async (row: Role) => {
   curItem.value = row
   treeRef.value?.setCheckedKeys([], false)
   const res = await listMenuByRoleIds({ ids: [row.id as string] })
-  console.log("🚀 ~ open ~ res:", res)
   drawer.value = true
   nextTick(() => {
     treeRef.value?.setCheckedKeys(res.data.permissions, false)

@@ -382,7 +382,6 @@ router.get('/menus/:userId', async (req, res) => {
   try {
     const user = await User.findOne({ id: userId })
     if (!user) return res.send({ code: 404, message: '用户不存在' })
-    console.log("🚀 ~ router.get ~ user:", user)
     // 如果是userId为admin时，直接返回所有权限
     if (user.isAdmin) {
       const menus = await Menu.find()

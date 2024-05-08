@@ -82,8 +82,6 @@ const getList = async () => {
   const params = { page: props.page, ...props.searchForm }
   try {
     const res = await props.api(params)
-    console.log(res)
-
     tableData.value = res.data
     props.page.total = res.page.total
   } catch (error) {

@@ -20,6 +20,7 @@
 import { reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 import RoleDialog from './RoleDialog.vue'
+import { DICTS } from '@/utils/enums'
 import PermissinTrees from './PermissinTrees.vue'
 import { Role, deleteRole, listRole } from '@/api'
 
@@ -38,10 +39,7 @@ const tableConfig = reactive({
       prop: 'status',
       label: '状态',
       type: 'tag',
-      options: [
-        { label: '启用', value: '1', type: 'success' },
-        { label: '禁用', value: '0', type: 'danger' },
-      ],
+      options: DICTS.roleStatus,
     },
     { prop: 'createTime', label: '创建时间', formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') },
     { prop: 'updateTime', label: '更新时间', formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') },

@@ -91,7 +91,6 @@ export class Enum {
     }))
   }
 }
-
 export const AllEnum = {
   // 菜单类型
   MenuType: new Enum().add('0', '目录').add('1', '菜单').add('2', '按钮'),
@@ -106,5 +105,47 @@ export const AllEnum = {
     .add('RoleType', '0', '系统')
     .add('RoleType', '1', '业务'),
 }
-
-// console.log(AllEnum)
+export const DICTS = {
+  // 用户状态
+  userStatus: [
+    { label: '启用', value: '1' },
+    { label: '停用', value: '0' },
+  ],
+  // 用户性别
+  userSex: [
+    { label: '男', value: '1' },
+    { label: '女', value: '0' },
+    { label: '未知', value: '2' },
+  ],
+  // 角色状态
+  roleStatus: [
+    { label: '启用', value: '1', type: 'success' },
+    { label: '禁用', value: '0', type: 'danger' },
+  ],
+  // 菜单类型
+  menuType: [
+    { label: '目录', value: '0' },
+    { label: '菜单', value: '1' },
+    { label: '按钮', value: '2' },
+  ],
+  // 菜单状态
+  menuStatus: [
+    { label: '启用', value: '1' },
+    { label: '禁用', value: '0' },
+  ],
+  // 菜单是否隐藏
+  menuHidden: [
+    { label: '显示', value: '0' },
+    { label: '隐藏', value: '1' },
+  ],
+  // 菜单是否缓存
+  menuKeepAlive: [
+    { label: '缓存', value: '1' },
+    { label: '不缓存', value: '0' },
+  ],
+  // 菜单是否折叠
+  menuFold: [
+    { label: '展开', value: '0' },
+    { label: '折叠', value: '1' },
+  ],
+}

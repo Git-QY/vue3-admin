@@ -27,6 +27,7 @@ import { ref, reactive, watch, toRaw } from 'vue'
 import { addMenu, updateMenu, Menu } from '@/api'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store'
+import { DICTS } from '@/utils/enums'
 
 const userStore = useUserStore()
 
@@ -48,10 +49,7 @@ const columns = reactive<columnsProps[]>([
     prop: 'status',
     label: '菜单状态',
     type: 'radio-group',
-    options: [
-      { label: '启用', value: '1' },
-      { label: '禁用', value: '0' },
-    ],
+    options: DICTS.menuStatus,
     rules: 'must',
     span: 12,
   },
@@ -66,10 +64,7 @@ const columns = reactive<columnsProps[]>([
     prop: 'isKeepAlive',
     label: '是否缓存',
     type: 'radio-group',
-    options: [
-      { label: '是', value: true },
-      { label: '否', value: false },
-    ],
+    options: DICTS.menuKeepAlive,
     rules: 'must',
     span: 12,
   },
@@ -77,10 +72,7 @@ const columns = reactive<columnsProps[]>([
     prop: 'isHidden',
     label: '是否隐藏',
     type: 'radio-group',
-    options: [
-      { label: '是', value: true },
-      { label: '否', value: false },
-    ],
+    options: DICTS.menuHidden,
     rules: 'must',
     span: 12,
   },
@@ -88,10 +80,7 @@ const columns = reactive<columnsProps[]>([
     prop: 'isFold',
     label: '是否折叠',
     type: 'radio-group',
-    options: [
-      { label: '是', value: true },
-      { label: '否', value: false },
-    ],
+    options: DICTS.menuFold,
     rules: 'must',
     span: 12,
   },

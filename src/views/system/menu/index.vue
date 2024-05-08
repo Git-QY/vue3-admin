@@ -5,7 +5,7 @@
     <el-table-column prop="menuName" label="菜单名称" show-overflow-tooltip />
     <el-table-column prop="menuType" label="菜单类型">
       <template #default="{ row }">
-        <el-tag :type="row.menuType == 0 ? 'info' : row.menuType == 1 ? 'success' : 'danger'">{{ AllEnum.MenuType.getLabel(row.menuType) }}</el-tag>
+        <el-tag type="info">{{ AllEnum.MenuType.getLabel(row.menuType) }}</el-tag>
       </template>
     </el-table-column>
     <el-table-column prop="sort" label="排序" width="60" />
@@ -38,7 +38,6 @@ import { ref, onMounted } from 'vue'
 import { listMenu, Menu, deleteMenu } from '@/api'
 import { listToTree, deepClone } from '@/utils'
 import { AllEnum } from '@/utils/enums.ts'
-console.log('🚀 ~ AllEnum:', AllEnum)
 import menuDialog from './menuDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
