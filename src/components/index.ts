@@ -1,6 +1,7 @@
 import PageTable from './Table/index.vue'
 import Page from './Page/index.vue'
 import SvgIcon from './Icon/svgIcon.vue'
+import Icon from './Icon/index.vue'
 import Upload from './FormItem/upload.vue'
 import Form from './Form/index.vue'
 import Dialog from './Dialog/index.vue'
@@ -14,6 +15,7 @@ const components: { [name: string]: Component } = {
   Upload,
   Form,
   Dialog,
+  Icon,
 }
 export default {
   // install方法， Object.keys()得到对象所有的key

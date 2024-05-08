@@ -1,5 +1,6 @@
 // 全局通用状态管理
 import { defineStore } from 'pinia'
+import { nextTick } from 'vue'
 import { LanguageType, LayoutType } from '../interface'
 interface globalState {
   isFullscreen: Boolean
@@ -7,8 +8,7 @@ interface globalState {
   theme: string
   layout: LayoutType
   isCollapse: Boolean
-  tabList: Array<any>
-  activePath: string
+  reloadFlag: Boolean
 }
 export const useGlobalStore = defineStore('global', {
   state: (): globalState => {
@@ -17,9 +17,8 @@ export const useGlobalStore = defineStore('global', {
       language: 'Chinese', // 语言
       theme: '', // 主题
       layout: 'vertical', // 布局方式
-      isCollapse: false,
-      tabList: [],
-      activePath: '/home',
+      isCollapse: false, // 是否折叠
+      reloadFlag: true, // 是否刷新页面
     }
   },
   getters: {},
@@ -31,11 +30,12 @@ export const useGlobalStore = defineStore('global', {
     changeCollapse() {
       this.isCollapse = !this.isCollapse
     },
-    addTab(state: any, tab: any) {
-      const isSome = state.some((item: any) => item.path === tab.path)
-      if (!isSome) {
-        this.tabList.push(tab)
-      }
+    // 刷新当前页
+    refresh() {
+      this.reloadFlag = false
+      nextTick(() => {
+        this.reloadFlag = true
+      })
     },
   },
   persist: true,

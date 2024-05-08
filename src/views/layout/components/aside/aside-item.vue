@@ -1,13 +1,15 @@
 <template>
   <el-sub-menu popper-class="pop-menu" v-if="hasChildren" :index="item.path">
     <template #title>
-      <component class="icons" :is="item.icon"></component>
+      <!-- <component class="icons" :is="item.icon"></component> -->
+      <el-icon> <svg-icon :iconName="`icon-${item.icon}`" color="#fff" /></el-icon>
       <span>{{ item.menuName }}</span>
     </template>
     <aside-item v-for="childItem in item.children" :item="childItem"></aside-item>
   </el-sub-menu>
   <el-menu-item v-else :index="item.path">
-    <component class="icons" :is="item.icon"></component>
+    <!-- <component class="icons" :is="item.icon"></component> -->
+    <el-icon> <svg-icon :iconName="`icon-${item.icon}`" color="#fff" /></el-icon>
     <template #title>{{ item.menuName }}</template>
   </el-menu-item>
 </template>
