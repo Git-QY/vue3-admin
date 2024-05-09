@@ -12,16 +12,16 @@
     </template>
   </page-table>
   <!-- 添加弹窗 -->
-  <RoleDialog ref="roleDialogRef" :title="title" :confirm="refresh"></RoleDialog>
-  <PermissinTrees ref="permissinTreesRef"></PermissinTrees>
+  <roleDialog ref="roleDialogRef" :title="title" :confirm="refresh"></roleDialog>
+  <permissinTrees ref="permissinTreesRef"></permissinTrees>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
-import RoleDialog from './RoleDialog.vue'
+import roleDialog from './roleDialog.vue'
 import { DICTS } from '@/utils/enums'
-import PermissinTrees from './PermissinTrees.vue'
+import permissinTrees from './permissinTrees.vue'
 import { Role, deleteRole, listRole } from '@/api'
 
 const tableConfig = reactive({

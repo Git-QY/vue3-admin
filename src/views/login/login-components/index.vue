@@ -103,10 +103,6 @@ const giteeLogin = async () => {
   .footer {
     width: 80%;
   }
-  .divider::v-deep .el-divider__text {
-    color: #acadaf;
-    background-color: transparent !important;
-  }
   .third-login-items {
     width: 100%;
     display: flex;
