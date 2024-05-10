@@ -28,7 +28,6 @@ const schemaRules = {
   // 是否是管理员
   isAdmin: { type: Boolean, default: false },
   // 省市区
-  
 }
 
 // 定义用户模型
@@ -38,7 +37,7 @@ const userSchema = new mongoose.Schema(schemaRules)
 const User = mongoose.model('User', userSchema)
 
 // 预校验规则
-const userValidationRules = isNewUser => [
+const userValidationRules = () => [
   body('username')
     .notEmpty()
     .withMessage('用户名不能为空')
@@ -49,7 +48,7 @@ const userValidationRules = isNewUser => [
     .custom(async (value, { req }) => {
       // 新增用户时候确保唯一性
       const query = { username: value }
-      if (!isNewUser) {
+      if (req.body.id) {
         query._id = { $ne: req.body._id }
       }
       const user = await User.findOne(query)

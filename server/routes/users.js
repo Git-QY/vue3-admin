@@ -87,7 +87,6 @@ router.post('/login', async (req, res) => {
 // 2 校验邮箱验证码
 // 3 输入新密码
 // 4 修改密码
-
 // 检验验证码
 router.post('/checkEmailCode', async function (req, res, next) {
   // 获取邮箱和验证码
@@ -142,7 +141,6 @@ router.post('/login/email', async (req, res) => {
     }
   }
 })
-
 // 第三方登录
 /**
  * @api {post} /users/login/third 第三方登录
@@ -228,7 +226,7 @@ router.post('/login/third', async (req, res) => {
 
 // ******************************************************************************************************************
 // 新增用户
-router.post('/add', userValidationRules(true), async (req, res) => {
+router.post('/add', userValidationRules(), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.send({ code: 500, message: errors.array().map(item => item.msg) })
@@ -273,7 +271,7 @@ router.put('/update/field', async (req, res) => {
   }
 })
 // 修改用户
-router.put('/update', userValidationRules(false), async (req, res) => {
+router.put('/update', userValidationRules(), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   try {
