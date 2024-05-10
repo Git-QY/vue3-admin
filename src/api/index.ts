@@ -23,7 +23,7 @@ export interface Menu {
   icon?: string
   path: string
   component?: string
-  sort?: string
+  sort: number
   perms: string
   status: string
   visible: Boolean

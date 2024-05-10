@@ -10,6 +10,10 @@
   --light-8: rgb(215, 230, 254);
   --light-9: rgb(235, 243, 255);
   --primary: #3582fb;
+  --text-color:'#000'
+
+  --header-bg: #fff;
+  --aside-bg: #fff;
 }
 
 @import './reset.scss'; // 初始化样式scss

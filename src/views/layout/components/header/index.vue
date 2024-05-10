@@ -1,6 +1,6 @@
 <template>
   <div class="layout-header">
-    <div class="layout-header--left">
+    <div class="layout-header--left" v-if="globalStore.layout !== 'horizontal'">
       <el-space size="large">
         <ToggleSidebar class="fold-btn" />
         <Breadcrumb class="action" />
@@ -30,10 +30,11 @@ import FullScreen from './components/FullScreen.vue'
 import ThemeSetting from './components/ThemeSetting.vue'
 
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/store'
+import { useUserStore, useGlobalStore } from '@/store'
 
 const router = useRouter()
 const userStore = useUserStore()
+const globalStore = useGlobalStore()
 const userInfo = userStore.userInfo
 
 const handleLogout = () => {

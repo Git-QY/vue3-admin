@@ -1,7 +1,7 @@
 <template>
   <el-tooltip placement="left" content="语言翻译">
     <el-dropdown @command="changeLanguage" class="my-dropdown">
-      <svg-icon iconName="icon-yuyan" :size="20" />
+      <svg-icon iconName="icon-yuyan" :size="20" color="var(--text-color)" />
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item v-for="item in languageList" :key="item.value" :command="item.value" :disabled="language === item.value">

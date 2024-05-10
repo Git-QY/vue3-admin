@@ -6,6 +6,7 @@ interface globalState {
   isFullscreen: Boolean
   language: LanguageType
   theme: string
+  themeColor:string
   layout: LayoutType
   isCollapse: Boolean
   reloadFlag: Boolean
@@ -16,6 +17,7 @@ export const useGlobalStore = defineStore('global', {
       isFullscreen: false, // 是否全屏
       language: 'Chinese', // 语言
       theme: '', // 主题
+      themeColor: '#3582FB', // 主题色
       layout: 'vertical', // 布局方式
       isCollapse: false, // 是否折叠
       reloadFlag: true, // 是否刷新页面

@@ -14,8 +14,16 @@
   border-radius: 4px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
-
-//
 .my-dropdown .el-tooltip__trigger:first-child:focus-visible {
   outline: unset;
+}
+
+.felx-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.felx-between {
+  display: flex;
+  justify-content: space-between;
 }

@@ -1,7 +1,7 @@
 <template>
-  <div class="layout-logo" @click="goHome">
-    <img class="logo" src="~@/assets/logo.svg" />
-    <div v-show="!isCollapse" class="title">Vue3</div>
+  <div class="layout-logo" :class="{ 'layout-logo--collapse': isCollapse }" @click="goHome">
+    <img class="logo" src="~@/assets/svgs/logo.svg" />
+    <span class="title" v-if="!isCollapse">ADMIN</span>
   </div>
 </template>
 
