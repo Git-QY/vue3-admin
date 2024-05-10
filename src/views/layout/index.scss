@@ -1,16 +1,32 @@
 .layout {
+  .el-aside {
+    padding: 0;
+    margin: 0;
+    width: auto;
+    box-shadow: 2px 0 12px #1d23290d;
+    background-color: #304156;
+  }
   .el-header {
+    padding: 0;
+    margin: 0;
     height: auto;
   }
   .el-main {
     padding: 0;
     margin: 0;
   }
-  &-main {
-    box-sizing: border-box;
-    height: 100%;
-    width: 100%;
-    padding: 16px;
+  &-header {
+    height: 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e4ef;
+    &--left,
+    &--right {
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+    }
   }
   &-navTab {
     height: 40px;
@@ -92,6 +108,48 @@
     .el-dropdown-link {
       width: 40px;
       height: 40px;
+    }
+  }
+  &-aside {
+    box-sizing: border-box;
+    width: 200px;
+    transition: width 0.3s;
+    &--collapse {
+      width: 64px;
+    }
+    .el-menu {
+      border: none;
+    }
+  }
+  &-logo {
+    color: #fff;
+    height: 48px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    .logo {
+      max-width: 32px;
+      max-height: 32px;
+    }
+    .title {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      margin-left: 8px;
+      // transition: all 0.3s;
+    }
+  }
+  &-main {
+    box-sizing: border-box;
+    padding: 16px;
+  }
+  // 布局样式
+  &-vertical {
+    .layout-main {
+      height: calc(100vh - 64px - 40px);
     }
   }
 }
