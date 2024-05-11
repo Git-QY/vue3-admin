@@ -3,7 +3,7 @@
     <!-- 基础page配置 搜索表格分页 -->
     <!-- 搜索模块 -->
     <div class="page-search">
-      <search :columns="props.columns" v-model="props.searchForm" :maxShow="3" @on-search="handleSearch">
+      <search :columns="props.columns" v-model="props.searchForm" :maxShow="maxShow" @on-search="handleSearch">
         <!-- 获取全部插槽映射 -->
         <template v-for="(_, slot) in $slots" v-slot:[slot]="{ item }">
           <slot :name="slot" :item="item"></slot>
@@ -18,14 +18,17 @@
     </div>
     <!-- 表格模块 -->
     <div class="page-table">
-      <el-table :data="props.data ?? tableData" :border="true" v-bind="props.table" v-loading="loading">
+      <el-table :data="props.data ?? tableData" :border="true" v-bind="props.table" v-loading="loading" @selection-change="handleSelectionChange">
         <template v-for="item in tableColumns">
           <slot v-if="item.type == 'slot'" :name="item.prop" :item="item"></slot>
           <!-- upload -->
           <el-table-column v-else-if="item.type == 'upload'" v-bind="item" v-slot="{ row }">
             <fileIcon :data="row[item.prop]"></fileIcon>
           </el-table-column>
-
+          <el-table-column v-else-if="item.type == 'tag'" v-bind="item" v-slot="{ row }">
+            <el-tag :type="getLabel(item.options, row[item.prop], true).type">{{ getLabel(item.options, row[item.prop]) }}</el-tag>
+          </el-table-column>
+          <!-- tag -->
           <el-table-column v-else v-bind="item"></el-table-column>
         </template>
         <template #empty>
@@ -50,6 +53,7 @@ import pagination from './components/pagination.vue'
 import fileIcon from '@/components/FormItem/fileIcon.vue'
 import { tableProps, columnsProps } from './type'
 import { defaultConfig, deepMerge } from './config'
+import { deepClone, getLabel } from '@/utils'
 
 const prop = defineProps({
   data: { type: Array },
@@ -58,8 +62,9 @@ const prop = defineProps({
   api: { type: Function },
   columns: { type: Array },
   page: { type: Object },
+  maxShow: { type: Number, default: 3 },
 }) as tableProps
-const props = reactive(deepMerge(defaultConfig, prop))
+const props = reactive(deepMerge(deepClone(defaultConfig), prop))
 // 搜索
 const handleSearch = () => {
   props.page.page = 1
@@ -70,20 +75,22 @@ const handleSearch = () => {
 const tableColumns = computed(() => props.columns.filter((item: columnsProps) => !item.hide))
 const tableData = ref([])
 const loading = ref(false)
+const selectData = ref([]) // 表格选中的数据
 const getList = async () => {
   if (!props.api) return
   loading.value = true
   const params = { page: props.page, ...props.searchForm }
   try {
     const res = await props.api(params)
-    console.log(res)
-
     tableData.value = res.data
     props.page.total = res.page.total
   } catch (error) {
   } finally {
     loading.value = false
   }
+}
+const handleSelectionChange = (val: any) => {
+  selectData.value = val
 }
 // 分页
 const setPage = (page: number) => {
@@ -100,12 +107,11 @@ const refresh = () => {
   getList()
 }
 
-defineExpose({ refresh })
+defineExpose({ refresh, selectData })
 </script>
 
 <style lang="scss" scoped>
 .page {
-  margin: 20px 20px 0;
   padding: 20px;
   background-color: #fff;
   border-radius: 4px;

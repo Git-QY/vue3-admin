@@ -1,15 +1,16 @@
 <template>
-  <div class="header">
-    <div class="header-left">
+  <div class="layout-header">
+    <div class="layout-header--left" v-if="globalStore.layout !== 'horizontal'">
       <el-space size="large">
         <ToggleSidebar class="fold-btn" />
         <Breadcrumb class="action" />
       </el-space>
     </div>
-    <div class="header-right">
+    <div class="layout-header--right">
       <el-space size="large">
         <Language />
         <FullScreen />
+        <ThemeSetting />
         <el-tooltip effect="light" placement="top">
           <template #content>
             <el-button text class="exit" @click="handleLogout">退出登录</el-button>
@@ -26,12 +27,14 @@ import ToggleSidebar from './components/ToggleSidebar.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
 import Language from './components/Language.vue'
 import FullScreen from './components/FullScreen.vue'
+import ThemeSetting from './components/ThemeSetting.vue'
 
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/store'
+import { useUserStore, useGlobalStore } from '@/store'
 
 const router = useRouter()
 const userStore = useUserStore()
+const globalStore = useGlobalStore()
 const userInfo = userStore.userInfo
 
 const handleLogout = () => {
@@ -40,17 +43,4 @@ const handleLogout = () => {
 }
 </script>
 
-<style scoped lang="scss">
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #e0e4ef;
-  &-left,
-  &-right {
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-  }
-}
-</style>
+<style scoped lang="scss"></style>

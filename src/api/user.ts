@@ -26,7 +26,7 @@ export interface User {
   id?: string
   username: string
   password?: string
-  createdTime?: Date
+  createTime?: Date
   updateTime?: Date
   email: string
   status: string
@@ -89,7 +89,6 @@ export default {
       data,
     })
   },
-
   // 更新用户
   updateUser(data: User): Promise<response> {
     return request({
@@ -128,6 +127,15 @@ export default {
       url: `/users/detail`,
       method: 'get',
       params: { id },
+    })
+  },
+
+  // 给用户分配角色 /assign/roles
+  assignRoles(data: { userIds: string[]; roleIds: string[] }): Promise<response> {
+    return request({
+      url: `/users/assign/roles`,
+      method: 'post',
+      data,
     })
   },
 }

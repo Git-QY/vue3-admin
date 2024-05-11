@@ -11,7 +11,6 @@ const readline = require('readline')
 const CHUNK_DIR = 'public/uploads/'
 router.post('/upload', multipartMiddleware, (req, res) => {
   const file = req.files.file
-  console.log(file)
   const newPath = path.resolve(CHUNK_DIR, file.originalFilename)
   fs.copyFileSync(file.path, newPath)
   fs.unlinkSync(file.path) // 删除原始文件
@@ -19,7 +18,6 @@ router.post('/upload', multipartMiddleware, (req, res) => {
   res.send({ code: 200, msg: '上传成功', data: { url, name: file.originalFilename } })
 })
 router.post('/chunk-upload', multipartMiddleware, (req, res) => {
-  console.log('req.body', req.body, req.files)
   const { fileHash, chunkHash } = req.body
 
   // 如果临时文件夹(用于保存分片)不存在，则创建
@@ -48,7 +46,6 @@ router.post('/chunk-merge', async (req, res) => {
   const chunkPaths = fs.readdirSync(chunkDir)
   // 读取临时文件夹获得的文件（分片）名称数组可能乱序，需要重新排序
   chunkPaths.sort((a, b) => a.split('-')[1] - b.split('-')[1])
-  console.log('chunkPaths', chunkPaths)
   // 遍历文件（分片）数组，将分片追加到文件中
   const pool = chunkPaths.map(
     chunkName =>
@@ -67,7 +64,6 @@ router.post('/chunk-merge', async (req, res) => {
     await fs.rmdirSync(chunkDir)
     res.send({ code: 200, msg: '合并成功', fs: fs })
   } catch (error) {
-    console.log('error', error)
     res.send({ code: 400, msg: error })
   }
 })

@@ -2,7 +2,7 @@
   <!-- 纵向布局 -->
   <div class="layout layout-horizontal">
     <el-container>
-      <el-header><Logo /> <Aside mode="horizontal" /> <Header mode="horizontal" /></el-header>
+      <el-header><Logo /> <Aside mode="horizontal" /> <Header /></el-header>
       <el-main> <NavTab /> <Main /> </el-main>
     </el-container>
   </div>

@@ -1,96 +1,33 @@
 <template>
-  <Logo />
-  <el-menu
-    active-text-color="#ffd04b"
-    @select="setActivePath"
-    :collapse="isCollapse"
-    background-color="#304156"
-    class="el-menu-vertical-demo"
-    :default-active="activePath"
-    text-color="#fff"
-    :router="true"
-  >
-    <template v-for="(item, index) in menuItems">
-      <!-- <template v-if="item.children">
-        <SubMenu :item="item" :key="index" />
+  <div class="layout-aside" :class="{ 'layout-aside--collapse': isCollapse }">
+    <el-menu router :mode="mode" :collapse="isCollapse" active-text-color="var(--primary)" :default-active="activePath" :collapse-transition="false" popper-class="pop-menu">
+      <template v-for="item in menuList">
+        <aside-item :item="item"></aside-item>
       </template>
-      <template v-else>
-        <MenuItem :item="item" :key="index" />
-      </template> -->
-      <aside-item :item="item"></aside-item>
-    </template>
-  </el-menu>
+    </el-menu>
+  </div>
 </template>
 
 <script setup lang="ts">
-// import SubMenu from './SubMenu.vue'
-// import MenuItem from './MenuItem.vue'
+import { computed } from 'vue'
 import asideItem from './aside-item.vue'
-
-import Logo from '../logo/index.vue'
-import { computed, ref } from 'vue'
-import { useGlobalStore } from '@/store'
+import { useGlobalStore, useAuthStore } from '@/store'
 import { useRouter } from 'vue-router'
-
+const props = defineProps({
+  menuList: { type: Array, default: () => [] },
+  mode: { type: String, default: 'vertical' },
+})
 const globalStore = useGlobalStore()
+const authStore = useAuthStore()
 const router = useRouter()
-
-const activePath = computed(() => {
-  return router.currentRoute.value.path
-})
-const setActivePath = (path: string) => {
-  globalStore.activePath = path
-}
-
-const isCollapse = computed(() => {
-  return globalStore.isCollapse
-})
-
-const menuItems = ref([
-  {
-    name: '首页',
-    path: '/home',
-    hidden: false,
-    icon: 'HomeFilled',
-  },
-  {
-    name: '系统管理',
-    path: 'system',
-    hidden: false,
-    icon: 'Tools',
-    children: [
-      {
-        name: '用户管理',
-        path: '/system/user',
-        hidden: false,
-      },
-      {
-        name: '角色管理',
-        path: '/system/role',
-        hidden: false,
-      },
-      {
-        name: '菜单管理',
-        path: '/system/menu',
-        hidden: false,
-      },
-    ],
-  },
-])
-</script>
-<style lang="scss" scoped>
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  height: 100%;
-}
-.el-menu {
-  border-right: none;
-}
-.el-menu-item.is-active {
-  background-color: #001528 !important;
-  color: #409eff;
-  span {
-    color: #fff !important;
+const activePath = computed(() => router.currentRoute.value.path)
+const isCollapse = computed(() => globalStore.isCollapse)
+const menuList = computed(() => {
+  if (props.menuList.length === 0) {
+    return authStore.getLeftMenuTree()
+  } else {
+    return props.menuList
   }
-}
-</style>
+})
+</script>
+<style lang="scss" scoped></style>

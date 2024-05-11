@@ -1,90 +1,95 @@
 <template>
-  <el-tabs v-model="globalStore.activePath" type="card" @tab-remove="onTabRemove" @tab-click="onTabClick">
-    <el-tab-pane v-for="item in tabList" :label="item.title" :name="item.path" :closable="item.path !== '/home'"></el-tab-pane>
-  </el-tabs>
+  <div class="layout-navTab">
+    <el-tabs :model-value="activeName" @tab-change="handleChange">
+      <el-tab-pane v-for="item in navTabStore.tabsList" :key="item.fullPath" :label="item.title" :name="item.fullPath">
+        <template #label>
+          <div class="layout-navTab--item" :class="{ active: isActive(item) }">
+            <span>{{ item.title }}</span>
+            <el-icon @click.prevent.stop="removeTab(item)" v-if="isClose(item)" class="layout-navTab--item_close"><Close /></el-icon>
+          </div>
+        </template>
+      </el-tab-pane>
+    </el-tabs>
+    <div class="layout-navTab--refresh" @click="handleRefresh">
+      <Icon name="refresh"></Icon>
+    </div>
+    <el-dropdown trigger="click" class="layout-navTab--more" @command="handleCommand">
+      <Icon class="el-dropdown-link" name="arrow-down"></Icon>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item v-for="item in navTabStore.tabMenuOptions" :key="item.key" :command="item.key" :disabled="item.disabled">
+            <Icon :name="item.icon" />
+            <span>{{ item.label }}</span>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </div>
 </template>
 
 <script lang="ts" setup>
+import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useGlobalStore } from '@/store'
-import { ref, watch } from 'vue'
+import { useNavTabStore, useGlobalStore } from '@/store'
+import { onMounted } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
+const navTabStore = useNavTabStore()
 const globalStore = useGlobalStore()
-const tabList = ref(globalStore.tabList)
+const activeName = computed(() => route.fullPath)
+
+// 路由添加tab
 const addTab = () => {
-  const { meta, path } = route
-  if (meta.hidden) return
-  const tab = {
-    path,
-    title: meta.title,
-  }
-  globalStore.addTab(globalStore.tabList, tab)
+  const { fullPath, meta } = route
+  const tab: App.TabItem = { fullPath, title: meta.name, ...meta }
+  navTabStore.addTab(tab)
 }
-addTab()
-const onTabClick = (event: any) => {
-  globalStore.activePath = event.props.name
-  router.push(event.props.name)
+// 切换tab
+const handleChange = (fullPath: string) => {
+  router.push(fullPath)
 }
-
-const onTabRemove = (targetName: any) => {
-  const tabs = tabList.value
-
-  // if (tabs.length === 1) return
-  if (globalStore.activePath === targetName) {
-    tabs.forEach((tab, index) => {
-      if (tab.path === targetName) {
-        const nextTab = tabs[index + 1] || tabs[index - 1]
-        if (nextTab) {
-          globalStore.activePath = nextTab.path
-        }
-      }
-    })
-  }
-
-  const newTab = tabs.filter(item => item.path !== targetName)
-  tabList.value = newTab
-  globalStore.tabList = newTab
-  globalStore.activePath = globalStore.activePath
-  router.push(globalStore.activePath)
+// 路由删除tab
+const removeTab = (item: App.TabItem) => {
+  navTabStore.removeTab(item.fullPath)
 }
-
-function getParentRoutePath(route: any) {
-  const segments = route.path.split('/')
-  segments.pop()
-  return segments.join('/')
+const isClose = (item: App.TabItem) => {
+  return item.fullPath !== '/home'
+}
+// 判断是否是当前激活的tab或者子集
+const isActive = (item: App.TabItem) => {
+  return route.fullPath.includes(item.fullPath)
 }
 watch(
-  () => route.path,
-  () => {
-    let activePath = route.path
-    if (route.meta.hidden) {
-      activePath = getParentRoutePath(route)
-    }
-    globalStore.activePath = activePath
-
-    addTab()
-  },
+  () => route.fullPath,
+  () => addTab(),
 )
+onMounted(addTab)
+const handleRefresh = () => globalStore.refresh()
+const handleCommand = (command: string) => {
+  switch (command) {
+    case 'refresh':
+      globalStore.refresh()
+      break
+    case 'closeCurrent':
+      navTabStore.removeTab(route.fullPath)
+      break
+    case 'closeLeft':
+      navTabStore.closeLeftTabs(route.fullPath)
+      break
+    case 'closeRight':
+      navTabStore.closeRightTabs(route.fullPath)
+      break
+    case 'closeOther':
+      navTabStore.closeOtherTabs(route.fullPath)
+      break
+    case 'closeAll':
+      navTabStore.clearTabs()
+      break
+    default:
+      break
+  }
+}
 </script>
 
-<style lang="scss" scoped>
-:deep.el-tabs {
-  --el-tabs-header-height: 32px;
-  line-height: 32px;
-}
-:deep(.el-tabs__item) {
-  font-size: 12px;
-}
-:deep(.el-tabs__item:hover) {
-  color: #000;
-}
-:deep(.el-tabs__item.is-active) {
-  color: #000;
-  background-color: #f5f5f5;
-}
-:deep.el-tabs--card .el-tabs__header .el-tabs__item.is-active {
-  border-bottom-color: #e0e4ef;
-}
-</style>
+<style lang="scss" scoped></style>

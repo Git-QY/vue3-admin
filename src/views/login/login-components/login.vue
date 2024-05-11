@@ -24,9 +24,10 @@ import router from '@/router'
 import { ElMessage } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
 import { ref, reactive, onMounted, inject } from 'vue'
-import { useUserStore } from '@/store'
+import { useUserStore, useAuthStore } from '@/store'
 import CryptoJS from 'crypto-js'
 const userStore = useUserStore()
+const authStore = useAuthStore()
 const form = ref<LoginType>({ username: '', password: '' })
 const rules = reactive({
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -48,6 +49,7 @@ const submitForm = async () => {
       ElMessage.success('登录成功')
       userStore.token = res.data.token
       userStore.userInfo = res.data.userInfo
+      await authStore.getPermissionsMenus(userStore.userInfo.id, router) // 获取当前用户有权限的菜单按钮集合并且生成路由表
       router.push('/')
       loading.value = false
     }

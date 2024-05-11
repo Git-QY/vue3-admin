@@ -1,11 +1,9 @@
 <template>
-  <div class="layout-main">
-    <router-view />
-  </div>
+  <div v-if="globalStore.reloadFlag" class="layout-main"><router-view></router-view></div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { useGlobalStore } from '@/store'
+const globalStore = useGlobalStore()
 </script>
-
 <style lang="scss" scoped></style>
