@@ -210,7 +210,12 @@
     display: flex;
     .layout-column {
       box-shadow: 2px 0 1px -2px rgb(136, 136, 136);
-
+      &--logo {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
       &--item {
         width: 90px !important;
         box-sizing: border-box;
@@ -235,6 +240,7 @@
         }
       }
     }
+
     &--main {
       flex: 1;
     }

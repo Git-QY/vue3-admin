@@ -9,3 +9,4 @@ const globalStore = useGlobalStore()
 const { setTheme } = useTheme()
 setTheme(globalStore.themeColor)
 </script>
+<style lang="scss"></style>
