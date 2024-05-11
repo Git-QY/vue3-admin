@@ -2,6 +2,9 @@
   <!-- 分栏布局 -->
   <div class="layout layout-columns">
     <div class="layout-column">
+      <div class="layout-column--logo">
+        <img src="~@/assets/svgs/logo.svg" style="height: 32px" />
+      </div>
       <div
         v-for="item in menuList"
         :key="item.path"
