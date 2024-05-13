@@ -48,6 +48,8 @@ router.delete('/delete', async (req, res) => {
   }
 })
 router.put('/update', roleValidationRules(), async (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   const { id, ...body } = req.body
   try {
     await Role.updateOne({ id }, { ...body, updateTime: Date.now(), updateBy: req.user.name })
