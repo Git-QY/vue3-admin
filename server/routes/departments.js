@@ -48,7 +48,7 @@ const { Department, departmentValidationRules, validationResult } = require('../
 router.post('/add', departmentValidationRules(true), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
-  const { body } = req
+  const { body, user } = req
   try {
     await Department.create({ ...body, id: $generateUUID() }) // 创建新用户
     res.send({ code: 200, message: '创建成功' })
@@ -134,13 +134,11 @@ router.put('/update', departmentValidationRules(false), async (req, res) => {
  * @api {post} /departments/list 部门列表
  * @apiDescription 获取全部列表 跟根据parentId获取相应的下级
  * @apiGroup 部门接口
+ * @apiHeader {String} token 用户授权token
  * @apiBody {String} any 全部参数可检索 deptName支持模糊
  * @apiParamExample {json} Request-Example:
  *     {
- *       "id"："xxxxxxxxxxxxx"
  *       "deptName": "部门名称",
- *       "parentId": "上级部门ID"
- *        ...
  *     }
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK

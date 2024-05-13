@@ -27,7 +27,9 @@ const schemaRules = {
   roleIds: { type: Array, default: [] },
   // 是否是管理员
   isAdmin: { type: Boolean, default: false },
-  // 省市区
+
+  // 所属部门
+  deptId: { typeof: String },
 }
 
 // 定义用户模型

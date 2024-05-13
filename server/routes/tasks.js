@@ -26,6 +26,7 @@ const { Task, taskPreValidate, validationResult } = require('../mongodb/models/t
  * @api {post} /tasks/add 新增任务
  * @apiDescription 新增任务信息
  * @apiGroup 任务接口
+ * @apiHeader {String} token
  * @apiBody {String} taskName 任务名称
  * @apiBody {String} [remark] 备注
  * @apiBody {String} priority 任务优先级 'low' 低 'medium' 中等 'high' 高
@@ -77,6 +78,7 @@ router.post('/add', taskPreValidate(), async (req, res) => {
  * @api {delete} /tasks/delete 删除任务
  * @apiDescription 删除指定ID的任务
  * @apiGroup 任务接口
+ * @apiHeader {String}  token
  * @apiParam {String} id 任务ID
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
@@ -106,6 +108,7 @@ router.delete('/delete', async (req, res) => {
  * @api {put} /tasks/update 修改任务
  * @apiDescription 修改指定ID的任务信息
  * @apiGroup 任务接口
+ * @apiHeader {String}  token
  * @apiBody {String} id 任务ID
  * @apiBody {String} taskName 任务名称
  * @apiBody {String} [remark] 备注
@@ -159,6 +162,7 @@ router.put('/update', taskPreValidate(), async (req, res) => {
  * @api {put} /tasks/update/field 单独更新任务字段
  * @apiDescription 单独更新任务的指定字段
  * @apiGroup 任务接口
+ * @apiHeader {String}  token
  * @apiBody {String} id 任务ID
  * @apiBody {String} fieldName 字段名称
  * @apiBody {String} fieldValue 字段值
@@ -203,6 +207,7 @@ router.put('/update/field', async (req, res) => {
  * @api {get} /tasks/list 获取任务列表
  * @apiDescription 获取符合条件的任务列表
  * @apiGroup 任务接口
+ * @apiHeader {String}  token
  * @apiParam {String} taskName 任务名称（可选）
  * @apiParam {Number} [page.page=1] 页码，默认为1
  * @apiParam {Number} [page.pageSize=10] 每页显示数量，默认为10
@@ -248,15 +253,43 @@ router.put('/update/field', async (req, res) => {
  */
 
 router.get('/list', async (req, res) => {
-  const { taskName, page = { pageSize: 10, page: 1 } } = req.body
+  const { taskName = '', page = { pageSize: 10, page: 1 } } = req.body
   const query = { ...req.body, taskName: { $regex: taskName } }
   try {
-    const task = await await Task.aggregate([
+    const task = await Task.aggregate([
       { $match: query }, // 匹配查询条件
-      { $sort: { createTime: 1 } }, // 按创建时间倒序排序
+      { $sort: { createTime: 1 } }, // 按照创建时间升序排序
       { $skip: (page.page - 1) * page.pageSize }, // 跳过指定数量的文档
       { $limit: page.pageSize }, // 限制返回的文档数量
+      /**
+       *  assigneeId createById updateById连表users查询 对应的username值  返回结果
+       * {
+       * assigneeId:'id1'
+       * createById:'id2'
+       * updateById:'id3'
+       * assignee:'id1->username1'
+       * createBy:'id2->username2'
+       * updateBy:'id3->username3'
+       * }
+       */
+      {
+        $lookup: {
+          from: 'users', // 关联的集合名
+          let: { assigneeId: '$assigneeId', createById: '$createById', updateById: '$updateById' },
+          pipeline: [{ $match: { $expr: { $in: ['$id', ['$$assigneeId', '$$createById', '$$updateById']] } } }, { $project: { _id: 1, id: 1, username: 1 } }],
+          as: 'users',
+        },
+      },
+      /**
+       * 把users集合中的数据，合并到task集合中，并删除users集合中的
+       * {
+       * assignee:'id1->username1'
+       * createBy:'id2->username2'
+       * updateBy:'id3->username3'
+       * }
+       */
     ])
+
     const total = await Task.countDocuments(query) // 获取符合条件的用户总数
     res.send({ code: 200, data: task, page: { ...page, total }, message: '获取成功' })
   } catch (error) {
