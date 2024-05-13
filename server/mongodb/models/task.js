@@ -47,9 +47,7 @@ const commentSchema = new Schema({
 const taskPreValidate = () => [
   body('taskName').notEmpty().withMessage('任务名称不能为空'),
   body('priority').isString().withMessage('任务优先级必须为字符串').bail().isIn(['low', 'medium', 'high']).withMessage('任务优先级值错误'),
-  body('status').isString().withMessage('任务状态必须为字符串').isIn(['todo', 'doing', 'done']).withMessage('任务状态值错误'),
-  body('startTime').isDate().withMessage('日期格式不正确'),
-  body('endTime').isDate().withMessage('日期格式不正确'),
+  body('status').isString().withMessage('任务状态必须为字符串').isIn(['0', '1', '2']).withMessage('任务状态值错误'),
   body('assigneeId').notEmpty().withMessage('认领人不能为空'),
 ]
 
