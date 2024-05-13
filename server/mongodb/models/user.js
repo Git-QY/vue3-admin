@@ -11,8 +11,8 @@ const schemaRules = {
     maxlength: 20,
   }, // 用户名，必需且唯一
   password: { type: String, required: true }, // 密码，必需
-  createdTime: { type: Date, default: Date.now }, // 创建时间
-  updatedTime: { type: Date, default: Date.now }, // 最后更新时间
+  createTime: { type: Date, default: Date.now }, // 创建时间
+  updateTime: { type: Date, default: Date.now }, // 最后更新时间
   // 用户备注
   remark: { type: String, default: '' },
   // 邮箱
@@ -28,7 +28,6 @@ const schemaRules = {
   // 是否是管理员
   isAdmin: { type: Boolean, default: false },
   // 省市区
-  
 }
 
 // 定义用户模型
@@ -38,7 +37,7 @@ const userSchema = new mongoose.Schema(schemaRules)
 const User = mongoose.model('User', userSchema)
 
 // 预校验规则
-const userValidationRules = isNewUser => [
+const userValidationRules = () => [
   body('username')
     .notEmpty()
     .withMessage('用户名不能为空')
@@ -49,7 +48,7 @@ const userValidationRules = isNewUser => [
     .custom(async (value, { req }) => {
       // 新增用户时候确保唯一性
       const query = { username: value }
-      if (!isNewUser) {
+      if (req.body.id) {
         query._id = { $ne: req.body._id }
       }
       const user = await User.findOne(query)

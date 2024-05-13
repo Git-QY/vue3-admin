@@ -76,12 +76,9 @@ const verifyEmail = async () => {
   }
   try {
     loading.value = true
-    await setTimeout(() => {
-      console.log('延迟一秒')
-    }, 1000)
+    await setTimeout(() => {}, 1000)
     const res = await api.checkEmailCode({ email: forgetform.value.email, code: forgetform.value.code })
     if (res.code === 200) {
-      // console.log(res,'邮箱验证通过')
       isverified.value = true
       token.value = res.data
       loading.value = false

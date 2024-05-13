@@ -7,8 +7,8 @@
         </el-form-item>
         <el-form-item label="用户状态" prop="status">
           <el-select v-model="form.status" placeholder="请选择用户状态" clearable>
-            <el-option label="启用" value="0" />
-            <el-option label="停用" value="1" />
+            <el-option label="启用" value="1" />
+            <el-option label="停用" value="0" />
           </el-select>
         </el-form-item>
         <el-form-item label="用户头像" prop="avatar"> <Upload v-model="form.avatar" :limit="1"></Upload> </el-form-item>

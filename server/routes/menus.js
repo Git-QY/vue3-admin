@@ -28,7 +28,7 @@ router.post('/list', async (req, res, next) => {
 })
 
 // 更新菜单
-router.post('/update', menuValidationRules(), async (req, res, next) => {
+router.put('/update', menuValidationRules(), async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   const { body } = req
