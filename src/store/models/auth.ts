@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 import { Menu, listMenuByUserId } from '@/api'
 import { listToTree, deepClone } from '@/utils'
 import { Router } from 'vue-router'
-import { useUserStore } from './user'
 
 interface authState {
   permissionsMenus: Menu[]
@@ -50,14 +49,15 @@ function generateRouter(router: Router, menus: Menu[]) {
   const newMenus = menus
     .filter((item: Menu) => item.menuType !== '2')
     .map((item: Menu) => {
-      const { id, parentId, menuType, menuName, path, component } = item
+      const { id, parentId, menuType, menuName, path, component, isHidden } = item
+      const meta = { name: menuName, isHidden }
       if (parentId === '0' && menuType === '1') {
         return {
           id,
           parentId: '0',
           path: '/',
           component: modules['src/views/layout/index.vue'],
-          children: [{ path, component: modules[`/src/views${component}.vue`], meta: { name: menuName } }],
+          children: [{ path, component: modules[`/src/views${component}.vue`], meta }],
         }
       }
       return {
@@ -65,7 +65,7 @@ function generateRouter(router: Router, menus: Menu[]) {
         parentId,
         path,
         component: modules[menuType === '0' ? '/src/views/layout/index.vue' : `/src/views${component}.vue`],
-        meta: { name: menuName },
+        meta,
       }
     })
   listToTree(deepClone(newMenus)).forEach(route => router.addRoute(route))
