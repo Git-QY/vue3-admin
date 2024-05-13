@@ -28,7 +28,6 @@ app.all('*', function (req, res, next) {
   res.header('X-Powered-By', '3.2.1')
   next()
 })
-
 app.use(checkToken) // 验证token
 
 require('./utils/route')(app) // 自动注册路由
@@ -52,6 +51,7 @@ app.use(function (err, req, res, next) {
 // 设置全局变量
 const { generateUUID } = require('./utils')
 const { verifyToken } = require('./utils/token')
+const { log } = require('console')
 
 global.$generateUUID = generateUUID
 global.$verifyToken = verifyToken

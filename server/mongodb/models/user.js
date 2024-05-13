@@ -16,7 +16,7 @@ const schemaRules = {
   // 用户备注
   remark: { type: String, default: '' },
   // 邮箱
-  email: { type: String },
+  email: { type: String, default: '' },
   // 状态
   status: { type: String, default: '1' }, // 1: 正常，0: 禁用
   // 头像

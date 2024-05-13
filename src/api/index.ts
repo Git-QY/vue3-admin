@@ -64,3 +64,19 @@ export const detailRole = (data?: Role): Promise<response> => request({ url: '/r
 export const updateRoleField = (data: { id: string; fieldName: string; fieldValue: any }): Promise<response> => request({ url: `/roles/update/field`, method: 'put', data })
 // 根据角色ids获取菜单权限
 export const listMenuByRoleIds = (data: { ids: string[] }): Promise<response> => request({ url: '/roles/aggregate/permissions', method: 'post', data })
+
+// 登录日志
+export interface Log {
+  id?: string
+  content?: string
+  ip?: string
+  method?: string
+  address?: string
+  createById?: string
+  createTime?: Date
+  updateById?: string
+  updateTime?: Date
+  [key: string]: any
+}
+export const listLog = (data?: Log): Promise<response> => request({ url: '/logs/list', method: 'post', data })
+export const deleteLog = (id: string): Promise<response> => request({ url: '/logs/delete', method: 'delete', params: { id } })

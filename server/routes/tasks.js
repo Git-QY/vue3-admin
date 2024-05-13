@@ -204,7 +204,7 @@ router.put('/update/field', async (req, res) => {
 // 任务列表
 
 /**
- * @api {get} /tasks/list 获取任务列表
+ * @api {post} /tasks/list 获取任务列表
  * @apiDescription 获取符合条件的任务列表
  * @apiGroup 任务接口
  * @apiHeader {String}  token
@@ -252,9 +252,9 @@ router.put('/update/field', async (req, res) => {
  * @apiVersion 0.0.1
  */
 
-router.get('/list', async (req, res) => {
-  const { taskName = '', page = { pageSize: 10, page: 1 } } = req.body
-  const query = { ...req.body, taskName: { $regex: taskName } }
+router.post('/list', async (req, res) => {
+  const { page = { pageSize: 10, page: 1 }, ...data } = req.body
+  const query = { ...data, taskName: { $regex: data.taskName ?? '' } }
   try {
     const task = await Task.aggregate([
       { $match: query }, // 匹配查询条件

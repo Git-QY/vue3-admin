@@ -18,11 +18,8 @@ router.post('/add', roleValidationRules(), async (req, res) => {
 })
 // 获取角色列表
 router.post('/list', async (req, res) => {
-  const { roleName, page = { pageSize: 10, page: 1 } } = req.body
-  const query = {}
-  if (roleName) {
-    query.roleName = { $regex: roleName }
-  }
+  const { page = { pageSize: 10, page: 1 }, ...data } = req.body
+  const query = { ...data, roleName: { $regex: data.roleName ?? '' } }
   try {
     const role = await await Role.aggregate([
       { $match: query }, // 匹配查询条件
