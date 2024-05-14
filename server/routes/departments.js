@@ -154,9 +154,9 @@ router.put('/update', departmentValidationRules(false), async (req, res) => {
  *     }
  */
 router.post('/list', async (req, res) => {
-  const { deptName = '' } = req.body
+  const { ...query } = req.body
   try {
-    const list = await Department.find({ ...req.query, deptName: { $regex: deptName } })
+    const list = await Department.find({ ...query, deptName: { $regex: query.deptName ?? '' } })
     res.send({ code: 200, message: '获取成功', data: list })
   } catch (error) {
     res.send({ code: 500, message: error })
