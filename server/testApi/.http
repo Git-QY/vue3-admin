@@ -67,3 +67,34 @@ token: {{token}}
    "page" :{ "pageSize": 10, "page": 1 } 
    
 }
+
+### // 新增字典
+POST {{host}}/dicts/add HTTP/1.1
+Content-Type: application/json
+token: {{token}}
+
+{
+  "dictName": "测试1",
+  "dictType": "test1",
+  "status": "1",
+  "remark": "测试1",
+  "sort":0,
+  "updateById":"f7553c63-4c8e-48c1-add8-61bcff1bc770"
+}
+
+### // 字典列表
+POST {{host}}/dicts/list HTTP/1.1
+Content-Type: application/json
+token: {{token}}
+
+{
+  "page": {
+    "pageSize": 10,
+    "page": 1
+  }
+}
+
+### // 删除字典
+DELETE {{host}}/dicts/delete/123456 HTTP/1.1
+Content-Type: application/json
+token: {{token}}

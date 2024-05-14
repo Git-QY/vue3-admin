@@ -1,8 +1,5 @@
 <template>
   <page-table v-bind="tableConfig" ref="tableRef">
-    <template #btnleft>
-      <el-button type="primary" v-auth="['system.role.add']" @click="onAdd">新增</el-button>
-    </template>
     <template #operate="{ item }">
       <el-table-column v-slot="{ row }" v-bind="item">
         <el-button type="danger" v-auth="['system:role:delete']" link @click="onDelete(row.id)">删除</el-button>
