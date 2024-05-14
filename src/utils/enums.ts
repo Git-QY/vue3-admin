@@ -135,8 +135,8 @@ export const DICTS = {
   ],
   // 菜单是否隐藏
   menuHidden: [
-    { label: '显示', value: '0' },
-    { label: '隐藏', value: '1' },
+    { label: '显示', value: false },
+    { label: '隐藏', value: true },
   ],
   // 菜单是否缓存
   menuKeepAlive: [
@@ -145,7 +145,7 @@ export const DICTS = {
   ],
   // 菜单是否折叠
   menuFold: [
-    { label: '展开', value: '0' },
-    { label: '折叠', value: '1' },
+    { label: '展开', value: false },
+    { label: '折叠', value: true },
   ],
 }
