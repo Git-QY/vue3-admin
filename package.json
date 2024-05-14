@@ -12,7 +12,6 @@
     "@element-plus/icons-vue": "^2.3.1",
     "@types/crypto-js": "^4.2.2",
     "@vueuse/core": "^10.9.0",
-    "@types/moment": "^2.13.0",
     "axios": "^1.6.8",
     "crypto-js": "^4.2.0",
     "element-plus": "^2.6.3",

@@ -23,6 +23,9 @@ dependencies:
   element-plus:
     specifier: ^2.6.3
     version: 2.6.3(vue@3.4.21)
+  lunar-typescript:
+    specifier: ^1.7.5
+    version: 1.7.5
   nprogress:
     specifier: ^0.2.0
     version: 0.2.0
@@ -948,6 +951,10 @@ packages:
     dependencies:
       yallist: 4.0.0
     dev: true
+
+  /lunar-typescript@1.7.5:
+    resolution: {integrity: sha512-AlOwYrxHRCR9Plba5TlZY0NVv6aFobmR1gxfiAE1KxjDzBXoDtT2KrsBYCVaErGokiL8qLMS1FNwGPiPRX2a4g==}
+    dev: false
 
   /magic-string@0.30.9:
     resolution: {integrity: sha512-S1+hd+dIrC8EZqKyT9DstTH/0Z+f76kmmvZnkfQVmOpDEF9iVgdYif3Q/pIWHmCoo59bQVGW0kVL3e2nl+9+Sw==}
