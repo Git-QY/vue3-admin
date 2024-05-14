@@ -97,6 +97,7 @@ import request from '@/utils/request'
 import api, { birthdayRecordUser } from '@/api/birthdayRecord'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 import {Lunar} from 'lunar-typescript';
+import { nextTick } from 'vue'
 //定义表格配置
 const tableConfig = reactive({
   table: { rowKey: 'id' },
@@ -159,7 +160,7 @@ const tableConfig = reactive({
 const tableRef = ref(null as any)
 const formRef = ref(null as any)
 //定义表单
-let formData = reactive({ 
+let formData = ref({ 
   name:'',
   sex:'',
   birthdayTime: '',
@@ -176,7 +177,7 @@ const rules = reactive({
   ],
 })
 //新增/修改
-let title = ref('')
+let title = ref("")
 let type = ref("")
 const onAdd = () => {
   title.value = '新增'
@@ -184,10 +185,12 @@ const onAdd = () => {
   drawer.value = true
 }
 const onEdit = (row: birthdayRecordUser) => {
+  title.value = '修改' 
   type.value = "edit"
   drawer.value = true
-  formData = row
-  console.log("row",row.id)
+  nextTick(()=>{
+    formData.value = {...row}
+  })
 }
 const onSubmit = async () => {
   const res = await formRef.value.validate()
@@ -195,7 +198,7 @@ const onSubmit = async () => {
   if (type.value == "add") {
     let res;
     try{
-      res = await api.addBirthdayRecordUser(formData)
+      res = await api.addBirthdayRecordUser({...formData.value})
       ElMessage.success(res.message)
       drawer.value = false
       tableRef.value.refresh()
@@ -207,7 +210,7 @@ const onSubmit = async () => {
     console.log("请求开始");
     let res;
     try{
-       res = await api.updateBirthdayRecordUser(formData)
+       res = await api.updateBirthdayRecordUser({...formData.value})
        ElMessage.success(res.message)
        drawer.value = false
        tableRef.value.refresh()
@@ -271,7 +274,6 @@ const computeAge = (date:String,type:String)=>{
     let day = Number(dateArr[2])
     const lunar = Lunar.fromYmd(year, month, day);
     solor = lunar.getSolar().toString()
-    console.log("solor",solor)    
   }
   let solordateAr = solor.split("-")
   let solorYear = Number(solordateAr[0])
