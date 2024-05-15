@@ -2,7 +2,7 @@
   <page-table v-bind="tableConfig" ref="tableRef">
     <template #operate="{ item }">
       <el-table-column v-slot="{ row }" v-bind="item">
-        <el-button type="danger" v-auth="['system:role:delete']" link @click="onDelete(row.id)">删除</el-button>
+        <el-button type="danger" v-auth="['system:role:delete']" link @click="operate['delete'](row.id)">删除</el-button>
       </el-table-column>
     </template>
   </page-table>
@@ -12,9 +12,10 @@
 import { reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 import { Log, listLog, deleteLog } from '@/api'
+import { useHandleData } from '@/utils';
 
 const tableConfig = reactive({
-  table: { rowKey: 'id' },
+  table: { rowKey: 'id' }, 
   searchForm: {},
   // 可以通过pomise构建需要的格式
   api: (data: any) => {
@@ -32,20 +33,29 @@ const tableConfig = reactive({
   ],
 })
 const tableRef = ref(null as any)
-const onDelete = (id: string) => {
-  ElMessageBox.confirm('确定删除吗？', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  })
-    .then(async () => {
-      await deleteLog(id)
-      ElMessage.success('删除成功')
+// const operate = (text:any ,row:any) => {
+//   let fun = {
+//     'delete':(row:any)=>{
+//       useHandleData(deleteLog, row.id, `确认删除`).then(callback => {
+//         refresh()
+//       });
+//     },
+//     'edit':(row:any)=>{
+//       console.log(row);
+//     }
+//   } as any
+//   fun[text](row)
+// }
+
+const operate = {
+  'delete':(id:number)=>{
+    useHandleData(deleteLog, id, `确认删除`).then(callback => {
       refresh()
-    })
-    .catch(() => {
-      ElMessage.info('取消删除')
-    })
+    });
+  },
+  'edit':(row:any)=>{
+    console.log(row);
+  }
 }
 
 // 刷新表格
