@@ -77,7 +77,7 @@ router.post('/item/add', dictItemPreValidate(), async (req, res, next) => {
   }
 })
 // 字典项列表
-router.get('/item/list', async (req, res, next) => {
+router.post('/item/list', async (req, res, next) => {
   const { page = { page: 1, pageSize: 10 }, ...data } = req.body
   const query = { ...data }
   try {

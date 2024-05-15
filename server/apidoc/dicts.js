@@ -168,19 +168,14 @@
  */
 
 /**
- * @api {get} /dict/item/list 获取字典项列表
+ * @api {post} /dict/item/list 获取字典项列表
  * @apiDescription 获取字典项列表信息
  * @apiGroup 字典接口
- * @apiParam {Number} [page=1] 页码
- * @apiParam {Number} [pageSize=10] 每页数量
- * @apiParam {String} [dictId] 字典id
- * @apiParam {String} [dictType] 字典code
- * @apiParam {String} [parentId] 父级id
+ * @apiBody {String} [dictId] 字典id
+ * @apiBody {String} [dictType] 字典code
+ * @apiBody {String} [parentId] 父级id
  * @apiParamExample {json} Request-Example:
  *     {
- *       "page": 1,
- *       "pageSize": 10,
- *       "dictId": "字典id",
  *       "dictType": "字典code",
  *       "parentId": "父级id"
  *        ...
