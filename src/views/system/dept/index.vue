@@ -77,12 +77,12 @@ const refresh = () => {
     部门管理
     <page-table v-bind="tableConfig" ref="tableRef">
       <template #btnleft>
-        <el-button type="primary" v-auth="['system.role.add']" @click="onClickAdd">新增</el-button>
+        <el-button type="primary" v-auth="['system.dept.add']" @click="onClickAdd">新增</el-button>
       </template>
       <template #operate="{ item }">
         <el-table-column v-slot="{ row }" v-bind="item">
-          <el-button type="primary" v-auth="['system.role.edit']" link @click="onClickEdit(row)">编辑</el-button>
-          <el-button type="danger" v-auth="['system:role:delete']" link @click="onClickDel(row.id)">删除</el-button>
+          <el-button type="primary" v-auth="['system.dept.edit']" link @click="onClickEdit(row)">编辑</el-button>
+          <el-button type="danger" v-auth="['system:dept:delete']" link @click="onClickDel(row.id)">删除</el-button>
         </el-table-column>
       </template>
     </page-table>
