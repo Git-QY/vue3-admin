@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
+import { dayjs } from 'element-plus'
 import { Log, listLog, deleteLog } from '@/api'
 import { useHandleData } from '@/utils';
 
@@ -33,20 +33,6 @@ const tableConfig = reactive({
   ],
 })
 const tableRef = ref(null as any)
-// const operate = (text:any ,row:any) => {
-//   let fun = {
-//     'delete':(row:any)=>{
-//       useHandleData(deleteLog, row.id, `确认删除`).then(callback => {
-//         refresh()
-//       });
-//     },
-//     'edit':(row:any)=>{
-//       console.log(row);
-//     }
-//   } as any
-//   fun[text](row)
-// }
-
 const operate = {
   'delete':(id:number)=>{
     useHandleData(deleteLog, id, `确认删除`).then(callback => {
