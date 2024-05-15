@@ -153,4 +153,9 @@ export const DICTS = {
     { label: '启用', value: '1', type: 'success' },
     { label: '禁用', value: '0', type: 'danger' },
   ],
+  // 字典状态
+  dictStatus: [
+    { label: '启用', value: '1', type: 'success' },
+    { label: '禁用', value: '0', type: 'danger' },
+  ],
 }

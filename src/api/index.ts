@@ -80,3 +80,37 @@ export interface Log {
 }
 export const listLog = (data?: Log): Promise<response> => request({ url: '/logs/list', method: 'post', data })
 export const deleteLog = (id: string): Promise<response> => request({ url: '/logs/delete', method: 'delete', params: { id } })
+
+// 字典
+export interface Dict {
+  id?: string
+  dictName: string
+  dictType: string
+  remark?: string
+  sort?: number
+  status?: string
+  [key: string]: any
+}
+export const addDict = (data: Dict): Promise<response> => request({ url: '/dicts/add', method: 'post', data })
+export const listDict = (data?: Dict): Promise<response> => request({ url: '/dicts/list', method: 'post', data })
+export const updateDict = (data: Dict): Promise<response> => request({ url: '/dicts/update', method: 'put', data })
+export const deleteDict = (id: string): Promise<response> => request({ url: '/dicts/delete', method: 'delete', params: { id } })
+
+// 字典项（枚举）
+export interface DictItem {
+  id?: string // 主键
+  dictId: string // 字典id
+  dictType: string // 字典类型
+  parentId?: string // 父级id
+  label: string // 名称
+  value: string // 值
+  remark?: string // 备注
+  sort?: number
+  status?: string // 状态 1:启用 0:禁用
+  [key: string]: any
+}
+
+export const addDictItem = (data: any): Promise<response> => request({ url: '/dicts/item/add', method: 'post', data })
+export const listDictItem = (data: any): Promise<response> => request({ url: '/dicts/item/list', method: 'post', data })
+export const updateDictItem = (data: any): Promise<response> => request({ url: '/dicts/item/update', method: 'put', data })
+export const deleteDictItem = (id: string): Promise<response> => request({ url: '/dicts/item/delete', method: 'delete', params: { id } })
