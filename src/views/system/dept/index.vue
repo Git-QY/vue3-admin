@@ -13,7 +13,6 @@ const tableConfig = reactive({
   columns: [
     { prop: 'id', label: 'ID', 'show-overflow-tooltip': true },
     { prop: 'deptName', label: '部门名称', query: {} },
-    { prop: 'remark', label: '备注' },
     { prop: 'phone', label: '联系电话' },
     { prop: 'email', label: '邮箱' },
     {
@@ -22,10 +21,18 @@ const tableConfig = reactive({
       type: 'tag',
       options: DICTS.deptStatus,
     },
-    { prop: 'createTime', label: '创建人' },
-    { prop: 'updateTime', label: '更新者' },
+    { prop: 'createTime', label: '创建时间' },
+    { prop: 'updateTime', label: '更新时间' },
+    { prop: 'remark', label: '备注' },
     { prop: 'operate', label: '操作', type: 'slot', fixed: 'right', width: 200 },
   ],
+  page: {
+    total: 0,
+    page: 1,
+    pageSize: 10,
+    pageSizes: [],
+    layout: '',
+  },
 })
 const tableRef = ref(null as any)
 // 弹框dom
