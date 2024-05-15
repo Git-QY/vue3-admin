@@ -2,8 +2,6 @@ const express = require('express')
 const router = express.Router()
 const { Role, validationResult, roleValidationRules } = require('../mongodb/models/role')
 const { generateUUID } = require('../utils/index')
-const { Menu } = require('../mongodb/models/menu')
-
 // 创建角色  (主要是获取菜单资源数据)
 router.post('/add', roleValidationRules(), async (req, res) => {
   const errors = validationResult(req)
@@ -18,11 +16,8 @@ router.post('/add', roleValidationRules(), async (req, res) => {
 })
 // 获取角色列表
 router.post('/list', async (req, res) => {
-  const { roleName, page = { pageSize: 10, page: 1 } } = req.body
-  const query = {}
-  if (roleName) {
-    query.roleName = { $regex: roleName }
-  }
+  const { page = { pageSize: 10, page: 1 }, ...data } = req.body
+  const query = { ...data, roleName: { $regex: data.roleName ?? '' } }
   try {
     const role = await await Role.aggregate([
       { $match: query }, // 匹配查询条件
@@ -47,6 +42,7 @@ router.delete('/delete', async (req, res) => {
     res.send({ code: 500, message: error })
   }
 })
+// 更新角色
 router.put('/update', roleValidationRules(), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
@@ -84,28 +80,7 @@ router.put('/update/field', async (req, res) => {
     res.send({ code: 500, message: error })
   }
 })
-/**
- * @api {post} /roles/aggregate/permissions 获取角色集合权限合集
- * @apiDescription 根据角色集合 IDs 获取权限的合集
- * @apiGroup 角色接口
- * @apiParamExample {json} Request-Example:
- *     {
- *       "ids": []
- *     }
- * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *       "code": 200,
- *       "data": {}
- *     }
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 500 Internal Server Error
- *     {
- *       "code": 500,
- *       "message": ""
- *     }
- * @apiVersion 0.0.1
- */
+// 根据角色集合 IDs 获取权限的合集
 router.post('/aggregate/permissions', async (req, res) => {
   const { ids } = req.body
   if (!ids || !Array.isArray(ids)) return res.send({ code: 500, message: '参数错误' })
