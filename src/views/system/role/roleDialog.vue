@@ -25,7 +25,7 @@ const props = defineProps({
   },
   width: { type: String, default: '50%' },
   // 按钮回调函数
-  confirm: { type: Function, default: () => {} },
+  confirm: { type: Function, default: () => { } },
 })
 const columns = reactive([
   { prop: 'roleName', label: '角色名称', rules: 'must', span: 12 },

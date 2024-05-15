@@ -148,4 +148,9 @@ export const DICTS = {
     { label: '展开', value: false },
     { label: '折叠', value: true },
   ],
+  // 部门状态
+  deptStatus: [
+    { label: '启用', value: '1', type: 'success' },
+    { label: '禁用', value: '0', type: 'danger' },
+  ],
 }
