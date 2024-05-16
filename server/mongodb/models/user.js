@@ -29,7 +29,7 @@ const schemaRules = {
   isAdmin: { type: Boolean, default: false },
 
   // 所属部门
-  deptId: { typeof: String },
+  deptId: { type: String },
 }
 
 // 定义用户模型

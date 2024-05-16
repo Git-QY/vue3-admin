@@ -1,32 +1,13 @@
 <template>
   <div class="page-form">
-    <el-form ref="formRef" :rules="rules" :model="form" label-width="80px" status-icon>
-      <div class="page-form--box">
-        <el-form-item label="用户名称" prop="username">
-          <el-input v-model="form.username" placeholder="请输入用户名称" clearable />
-        </el-form-item>
-        <el-form-item label="用户状态" prop="status">
-          <el-select v-model="form.status" placeholder="请选择用户状态" clearable>
-            <el-option label="启用" value="1" />
-            <el-option label="停用" value="0" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="用户头像" prop="avatar"> <Upload v-model="form.avatar" :limit="1"></Upload> </el-form-item>
-        <el-form-item label="用户备注" prop="remark">
-          <el-input v-model="form.remark" :rows="5" type="textarea" placeholder="请输入用户备注" />
-        </el-form-item>
-      </div>
-      <el-form-item label="性别" prop="sex">
-        <el-radio-group v-model="form.sex">
-          <el-radio value="0">女</el-radio>
-          <el-radio value="1">男</el-radio>
-          <el-radio value="2">保密</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="form.email" placeholder="请输入邮箱"></el-input>
-      </el-form-item>
-    </el-form>
+    <Form :columns="columns" v-model="form" ref="formRef">
+      <template #deptId="{ item }">
+        <!-- 输入框 -->
+        <!-- <el-input v-model="deptName" placeholder="请选择部门" readonly @click="showDeptDialog"> </el-input>
+        <deptDialog ref="deptDialogRef" @change="onDeptChange"></deptDialog> -->
+        <!-- 目前纠结的是触发弹窗的输入框是放在组件里面  还是 外面 -->
+      </template>
+    </Form>
     <div class="page-main--footer">
       <el-button type="primary" @click="onAdd" :loading="loading">保存</el-button>
       <el-button @click="onBack">返回</el-button>
@@ -39,31 +20,36 @@ import { reactive, ref, onMounted } from 'vue'
 import api, { User } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
+import { DICTS } from '@/utils/enums'
+// import deptDialog from '@/components/Dialog/base-dialog/components/dept-dialog.vue'
 const router = useRouter()
 const route = useRoute()
-
-const rules = reactive({
-  username: [{ required: true, message: '请输入用户名称', trigger: 'blur' }],
-  status: [{ required: true, message: '请选择用户状态', trigger: 'blur' }],
-  //  邮箱 正则
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱', trigger: ['blur', 'change'] },
-  ],
-  sex: [{ required: true, message: '请选择性别', trigger: 'blur' }],
-})
+const columns = reactive([
+  { label: '用户名', prop: 'username', rules: 'must' },
+  { label: '昵称', prop: 'nickname' },
+  { label: '头像', prop: 'avatar', type: 'upload', rules: 'must' },
+  { label: '邮箱', prop: 'email', rules: 'email' },
+  { label: '性别', prop: 'sex', type: 'select', options: DICTS.userSex },
+  { label: '状态', prop: 'status', type: 'select', options: DICTS.userStatus },
+  { label: '角色选择', prop: 'roleIds' },
+  { label: '所属部门', prop: 'deptId', type: 'slot' },
+  { label: '备注', prop: 'remark' },
+])
 const form = ref<User>({
+  id: '',
   username: '',
-  status: '',
+  password: '',
   email: '',
-  remark: '',
   sex: '',
-  avatar: [],
+  status: '',
+  roleIds: [],
+  deptId: '',
+  remark: '',
 })
 const formRef = ref(null as any)
 const loading = ref(false)
 const onAdd = async () => {
-  const res = await formRef.value.validate()
+  const res = await formRef.value.validateForm()
   if (!res) return
   try {
     loading.value = true
@@ -97,6 +83,15 @@ const getDetail = async () => {
     ElMessage.error(error)
   }
 }
+// const deptDialogRef = ref(null as any)
+// const showDeptDialog = () => {
+//   deptDialogRef.value.open([form.value.deptId])
+// }
+// const deptName = ref('')
+// const onDeptChange = (item: any) => {
+//   form.value.deptId = item.id
+//   deptName.value = item.deptName
+// }
 </script>
 
 <style lang="scss" scoped></style>

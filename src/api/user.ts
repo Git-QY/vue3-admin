@@ -29,6 +29,8 @@ export interface User {
   createTime?: Date
   updateTime?: Date
   email: string
+  roleIds: string[]
+  deptId?: string
   status: string
   avatar?: any
   remark?: string

@@ -51,8 +51,12 @@ router.post('/list', async (req, res) => {
 })
 // 部门详情
 router.get('/detail', async (req, res) => {
-  const { id } = req.query
+  const { id, ids } = req.query
   try {
+    if (ids) {
+      const list = await Department.find({ id: { $in: ids } })
+      return res.send({ code: 200, message: '获取成功', data: list })
+    }
     const detail = await Department.findOne({ id })
     res.send({ code: 200, message: '获取成功', data: detail })
   } catch (error) {
