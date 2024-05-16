@@ -2,7 +2,7 @@
 import { DICTS } from '@/utils/enums';
 import { reactive, ref } from 'vue'
 import { addDept, updateDept } from '@/api/dept'
-import { ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus'
 // props接受参数
 const props = defineProps({
   title: {
@@ -15,10 +15,10 @@ const props = defineProps({
 })
 // 弹框显隐
 const dialogVisible = ref(false)
-
+// form表单属性
 const columns = reactive([
   { prop: 'deptName', label: '部门名称', rules: 'must' },
-  { prop: 'parentId', label: '上级部门ID', rules: 'must' },
+  { prop: 'parentId', label: '上级部门ID', type: 'select', rules: 'must' },
   { prop: 'remark', label: '备注' },
   { prop: 'phone', label: '联系电话' },
   { prop: 'email', label: '邮箱' },
@@ -30,8 +30,6 @@ const columns = reactive([
     rules: 'must',
     options: DICTS.deptStatus,
   },
-  { prop: 'createTime', label: '创建人', rules: 'must' },
-  { prop: 'updateTime', label: '更新者', rules: 'must' },
 ])
 // form表单
 const form = ref({
@@ -42,8 +40,6 @@ const form = ref({
   phone: null,
   email: '',
   status: '',
-  createTime: '',
-  updateTime: '',
 })
 // form DOM
 const formRef = ref(null as any)
@@ -88,6 +84,7 @@ const onClickConfirm = async () => {
 
 
 const open = (row: any) => {
+  formRef.value?.resetForm()
   if (row) {
     form.value = { ...row }
   }
