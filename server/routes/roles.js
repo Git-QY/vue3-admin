@@ -8,7 +8,7 @@ router.post('/add', roleValidationRules(), async (req, res) => {
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   const { body, user } = req
   try {
-    await Role.create({ ...body, id: generateUUID(), createBy: user.name, name: 1 }) // 创建新用户
+    await Role.create({ ...body, id: generateUUID(), createBy: user.name }) // 创建新用户
     res.send({ code: 200, message: '创建成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
