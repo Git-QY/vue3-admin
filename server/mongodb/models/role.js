@@ -25,9 +25,9 @@ const Role = mongoose.model('Role', new mongoose.Schema(schemaRules))
 // 预校验规则
 const roleValidationRules = () => [
   body('roleName').notEmpty().withMessage('角色名称不能为空'),
-  body('permissions').optional().isArray().withMessage('权限id集合必须为数组'),
-  body('remark').optional().isLength({ max: 100 }).withMessage('备注不能超过100个字符'),
-  body('status').optional().isString().withMessage('状态必须为字符串').bail().isIn(['0', '1']).withMessage('状态值错误'),
+  body('permissions').optional({ checkFalsy: true }).isArray().withMessage('权限id集合必须为数组'),
+  body('remark').optional({ checkFalsy: true }).isLength({ max: 100 }).withMessage('备注不能超过100个字符'),
+  body('status').optional({ checkFalsy: true }).isString().withMessage('状态必须为字符串').bail().isIn(['0', '1']).withMessage('状态值错误'),
   body('perms')
     .notEmpty()
     .withMessage('标识不能为空')

@@ -22,7 +22,7 @@ const taskSchema = new Schema({
   assigneeId: { type: String, required: true }, // 认领人id 查询详细的时候通过连表查询
 
   tags: { type: String, default: '4' }, // 关联标签  '1'：bug，'2'：优化，'3'：新功能，'4'：其他
-  attachments: { type: String }, // 附件
+  attachments: { type: Array }, // 附件
 
   startTime: { type: Date }, // 开始时间
   endTime: { type: Date }, // 结束时间
@@ -46,9 +46,10 @@ const commentSchema = new Schema({
 // task预校验规则
 const taskPreValidate = () => [
   body('taskName').notEmpty().withMessage('任务名称不能为空'),
-  body('priority').isString().withMessage('任务优先级必须为字符串').bail().isIn(['low', 'medium', 'high']).withMessage('任务优先级值错误'),
-  body('status').isString().withMessage('任务状态必须为字符串').isIn(['0', '1', '2']).withMessage('任务状态值错误'),
+  body('priority').optional({ checkFalsy: true }).isString().withMessage('任务优先级必须为字符串').bail().isIn(['low', 'medium', 'high']).withMessage('任务优先级值错误'),
+  body('status').optional({ checkFalsy: true }).isString().withMessage('任务状态必须为字符串').isIn(['0', '1', '2']).withMessage('任务状态值错误'),
   body('assigneeId').notEmpty().withMessage('认领人不能为空'),
+  body('tags').optional({ checkFalsy: true }).isString().withMessage('标签必须为字符串').isIn(['1', '2', '3', '4']).withMessage('标签值错误'),
 ]
 
 // 导出模块

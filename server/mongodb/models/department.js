@@ -28,7 +28,7 @@ const departmentValidationRules = isNewUser => [
     .withMessage('部门名称不能为空')
     .custom(async (value, { req }) => {
       const query = { deptName: value }
-      if (!isNewUser) {
+      if (req.body.id) {
         query._id = { $ne: req.body._id }
       }
       const department = await Department.findOne(query)
@@ -36,16 +36,12 @@ const departmentValidationRules = isNewUser => [
         throw new Error('部门名称已存在')
       }
     }),
-  body('remark').optional().isLength({ max: 100 }).withMessage('部门描述不能超过100个字符'),
-  body('leader').optional().isString().withMessage('部门负责人必须为字符串'),
-  // parentId
-  body('parentId').notEmpty().withMessage('部门名称不能为空'),
-  // phone
-  body('phone').optional().isMobilePhone('zh-CN').withMessage('联系电话必须为手机号'),
-  // email
-  body('email').optional().isEmail().withMessage('联系邮箱必须为邮箱格式'),
-  // status
-  body('status').optional().isIn(['0', '1']).withMessage('部门状态必须为0或1'),
+  body('remark').optional({ checkFalsy: true }).isLength({ max: 100 }).withMessage('部门描述不能超过100个字符'),
+  body('leader').optional({ checkFalsy: true }).isString().withMessage('部门负责人必须为字符串'),
+  body('parentId').notEmpty().withMessage('上级部门名称不能为空'),
+  body('phone').optional({ checkFalsy: true }).isMobilePhone('zh-CN').withMessage('联系电话必须为手机号'),
+  body('email').optional({ checkFalsy: true }).isEmail().withMessage('联系邮箱必须为邮箱格式'),
+  body('status').optional({ checkFalsy: true }).isIn(['0', '1']).withMessage('部门状态必须为0或1'),
 ]
 
 module.exports = { Department, departmentValidationRules, validationResult }

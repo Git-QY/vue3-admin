@@ -55,9 +55,9 @@ const menuValidationRules = () => [
   // 是否隐藏
   body('isHidden').notEmpty().withMessage('是否隐藏不能为空').bail().isBoolean().withMessage('是否隐藏必须为布尔值'),
   // isKeepAlive Boolean
-  body('isKeepAlive').optional().isBoolean().withMessage('是否缓存必须为布尔值'),
+  body('isKeepAlive').optional({ checkFalsy: true }).isBoolean().withMessage('是否缓存必须为布尔值'),
   // isFold Boolean
-  body('isFold').optional().bail().isBoolean().withMessage('是否折叠必须为布尔值'),
+  body('isFold').optional({ checkFalsy: true }).bail().isBoolean().withMessage('是否折叠必须为布尔值'),
 ]
 
 module.exports = { Menu, schemaRules, menuValidationRules, validationResult }

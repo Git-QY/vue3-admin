@@ -39,7 +39,7 @@ const form = ref({
   deptName: '',
   parentId: '',
   remark: '',
-  phone: '',
+  phone: null,
   email: '',
   status: '',
   createTime: '',
