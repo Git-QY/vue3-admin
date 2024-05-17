@@ -62,15 +62,15 @@ const userValidationRules = () => [
     .isLength({ min: 3, max: 20 })
     .bail()
     .withMessage('用户名长度为 3 到 20 个字符'),
-  body('email').optional({ checkFalsy: true }).isEmail().withMessage('邮箱格式不正确'),
+  body('email').optional().isEmail().withMessage('邮箱格式不正确'),
   // 状态
-  body('state').optional({ checkFalsy: true }).isIn(['0', '1']).withMessage('状态值不合法'),
+  body('state').optional().isIn([0, 1]).withMessage('状态值不合法'),
   // 性别
   body('sex').notEmpty().withMessage('性别不能为空').bail().isString().withMessage('性别必须为字符串').bail().isIn(['0', '1', '2']).withMessage('性别值不合法'),
   // 角色id集合
-  body('roleIds').optional({ checkFalsy: true }).isArray().withMessage('角色id集合必须为数组'),
+  body('roleIds').optional().isArray().withMessage('角色id集合必须为数组'),
   // 头像
-  body('avatar').optional({ checkFalsy: true }).isString().withMessage('头像必须为字符串').bail().isLength({ min: 1, max: 100 }).withMessage('头像长度不合法'),
+  body('avatar').optional().isString().withMessage('头像必须为字符串').bail().isLength({ min: 1, max: 100 }).withMessage('头像长度不合法'),
 ]
 
 // 导出用户模型

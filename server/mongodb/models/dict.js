@@ -46,14 +46,12 @@ const dictPreValidate = () => [
     .bail()
     .custom(async (value, { req }) => {
       const query = { dictType: value }
-      if (req.body.id) {
-        query.id = { $ne: req.body.id }
-      }
+      if (req.body.id) query.id = { $ne: req.body.id }
       const dict = await Dict.findOne(query)
       if (dict) throw new Error('字典类型已存在')
     }),
-  body('remark').optional({ checkFalsy: true }).isLength({ max: 200 }).withMessage('备注不能超过200个字符'),
-  body('status').optional({ checkFalsy: true }).isIn(['1', '0']).withMessage('状态只能为1或0'),
+  body('remark').optional().isLength({ max: 200 }).withMessage('备注不能超过200个字符'),
+  body('status').optional().isIn(['1', '0']).withMessage('状态只能为1或0'),
   body('sort').optional().isInt().withMessage('排序必须为数字'),
 ]
 const dictItemPreValidate = () => [
@@ -61,9 +59,9 @@ const dictItemPreValidate = () => [
   body('dictType').notEmpty().withMessage('字典code不能为空'),
   body('lable').notEmpty().withMessage('名称不能为空'),
   body('value').notEmpty().withMessage('值不能为空'),
-  body('remark').optional({ checkFalsy: true }).isLength({ max: 200 }).withMessage('备注不能超过200个字符'),
-  body('status').optional({ checkFalsy: true }).isIn(['1', '0']).withMessage('状态只能为1或0'),
-  body('sort').optional().isInt().withMessage('排序必须为数字'), // 不能传空字符串
+  body('remark').optional().isLength({ max: 200 }).withMessage('备注不能超过200个字符'),
+  body('status').optional().isIn(['1', '0']).withMessage('状态只能为1或0'),
+  body('sort').optional().isInt().withMessage('排序必须为数字'),
 ]
 
 module.exports = { Dict, DictItem, dictPreValidate, dictItemPreValidate, validationResult }

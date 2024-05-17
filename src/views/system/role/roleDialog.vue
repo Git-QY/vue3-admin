@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import { ref, reactive, toRaw } from 'vue'
-import { Role, addRole, updateRole } from '@/api'
+import { addRole, updateRole } from '@/api'
 import { ElMessage } from 'element-plus'
 import { DICTS } from '@/utils/enums'
 
@@ -25,7 +25,7 @@ const props = defineProps({
   },
   width: { type: String, default: '50%' },
   // 按钮回调函数
-  confirm: { type: Function, default: () => {} },
+  confirm: { type: Function, default: () => { } },
 })
 const columns = reactive([
   { prop: 'roleName', label: '角色名称', rules: 'must', span: 12 },
@@ -41,7 +41,8 @@ const columns = reactive([
   { prop: 'sort', type: 'input-number', label: '排序', span: 12 },
   { prop: 'remark', label: '备注', span: 24 },
 ])
-const form = ref<Role>({
+const form = ref({
+  id: '',
   roleName: '',
   remark: '',
   status: '',
@@ -70,7 +71,7 @@ const confirm = async () => {
   if (!res) return
   try {
     loading.value = true
-    if (form.value?.id) {
+    if (form.value.id) {
       await updateRole(form.value)
     } else {
       await addRole(form.value)

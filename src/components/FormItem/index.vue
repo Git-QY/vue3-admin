@@ -7,8 +7,14 @@
   </template>
   <template v-if="item.type === 'select'">
     <el-select v-model="form[item.prop]" :placeholder="`请选择${item.label}`" v-bind="item.props" style="width: 100%">
-      <el-option v-for="option in item.options" :key="option.value" :label="option.label" :value="option.value"> </el-option>
+      <el-option v-for="option in item.options" :key="option.value" :label="option.label" :value="option.value">
+      </el-option>
     </el-select>
+  </template>
+  <template v-if="item.type === 'tree-select'">
+    <el-tree-select v-model="form[item.prop]" :placeholder="`请选择${item.label}`" :data="item.options" check-strictly
+      :render-after-expand="false" v-bind="item.props" style="width: 100%">
+    </el-tree-select>
   </template>
   <template v-if="item.type === 'switch'">
     <el-switch v-model="form[item.prop]" v-bind="item.props"></el-switch>
@@ -18,7 +24,8 @@
   </template>
   <template v-if="item.type === 'radio-group'">
     <el-radio-group v-model="form[item.prop]" v-bind="item.props">
-      <el-radio v-for="option in item.options" :key="option.value" :label="option.label" :value="option.value"> </el-radio>
+      <el-radio v-for="option in item.options" :key="option.value" :label="option.label" :value="option.value">
+      </el-radio>
     </el-radio-group>
   </template>
   <template v-if="item.type === 'radio-group-button'">
@@ -51,7 +58,8 @@
   </template>
   <!-- 日期范围选择 -->
   <template v-if="item.type === 'daterange'">
-    <el-date-picker v-model="form[item.prop]" type="daterange" unlink-panels range-separator="To" start-placeholder="Start date" end-placeholder="End date" />
+    <el-date-picker v-model="form[item.prop]" type="daterange" unlink-panels range-separator="To"
+      start-placeholder="Start date" end-placeholder="End date" />
   </template>
 </template>
 
