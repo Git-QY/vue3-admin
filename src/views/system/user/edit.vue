@@ -1,13 +1,6 @@
 <template>
   <div class="page-form">
-    <Form :columns="columns" v-model="form" ref="formRef">
-      <template #deptId="{ item }">
-        <!-- 输入框 -->
-        <!-- <el-input v-model="deptName" placeholder="请选择部门" readonly @click="showDeptDialog"> </el-input>
-        <deptDialog ref="deptDialogRef" @change="onDeptChange"></deptDialog> -->
-        <!-- 目前纠结的是触发弹窗的输入框是放在组件里面  还是 外面 -->
-      </template>
-    </Form>
+    <Form :columns="columns" v-model="form" ref="formRef"> </Form>
     <div class="page-main--footer">
       <el-button type="primary" @click="onAdd" :loading="loading">保存</el-button>
       <el-button @click="onBack">返回</el-button>
@@ -21,7 +14,6 @@ import api, { User } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 import { DICTS } from '@/utils/enums'
-// import deptDialog from '@/components/Dialog/base-dialog/components/dept-dialog.vue'
 const router = useRouter()
 const route = useRoute()
 const columns = reactive([
@@ -31,8 +23,6 @@ const columns = reactive([
   { label: '邮箱', prop: 'email', rules: 'email' },
   { label: '性别', prop: 'sex', type: 'select', options: DICTS.userSex },
   { label: '状态', prop: 'status', type: 'select', options: DICTS.userStatus },
-  { label: '角色选择', prop: 'roleIds' },
-  { label: '所属部门', prop: 'deptId', type: 'slot' },
   { label: '备注', prop: 'remark' },
 ])
 const form = ref<User>({
@@ -43,7 +33,6 @@ const form = ref<User>({
   sex: '',
   status: '',
   roleIds: [],
-  deptId: '',
   remark: '',
 })
 const formRef = ref(null as any)
