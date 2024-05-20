@@ -53,12 +53,15 @@ router.post('/list', async (req, res) => {
 router.get('/detail', async (req, res) => {
   const { id, ids } = req.query
   try {
-    if (ids) {
-      const list = await Department.find({ id: { $in: ids } })
-      return res.send({ code: 200, message: '获取成功', data: list })
+    let role
+    if (id) {
+      role = await Department.findById(id).select('-permissions')
+    } else if (ids) {
+      role = await Department.find({ id: { $in: ids } }).select('-permissions')
+    } else {
+      return res.send({ code: 400, message: '缺少查询参数' })
     }
-    const detail = await Department.findOne({ id })
-    res.send({ code: 200, message: '获取成功', data: detail })
+    res.send({ code: 200, data: role, message: '获取成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
   }

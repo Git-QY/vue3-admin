@@ -1,29 +1,39 @@
 <template>
-  <div class="page-form">
-    <Form :columns="columns" v-model="form" ref="formRef"> </Form>
-    <div class="page-main--footer">
-      <el-button type="primary" @click="onAdd" :loading="loading">保存</el-button>
-      <el-button @click="onBack">返回</el-button>
-    </div>
-  </div>
+  <Outlet :finish="onAdd">
+    <Form class="form" :columns="columns" v-model="form" ref="formRef">
+      <template #roleIds>
+        <el-input v-model="roleNames" placeholder="请选择角色" readonly @click="openRoleDialog" />
+      </template>
+      <template #deptId>
+        <el-input v-model="deptNames" placeholder="请输入部门" readonly @click="openDeptDialog" />
+      </template>
+    </Form>
+    <RoleDialog ref="roleDialogRef" :multiple="true" @confirm="onRoleConfirm"></RoleDialog>
+    <DeptDialog ref="deptDialogRef" :multiple="false" @confirm="onDeptConfirm"></DeptDialog>
+  </Outlet>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import api, { User } from '@/api/user'
+import { detailRole } from '@/api'
+import { detailDept } from '@/api/dept'
 import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 import { DICTS } from '@/utils/enums'
+import RoleDialog from '@/components/Dialog/base-dialog/components/role-dialog.vue'
+import DeptDialog from '@/components/Dialog/base-dialog/components/dept-dialog.vue'
 const router = useRouter()
 const route = useRoute()
 const columns = reactive([
   { label: '用户名', prop: 'username', rules: 'must' },
-  { label: '昵称', prop: 'nickname' },
   { label: '头像', prop: 'avatar', type: 'upload', rules: 'must' },
-  { label: '邮箱', prop: 'email', rules: 'email' },
-  { label: '性别', prop: 'sex', type: 'select', options: DICTS.userSex },
-  { label: '状态', prop: 'status', type: 'select', options: DICTS.userStatus },
-  { label: '备注', prop: 'remark' },
+  { label: '邮箱', prop: 'email', rules: 'email', rules: 'must' },
+  { label: '性别', prop: 'sex', type: 'select', options: DICTS.userSex, span: 12 },
+  { label: '状态', prop: 'status', type: 'select', options: DICTS.userStatus, span: 12 },
+  { label: '角色', prop: 'roleIds', type: 'solt', span: 12 },
+  { label: '所属部门', prop: 'deptId', type: 'solt', span: 12 },
+  { label: '备注', prop: 'remark', type: 'textarea' },
 ])
 const form = ref<User>({
   id: '',
@@ -33,6 +43,7 @@ const form = ref<User>({
   sex: '',
   status: '',
   roleIds: [],
+  deptId: '',
   remark: '',
 })
 const formRef = ref(null as any)
@@ -59,9 +70,7 @@ const onAdd = async () => {
 const onBack = () => {
   router.go(-1)
 }
-onMounted(() => {
-  getDetail()
-})
+
 const getDetail = async () => {
   const id: any = route.query.id
   if (!id) return
@@ -72,15 +81,59 @@ const getDetail = async () => {
     ElMessage.error(error)
   }
 }
-// const deptDialogRef = ref(null as any)
-// const showDeptDialog = () => {
-//   deptDialogRef.value.open([form.value.deptId])
-// }
-// const deptName = ref('')
-// const onDeptChange = (item: any) => {
-//   form.value.deptId = item.id
-//   deptName.value = item.deptName
-// }
+// 角色弹窗
+const roleDialogRef = ref<typeof RoleDialog>()
+const roleList = ref<any[]>([])
+const roleNames = computed(() => {
+  return roleList.value.map(item => item.roleName)
+})
+// 获取角色list详情
+const getRoleList = async () => {
+  try {
+    const res = await detailRole({ ids: form.value.roleIds })
+    roleList.value = res.data || []
+  } catch (error: any) {
+    ElMessage.error(error)
+  }
+}
+const openRoleDialog = async () => {
+  roleDialogRef.value?.open(roleList.value)
+}
+const onRoleConfirm = async (list: any[]) => {
+  roleList.value = list
+  form.value.roleIds = list.map((item: any) => item.id)
+}
+onMounted(async () => {
+  await getDetail()
+  await getRoleList()
+  await getDepList()
+})
+// 部门弹窗
+const deptDialogRef = ref<typeof DeptDialog>()
+const deptList = ref<any[]>([])
+const deptNames = computed(() => {
+  return deptList.value.map(item => item.deptName)
+})
+// 获取角色list详情
+const getDepList = async () => {
+  try {
+    const res = await detailDept({ ids: [form.value.deptId] })
+    deptList.value = res.data || []
+  } catch (error: any) {
+    ElMessage.error(error)
+  }
+}
+const openDeptDialog = async () => {
+  deptDialogRef.value?.open(deptList.value)
+}
+const onDeptConfirm = async (list: any[]) => {
+  deptList.value = list
+  form.value.deptId = list.map((item: any) => item.id).join(',')
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.form {
+  padding: 0 100px;
+}
+</style>

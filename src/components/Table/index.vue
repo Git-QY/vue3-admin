@@ -22,8 +22,7 @@
     </div>
     <!-- 表格模块 -->
     <div class="page-table">
-      <el-table :data="props.data ?? tableData" :border="true" v-bind="props.table" v-loading="loading"
-        @selection-change="handleSelectionChange">
+      <el-table :data="props.data ?? tableData" :border="true" v-bind="props.table" v-loading="loading" @selection-change="handleSelectionChange">
         <template v-for="item in tableColumns">
           <slot v-if="item.type == 'slot'" :name="item.prop" :item="item"></slot>
           <!-- upload -->
@@ -31,8 +30,7 @@
             <fileIcon :data="row[item.prop]"></fileIcon>
           </el-table-column>
           <el-table-column v-else-if="item.type == 'tag'" v-bind="item" v-slot="{ row }">
-            <el-tag :type="getLabel(item.options, row[item.prop], true).type">{{ getLabel(item.options, row[item.prop])
-              }}</el-tag>
+            <el-tag :type="getLabel(item.options, row[item.prop], true).type">{{ getLabel(item.options, row[item.prop]) }}</el-tag>
           </el-table-column>
           <!-- tag -->
           <el-table-column v-else v-bind="item"></el-table-column>
@@ -59,7 +57,6 @@ import { ref, computed, onMounted, reactive } from 'vue'
 import search from './components/search.vue'
 import pagination from './components/pagination.vue'
 import fileIcon from '@/components/FormItem/fileIcon.vue'
-import { tableProps, columnsProps } from './type'
 import { defaultConfig, deepMerge } from './config'
 import { deepClone, getLabel, listToTree } from '@/utils'
 
@@ -90,16 +87,13 @@ const getList = async () => {
   const params = { page: props.page, ...props.searchForm }
   try {
     const res = await props.api(params)
-    // console.log(res, 'res')
     tableData.value = listToTree(deepClone(res.data))
-    console.log(listToTree(res.data), '树结构')
     props.page.total = res.page.total
   } catch (error) {
   } finally {
     loading.value = false
   }
 }
-
 
 const handleSelectionChange = (val: any) => {
   selectData.value = val
@@ -129,7 +123,8 @@ defineExpose({ refresh, selectData })
   border-radius: 4px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 
-  &-search {}
+  &-search {
+  }
 
   &-table {
     margin: 20px 0;

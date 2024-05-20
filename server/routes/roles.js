@@ -56,14 +56,23 @@ router.put('/update', roleValidationRules(), async (req, res) => {
 })
 // 获取角色详情
 router.get('/detail', async (req, res) => {
-  const { id } = req.query
+  const { id, ids } = req.query
+  console.log('🚀 ~ router.get ~ ids:', ids)
   try {
-    const role = await Role.findById(id).select('-permissions')
+    let role
+    if (id) {
+      role = await Role.findById(id).select('-permissions')
+    } else if (ids) {
+      role = await Role.find({ id: { $in: ids } }).select('-permissions')
+    } else {
+      return res.send({ code: 400, message: '缺少查询参数' })
+    }
     res.send({ code: 200, data: role, message: '获取成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
   }
 })
+
 // 单独更新某一个字段
 const canUpdateField = ['status', 'permissions']
 router.put('/update/field', async (req, res) => {

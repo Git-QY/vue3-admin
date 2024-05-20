@@ -27,7 +27,6 @@ const schemaRules = {
   roleIds: { type: Array, default: [] },
   // 是否是管理员
   isAdmin: { type: Boolean, default: false },
-
   // 所属部门
   deptId: { type: String },
 }
