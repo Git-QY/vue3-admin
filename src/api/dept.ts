@@ -7,7 +7,7 @@ export interface Dept {
   [key: string]: any
 }
 // 获取部门列表
-export const listDept = (data?: Dept): Promise<response> => request({ url: '/departments/list', method: 'post', data })
+export const listDept = (data?: any): Promise<response> => request({ url: '/departments/list', method: 'post', data })
 
 // 新增部门
 export const addDept = (data?: Dept): Promise<response> => request({ url: '/departments/add', method: 'post', data })
@@ -17,3 +17,6 @@ export const updateDept = (data?: Dept): Promise<response> => request({ url: '/d
 
 // 删除部门
 export const deleteDept = (id: string): Promise<response> => request({ url: '/departments/delete', method: 'delete', params: { id } })
+
+// 部门详情 detail
+export const detailDept = (params: any): Promise<response> => request({ url: '/departments/detail', method: 'get', params })

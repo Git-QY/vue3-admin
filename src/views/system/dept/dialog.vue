@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DICTS } from '@/utils/enums';
 import { reactive, ref } from 'vue'
-import { addDept, updateDept } from '@/api/dept'
+import { addDept, updateDept, listDept } from '@/api/dept'
 import { ElMessage } from 'element-plus'
 // props接受参数
 const props = defineProps({
@@ -15,10 +15,31 @@ const props = defineProps({
 })
 // 弹框显隐
 const dialogVisible = ref(false)
+
+// 部门id数组
+const options = ref<object[]>([
+  {
+    value: '1',
+    label: 'Level one 1',
+    children: [
+      {
+        value: '1-1',
+        label: 'Level two 1-1',
+        children: [
+          {
+            value: '1-1-1',
+            label: 'Level three 1-1-1',
+          },
+        ],
+      },
+    ],
+  },
+])
+
 // form表单属性
 const columns = reactive([
   { prop: 'deptName', label: '部门名称', rules: 'must' },
-  { prop: 'parentId', label: '上级部门ID', type: 'select', rules: 'must' },
+  { prop: 'parentId', label: '上级部门', type: 'tree-select', rules: 'must', options: options },
   { prop: 'remark', label: '备注' },
   { prop: 'phone', label: '联系电话' },
   { prop: 'email', label: '邮箱' },
@@ -82,9 +103,19 @@ const onClickConfirm = async () => {
   }
 }
 
+// 获取部门ID
+const getDeptList = async () => {
+  const { data } = await listDept({ deptName: '' })
+  // console.log(data, 'data')
+  // options.value = []
+  // data.forEach((item: any) => {
+  //   options.value.push({ label: item.deptName, value: item.id })
+  // })
+}
 
 const open = (row: any) => {
   formRef.value?.resetForm()
+  getDeptList()
   if (row) {
     form.value = { ...row }
   }

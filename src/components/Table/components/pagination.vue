@@ -15,7 +15,6 @@
 
 <script lang="ts" setup>
 import { toRefs } from 'vue'
-import { pageProps } from '../type'
 const props = defineProps({
   page: { type: Object },
 })

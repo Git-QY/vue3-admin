@@ -1,69 +1,55 @@
 <template>
-  <div class="page-form">
-    <el-form ref="formRef" :rules="rules" :model="form" label-width="80px" status-icon>
-      <div class="page-form--box">
-        <el-form-item label="用户名称" prop="username">
-          <el-input v-model="form.username" placeholder="请输入用户名称" clearable />
-        </el-form-item>
-        <el-form-item label="用户状态" prop="status">
-          <el-select v-model="form.status" placeholder="请选择用户状态" clearable>
-            <el-option label="启用" value="1" />
-            <el-option label="停用" value="0" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="用户头像" prop="avatar"> <Upload v-model="form.avatar" :limit="1"></Upload> </el-form-item>
-        <el-form-item label="用户备注" prop="remark">
-          <el-input v-model="form.remark" :rows="5" type="textarea" placeholder="请输入用户备注" />
-        </el-form-item>
-      </div>
-      <el-form-item label="性别" prop="sex">
-        <el-radio-group v-model="form.sex">
-          <el-radio value="0">女</el-radio>
-          <el-radio value="1">男</el-radio>
-          <el-radio value="2">保密</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="form.email" placeholder="请输入邮箱"></el-input>
-      </el-form-item>
-    </el-form>
-    <div class="page-main--footer">
-      <el-button type="primary" @click="onAdd" :loading="loading">保存</el-button>
-      <el-button @click="onBack">返回</el-button>
-    </div>
-  </div>
+  <Outlet :finish="onAdd">
+    <Form class="form" :columns="columns" v-model="form" ref="formRef">
+      <template #roleIds>
+        <el-input v-model="roleNames" placeholder="请选择角色" readonly @click="openRoleDialog" />
+      </template>
+      <template #deptId>
+        <el-input v-model="deptNames" placeholder="请输入部门" readonly @click="openDeptDialog" />
+      </template>
+    </Form>
+    <RoleDialog ref="roleDialogRef" :multiple="true" @confirm="onRoleConfirm"></RoleDialog>
+    <DeptDialog ref="deptDialogRef" :multiple="false" @confirm="onDeptConfirm"></DeptDialog>
+  </Outlet>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import api, { User } from '@/api/user'
+import { detailRole } from '@/api'
+import { detailDept } from '@/api/dept'
 import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
+import { DICTS } from '@/utils/enums'
+import RoleDialog from '@/components/Dialog/base-dialog/components/role-dialog.vue'
+import DeptDialog from '@/components/Dialog/base-dialog/components/dept-dialog.vue'
 const router = useRouter()
 const route = useRoute()
-
-const rules = reactive({
-  username: [{ required: true, message: '请输入用户名称', trigger: 'blur' }],
-  status: [{ required: true, message: '请选择用户状态', trigger: 'blur' }],
-  //  邮箱 正则
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱', trigger: ['blur', 'change'] },
-  ],
-  sex: [{ required: true, message: '请选择性别', trigger: 'blur' }],
-})
+const columns = reactive([
+  { label: '用户名', prop: 'username', rules: 'must' },
+  { label: '头像', prop: 'avatar', type: 'upload', rules: 'must' },
+  { label: '邮箱', prop: 'email', rules: 'email', rules: 'must' },
+  { label: '性别', prop: 'sex', type: 'select', options: DICTS.userSex, span: 12 },
+  { label: '状态', prop: 'status', type: 'select', options: DICTS.userStatus, span: 12 },
+  { label: '角色', prop: 'roleIds', type: 'solt', span: 12 },
+  { label: '所属部门', prop: 'deptId', type: 'solt', span: 12 },
+  { label: '备注', prop: 'remark', type: 'textarea' },
+])
 const form = ref<User>({
+  id: '',
   username: '',
-  status: '',
+  password: '',
   email: '',
-  remark: '',
   sex: '',
-  avatar: [],
+  status: '',
+  roleIds: [],
+  deptId: '',
+  remark: '',
 })
 const formRef = ref(null as any)
 const loading = ref(false)
 const onAdd = async () => {
-  const res = await formRef.value.validate()
+  const res = await formRef.value.validateForm()
   if (!res) return
   try {
     loading.value = true
@@ -84,9 +70,7 @@ const onAdd = async () => {
 const onBack = () => {
   router.go(-1)
 }
-onMounted(() => {
-  getDetail()
-})
+
 const getDetail = async () => {
   const id: any = route.query.id
   if (!id) return
@@ -97,6 +81,59 @@ const getDetail = async () => {
     ElMessage.error(error)
   }
 }
+// 角色弹窗
+const roleDialogRef = ref<typeof RoleDialog>()
+const roleList = ref<any[]>([])
+const roleNames = computed(() => {
+  return roleList.value.map(item => item.roleName)
+})
+// 获取角色list详情
+const getRoleList = async () => {
+  try {
+    const res = await detailRole({ ids: form.value.roleIds })
+    roleList.value = res.data || []
+  } catch (error: any) {
+    ElMessage.error(error)
+  }
+}
+const openRoleDialog = async () => {
+  roleDialogRef.value?.open(roleList.value)
+}
+const onRoleConfirm = async (list: any[]) => {
+  roleList.value = list
+  form.value.roleIds = list.map((item: any) => item.id)
+}
+onMounted(async () => {
+  await getDetail()
+  await getRoleList()
+  await getDepList()
+})
+// 部门弹窗
+const deptDialogRef = ref<typeof DeptDialog>()
+const deptList = ref<any[]>([])
+const deptNames = computed(() => {
+  return deptList.value.map(item => item.deptName)
+})
+// 获取角色list详情
+const getDepList = async () => {
+  try {
+    const res = await detailDept({ ids: [form.value.deptId] })
+    deptList.value = res.data || []
+  } catch (error: any) {
+    ElMessage.error(error)
+  }
+}
+const openDeptDialog = async () => {
+  deptDialogRef.value?.open(deptList.value)
+}
+const onDeptConfirm = async (list: any[]) => {
+  deptList.value = list
+  form.value.deptId = list.map((item: any) => item.id).join(',')
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.form {
+  padding: 0 100px;
+}
+</style>

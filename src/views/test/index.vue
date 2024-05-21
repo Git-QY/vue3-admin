@@ -1,57 +1,48 @@
 <template>
-  <div>
-    <p>测试上传接口</p>
-    <!-- <input type="file" ref="file" @change="onChangeFile" /> -->
-    <p>测试切片上传接口</p>
-    <input type="file" ref="file" @change="onChangeFile" />
-  </div>
+  <div>测试封装的基础弹窗</div>
+  <baseDialog ref="baseDialogRef" v-model:list="list" title="测试" :getList="getList" :multiple="multiple"></baseDialog>
+  <!-- 输入框 -->
+  <el-input v-model="input" placeholder="请输入内容" @click="handleFocus" readonly />
+  <!-- 是否多选 -->
+  <el-checkbox v-model="multiple">是否多选</el-checkbox>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import request from '@/utils/request'
-import { createFileChunk, calculationChunksMd5 } from '@/utils/upload'
-
-const file = ref<HTMLInputElement | null>(null)
-const onChangeFile = (e: any) => {
-  const formData = new FormData()
-  formData.append('file', e.target.files[0])
-  request.post('/utils/upload', formData).then(res => {
-    console.log(res)
-  })
+import { computed, ref } from 'vue'
+// api
+import { listRole } from '@/api'
+import baseDialog from '@/components/Dialog/base-dialog/index.vue'
+const input = computed(() => {
+  return list.value.map((item: any) => item.roleName).join(',')
+})
+const show = ref(false)
+const list = ref([
+  {
+    _id: '664700264553bc3a38696087',
+    id: '53a5686c-c9d7-4753-a8d2-c46fe67ac412',
+    roleName: 'admin',
+    permissions: [],
+    remark: '',
+    status: '1',
+    perms: 'admin',
+    sort: 1,
+    createBy: 'admin',
+    updateBy: '',
+    createTime: '2024-05-17T06:58:46.158Z',
+    updateTime: '2024-05-17T06:58:46.158Z',
+    __v: 0,
+    checked: true,
+  },
+]) // 选中的数据 ids 或者 完整的数据数组
+const baseDialogRef = ref<InstanceType<typeof baseDialog>>()
+const handleFocus = () => {
+  baseDialogRef.value?.open()
 }
-// const onChangeFile = async (e: any) => {
-//   const file = e.target.files[0]
-//   if (!file) return
-//   const chunks = createFileChunk(file)
-//   const fileHash = await calculationChunksMd5([file])
-//   // 上传切片
-//   await Promise.all(
-//     chunks.map(async (chunk, index) => {
-//       const formData = new FormData()
-//       formData.append('chunk', chunk)
-//       formData.append('fileHash', fileHash)
-//       formData.append('chunkHash', `${fileHash}-${index}`)
-//       return request({
-//         method: 'post',
-//         url: '/utils/chunk-upload',
-//         data: formData,
-//       })
-//     }),
-//   ).then(res => {
-//     request({
-//       method: 'post',
-//       url: '/utils/chunk-merge',
-//       data: {
-//         fileHash,
-//         fileName: file.name,
-//       },
-//     }).then(res => {
-//       console.log(res)
-//     })
-//   })
-//   console.log('上传成功')
-// }
+const multiple = ref(false)
+// 请求列表的方法
+const getList = (data: any) => {
+  return listRole(data)
+}
 </script>
 
 <style lang="scss" scoped></style>

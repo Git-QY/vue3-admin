@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import deptDialog from './dialog.vue'
-import { onMounted, ref, reactive } from 'vue';
-import { listDept, deleteDept } from '../../../api/dept';
+import { onMounted, ref, reactive } from 'vue'
+import { listDept, deleteDept } from '../../../api/dept'
 import { DICTS } from '@/utils/enums'
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus'
 const tableConfig = reactive({
   table: { rowKey: 'id' },
   searchForm: {},
@@ -97,8 +97,4 @@ const refresh = () => {
   </div>
 </template>
 
-<style lang="scss" scoped>
-div {
-  width: 100%;
-}
-</style>
+<style lang="scss" scoped></style>

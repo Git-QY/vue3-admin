@@ -13,8 +13,12 @@
 
     <!-- 按钮模块 -->
     <div clss="page-btn">
-      <div class="page-btn--lf"><slot name="btnleft" /></div>
-      <div class="page-btn--ri"><slot name="btnRight" /></div>
+      <div class="page-btn--lf">
+        <slot name="btnleft" />
+      </div>
+      <div class="page-btn--ri">
+        <slot name="btnRight" />
+      </div>
     </div>
     <!-- 表格模块 -->
     <div class="page-table">
@@ -32,7 +36,9 @@
           <el-table-column v-else v-bind="item"></el-table-column>
         </template>
         <template #empty>
-          <slot name="empty"><div>暂无数据</div></slot>
+          <slot name="empty">
+            <div>暂无数据</div>
+          </slot>
         </template>
       </el-table>
     </div>
@@ -51,9 +57,8 @@ import { ref, computed, onMounted, reactive } from 'vue'
 import search from './components/search.vue'
 import pagination from './components/pagination.vue'
 import fileIcon from '@/components/FormItem/fileIcon.vue'
-import { tableProps, columnsProps } from './type'
 import { defaultConfig, deepMerge } from './config'
-import { deepClone, getLabel } from '@/utils'
+import { deepClone, getLabel, listToTree } from '@/utils'
 
 const prop = defineProps({
   data: { type: Array },
@@ -73,7 +78,7 @@ const handleSearch = () => {
 
 // 表格
 const tableColumns = computed(() => props.columns.filter((item: columnsProps) => !item.hide))
-const tableData = ref([])
+const tableData = ref<Object[]>([]) // 表格数据
 const loading = ref(false)
 const selectData = ref([]) // 表格选中的数据
 const getList = async () => {
@@ -82,13 +87,14 @@ const getList = async () => {
   const params = { page: props.page, ...props.searchForm }
   try {
     const res = await props.api(params)
-    tableData.value = res.data
+    tableData.value = listToTree(deepClone(res.data))
     props.page.total = res.page.total
   } catch (error) {
   } finally {
     loading.value = false
   }
 }
+
 const handleSelectionChange = (val: any) => {
   selectData.value = val
 }
@@ -116,11 +122,14 @@ defineExpose({ refresh, selectData })
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+
   &-search {
   }
+
   &-table {
     margin: 20px 0;
   }
+
   &-btn,
   &-pagination {
     display: flex;

@@ -1,5 +1,6 @@
 import PageTable from './Table/index.vue'
 import Page from './Page/index.vue'
+import Outlet from './Page/outlet.vue'
 import SvgIcon from './Icon/svgIcon.vue'
 import Icon from './Icon/index.vue'
 import Upload from './FormItem/upload.vue'
@@ -11,6 +12,7 @@ import type { App, Component } from 'vue'
 const components: { [name: string]: Component } = {
   PageTable,
   Page,
+  Outlet,
   SvgIcon,
   Upload,
   Form,

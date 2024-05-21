@@ -29,7 +29,7 @@ router.post('/list', async (req, res) => {
   try {
     const logs = await Log.aggregate([
       { $match: query }, // 匹配查询条件
-      { $sort: { createTime: 1 } }, // 按照创建时间升序排序
+      { $sort: { createTime: -1 } }, // 按照创建时间升序排序
       { $skip: (page.page - 1) * page.pageSize }, // 跳过指定数量的文档
       { $limit: page.pageSize }, // 限制返回的文档数量
       { $lookup: { from: 'users', localField: 'createById', foreignField: 'id', as: 'user' } }, // 通过 $lookup 聚合操作，将日志与用户关联起来
