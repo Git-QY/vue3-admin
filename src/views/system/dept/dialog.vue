@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { DICTS } from '@/utils/enums';
+import { DICTS } from '@/utils/enums'
+import { deepClone, listToTree } from '@/utils'
 import { reactive, ref } from 'vue'
 import { addDept, updateDept, listDept } from '@/api/dept'
 import { ElMessage } from 'element-plus'
@@ -11,30 +12,13 @@ const props = defineProps({
   },
   width: { type: String, default: '50%' },
   // 按钮回调函数
-  confirm: { type: Function, default: () => { } },
+  confirm: { type: Function, default: () => {} },
 })
 // 弹框显隐
 const dialogVisible = ref(false)
 
 // 部门id数组
-const options = ref<object[]>([
-  {
-    value: '1',
-    label: 'Level one 1',
-    children: [
-      {
-        value: '1-1',
-        label: 'Level two 1-1',
-        children: [
-          {
-            value: '1-1-1',
-            label: 'Level three 1-1-1',
-          },
-        ],
-      },
-    ],
-  },
-])
+const options = ref<object[]>([])
 
 // form表单属性
 const columns = reactive([
@@ -106,11 +90,21 @@ const onClickConfirm = async () => {
 // 获取部门ID
 const getDeptList = async () => {
   const { data } = await listDept({ deptName: '' })
-  // console.log(data, 'data')
-  // options.value = []
-  // data.forEach((item: any) => {
-  //   options.value.push({ label: item.deptName, value: item.id })
-  // })
+  const list = listToTree(deepClone(data))
+  options.value = transformList(list)
+}
+// 树形结构中的deptName和id字段 修改成label和value
+const transformList = (data: any) => {
+  return data.map((item: any) => {
+    if (item.children) {
+      item.children = transformList(item.children)
+    }
+    item.label = item.deptName
+    item.value = item.id
+    delete item.deptName
+    delete item.id
+    return item
+  })
 }
 
 const open = (row: any) => {
