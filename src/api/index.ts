@@ -55,11 +55,12 @@ export interface Role {
   createTime?: string
   updateTime?: string
   [key: string]: any
+  page?: object
 }
 export const listRole = (data?: Role): Promise<response> => request({ url: '/roles/list', method: 'post', data })
 export const addRole = (data?: Role): Promise<response> => request({ url: '/roles/add', method: 'post', data })
 export const updateRole = (data?: Role): Promise<response> => request({ url: '/roles/update', method: 'put', data })
-export const deleteRole = (id: string): Promise<response> => request({ url: '/roles/delete', method: 'delete', params: { id } })
+export const deleteRole = (params: any): Promise<response> => request({ url: '/roles/delete', method: 'delete', params })
 export const detailRole = (params?: any): Promise<response> => request({ url: '/roles/detail', method: 'get', params })
 export const updateRoleField = (data: { id: string; fieldName: string; fieldValue: any }): Promise<response> => request({ url: `/roles/update/field`, method: 'put', data })
 // 根据角色ids获取菜单权限
@@ -115,6 +116,4 @@ export const listDictItem = (data: any): Promise<response> => request({ url: '/d
 export const updateDictItem = (data: any): Promise<response> => request({ url: '/dicts/item/update', method: 'put', data })
 export const deleteDictItem = (id: string): Promise<response> => request({ url: '/dicts/item/delete', method: 'delete', params: { id } })
 
-
 // 部门
-

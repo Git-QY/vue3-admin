@@ -25,9 +25,14 @@ interface Props {
 const props = defineProps<Props>()
 const emits = defineEmits(['update:modelValue'])
 
+import { useDictStore } from '@/store'
+const dictStore = useDictStore()
 const editColumns = computed(() => {
   return props.columns.map(item => {
     item.rules = typeof item.rules === 'string' ? addRules(item.rules, item) : item.rules
+    if (item.dict) {
+      item.options = dictStore.dictDataGetter[item.dict]
+    }
     return item
   })
 })

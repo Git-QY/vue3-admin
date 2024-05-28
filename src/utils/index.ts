@@ -1,4 +1,4 @@
-import { ElMessage, ElMessageBox } from "element-plus"
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 // 获取assets静态图片
 export const getAssetsImge = (url: string) => {
@@ -134,29 +134,57 @@ export function getLabel(data: { value: any; label: string }[], value: any, isIt
  * @param {String} message 提示信息 (必传)
  * @returns {Promise}
  */
-export const useHandleData = (
-  api: (params: any) => Promise<any>,
-  params: any = {},
-  message: string,
-) => {
+export const useHandleData = (api: (params: any) => Promise<any>, params: any = {}, message: string) => {
   return new Promise((resolve, reject) => {
-    ElMessageBox.confirm(`是否${message}?`, "温馨提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
-      draggable: true
+    ElMessageBox.confirm(`是否${message}?`, '温馨提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+      draggable: true,
     })
       .then(async () => {
-        const res = await api(params);
-        if (!res) return reject(false);
+        const res = await api(params)
+        if (!res) return reject(false)
         ElMessage({
-          type: "success",
-          message: `${message}成功!`
-        });
-        resolve(true);
+          type: 'success',
+          message: `${message}成功!`,
+        })
+        resolve(true)
       })
       .catch(() => {
-        console.log("取消操作");
-      });
-  });
-};
+        console.log('取消操作')
+      })
+  })
+}
+
+/**
+ *  节流函数
+ * @param fn    函数
+ * @param delay  延迟时间
+ * @returns
+ */
+export function throttle(fn: Function, delay: number) {
+  let timer: any = null
+  return function (this: any, ...args: any[]) {
+    if (timer) return
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+      timer = null
+    }, delay)
+  }
+}
+/**
+ *  防抖函数
+ * @param fn    函数
+ * @param delay  延迟时间
+ * @returns
+ */
+export function debounce(fn: Function, delay: number) {
+  let timer: any = null
+  return function (this: any, ...args: any[]) {
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+    }, delay)
+  }
+}

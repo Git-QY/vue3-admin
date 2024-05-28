@@ -77,7 +77,18 @@ const handleSearch = () => {
 }
 
 // 表格
-const tableColumns = computed(() => props.columns.filter((item: columnsProps) => !item.hide))
+import { useDictStore } from '@/store'
+const dictStore = useDictStore()
+const tableColumns = computed(() => {
+  return props.columns
+    .filter((item: columnsProps) => !item.hide)
+    .map((item: columnsProps) => {
+      if (item.dict) {
+        item.options = dictStore.dictDataGetter[item.dict]
+      }
+      return item
+    })
+})
 const tableData = ref<Object[]>([]) // 表格数据
 const loading = ref(false)
 const selectData = ref([]) // 表格选中的数据

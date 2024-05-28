@@ -2,6 +2,7 @@
   <page-table v-bind="tableConfig" ref="tableRef">
     <template #btnleft>
       <el-button type="primary" v-auth="['system.role.add']" @click="onAdd">新增</el-button>
+      <el-button type="primary" v-auth="['system.role.delete']" @click="onDeleteBatch">批量删除</el-button>
     </template>
     <template #operate="{ item }">
       <el-table-column v-slot="{ row }" v-bind="item">
@@ -32,6 +33,7 @@ const tableConfig = reactive({
     return listRole(data)
   },
   columns: [
+    { type: 'selection', fixed: 'left', width: 40, 'reserve-selection': true },
     { prop: 'id', label: 'ID', 'show-overflow-tooltip': true },
     { prop: 'roleName', label: '角色名', query: {} },
     { prop: 'remark', label: '备注' },
@@ -65,9 +67,30 @@ const onDelete = (id: string) => {
     type: 'warning',
   })
     .then(async () => {
-      await deleteRole(id)
+      await deleteRole({ id })
       ElMessage.success('删除成功')
       refresh()
+    })
+    .catch(() => {
+      ElMessage.info('取消删除')
+    })
+}
+const onDeleteBatch = () => {
+  console.log('🚀 ~ onDeleteBatch ~  tableRef.value?.selectData:', tableRef.value?.selectData)
+  if (tableRef.value?.selectData.length === 0) {
+    ElMessage.warning('请选择要删除的角色')
+    return
+  }
+  ElMessageBox.confirm('此操作将永久删除该角色, 是否继续?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      const ids = tableRef.value?.selectData.map((item: Role) => item.id)
+      await deleteRole({ ids })
+      refresh()
+      ElMessage.success('删除成功')
     })
     .catch(() => {
       ElMessage.info('取消删除')

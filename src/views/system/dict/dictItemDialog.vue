@@ -1,6 +1,6 @@
 <template>
   <!-- 、添加编辑弹窗 -->
-  <el-dialog v-model="dialogVisible" :title="props.title" :width="props.width" @close="close">
+  <el-dialog v-model="dialogVisible" :title="title" :width="props.width" @close="close">
     <Form :columns="columns" v-model="form" ref="formRef"></Form>
     <!-- 按钮 -->
     <template #footer>
@@ -14,19 +14,21 @@
 
 <script lang="ts" setup>
 import { ref, reactive, toRaw } from 'vue'
-import { addDict, updateDict, Dict } from '@/api'
+import { addDictItem, updateDictItem, Dict } from '@/api'
 import { ElMessage } from 'element-plus'
+// 路由
+import { useRoute } from 'vue-router'
 const props = defineProps({
-  title: { type: String, default: '' },
   width: { type: String, default: '50%' },
   confirm: { type: Function, default: () => {} },
 })
 const columns = reactive([
-  { prop: 'dictName', label: '字典名称', rules: 'must', span: 12 },
-  { prop: 'dictType', label: '字典类型', rules: 'must', span: 12 },
-  { prop: 'status', label: '状态', type: 'select', span: 12, dict: 'dict_status' },
-  { prop: 'sort', label: '排序', type: 'input-number', span: 12 },
-  { prop: 'remark', label: '备注', type: 'textarea', span: 24 },
+  { prop: 'parentId', label: '父级id', width: 150, 'show-overflow-tooltip': true },
+  { prop: 'label', label: '名称', width: 180, rules: 'must' },
+  { prop: 'value', label: '值', width: 150, rules: 'must' },
+  { prop: 'sort', label: '排序', type: 'input-number' },
+  { prop: 'remark', label: '备注', type: 'textarea' },
+  { prop: 'status', label: '状态', type: 'radio-group', dict: 'dict_status' },
 ])
 const form = ref<Dict>({
   dictName: '',
@@ -38,10 +40,9 @@ const form = ref<Dict>({
 const _form = toRaw(form.value) // 获取初始表单数据
 // 命令式
 const dialogVisible = ref(false)
-const open = (row: any) => {
-  if (row) {
-    form.value = { ...row }
-  }
+const title = ref('')
+const open = (row: any, { title }: any) => {
+  if (row) form.value = { ...row }
   dialogVisible.value = true
 }
 const close = () => {
@@ -51,6 +52,7 @@ const close = () => {
 }
 const formRef = ref<HTMLFormElement | null>(null)
 const loading = ref(false)
+const route = useRoute()
 
 const confirm = async () => {
   const res = await formRef.value?.validateForm()
@@ -58,9 +60,9 @@ const confirm = async () => {
   try {
     loading.value = true
     if (form.value.id) {
-      await updateDict(form.value)
+      await updateDictItem(form.value)
     } else {
-      await addDict(form.value)
+      await addDictItem({ ...form.value, ...route.query })
     }
     close()
     props.confirm()

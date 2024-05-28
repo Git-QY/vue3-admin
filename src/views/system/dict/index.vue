@@ -6,7 +6,7 @@
       </template>
       <template #dictType="{ item }">
         <el-table-column v-slot="{ row }" v-bind="item">
-          <el-button type="primary" @click="toDictItem(row.id)" link>{{ row.dictType }}</el-button>
+          <el-button type="primary" @click="toDictItem(row)" link>{{ row.dictType }}</el-button>
         </el-table-column>
       </template>
       <template #operate="{ item }">
@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { listDict, Dict, deleteDict } from '@/api'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 import { useRouter } from 'vue-router'
@@ -32,10 +32,10 @@ const tableConfig = reactive({
   searchForm: {},
   api: (data: any) => listDict(data),
   columns: [
-    { prop: 'id', label: 'ID', 'show-overflow-tooltip': true },
     { prop: 'dictName', label: '名称', query: {} },
     { prop: 'dictType', label: '类型', type: 'slot' },
     { prop: 'remark', label: '备注' },
+    { prop: 'status', label: '状态', type: 'tag', dict: 'dict_status' },
     { prop: 'createTime', label: '创建时间', formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') },
     { prop: 'updateTime', label: '更新时间', formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') },
     { prop: 'operate', label: '操作', type: 'slot', fixed: 'right', width: 200 },
@@ -45,8 +45,8 @@ const router = useRouter()
 const title = ref('新增')
 const tableRef = ref<HTMLFormElement | null>(null)
 const dictDialogRef = ref<HTMLFormElement | null>(null)
-const toDictItem = (id: string) => {
-  router.push('/system/dict/item')
+const toDictItem = (row: Dict) => {
+  router.push({ path: '/system/dict/item', query: { dictId: row.id, dictType: row.dictType } })
 }
 const onAdd = () => {
   title.value = '新增字典'
@@ -71,6 +71,12 @@ const onDelete = (id: string) => {
 }
 // 刷新表格
 const refresh = () => tableRef.value?.refresh()
+
+import { useDictStore } from '@/store'
+const dictStore = useDictStore()
+onMounted(async () => {
+  await dictStore.getDict('dict_status')
+})
 </script>
 
 <style lang="scss" scoped></style>

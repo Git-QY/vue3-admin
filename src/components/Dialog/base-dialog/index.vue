@@ -4,22 +4,21 @@
     <section class="picker">
       <slot name="content">
         <div class="picker-body">
-          <div class="picker-body--left">
-            <template v-if="props.prop.type == 'tree'">
-              <el-tree style="max-width: 600px" :props="props.prop" :load="loadNode" lazy :show-checkbox="props.multiple" :expand-on-click-node="false" @node-click="handleNodeClick" />
-            </template>
-            <template v-else>
-              <div v-for="item in listData" class="picker-body--item">
-                <el-checkbox :model-value="item.checked" :label="item[name]" size="large" @change="handleChange(item)" />
+          <div class="picker-left">
+            <div class="picker-search">
+              <el-input v-model="searchText" placeholder="请输入搜索内容" clearable @input="handleSearch"></el-input>
+            </div>
+            <div class="picker-list" v-if="props.type == 'list'">
+              <div class="picker-list--item" v-for="(item, index) in rightData" :key="index">
+                <el-checkbox :model-value="item.checked" :label="item[name]" size="large" />
               </div>
-            </template>
-          </div>
-          <div class="picker-body--right">
-            <div v-for="item in selectData" class="picker-body--item">
-              <span> {{ item[name] }}</span>
-              <Icon name="close" @click="handleDelete(item)"></Icon>
+            </div>
+            <div class="picker-tree" v-else></div>
+            <div class="picker-list--page">
+              <el-pagination v-model:current-page="curPage" :page-size="pageSize" :total="total" layout="prev, pager, next" @current-change="handleCurrentChange" />
             </div>
           </div>
+          <div class="picker-right"></div>
         </div>
       </slot>
     </section>
@@ -34,83 +33,89 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
-import { ref } from 'vue'
+/**
+ * 实现的效果 只需要专递接口 配置参数
+ * 1 实现列表和树的单选和多选
+ * 2 实现列表和树的搜索 （树的搜索结果是列表）
+ * 3 实现回显
+ * (1) 先实现懒加载的树的 多选单选
+ */
+import { onMounted, ref } from 'vue'
 const props = defineProps({
-  getList: {
-    type: Function,
-    default: () => {
-      return []
-    },
-  },
-  multiple: {
-    type: Boolean,
-    default: false,
-  }, //   是否多选
+  type: { type: String, default: 'list' },
+  onLoad: { type: Function }, // 获取数据
+  data: { type: Array }, // 原数据 可以直接忽略onload
+  multiple: { type: Boolean, default: false }, //   是否多选
   prop: {
     type: Object,
     default: {
-      label: 'roleName', // 显示字段
+      label: 'name', // 显示字段
       value: 'id', // 值字段
       children: 'children', // 子级字段
-      type: 'list', // 类型
       lazy: false, // 是否懒加载
     },
-  }, // 配置
+  },
 })
+
 const name = props.prop.label
 const key = props.prop.value
 const visible = ref(false)
-const open = (list: any[]) => {
+const open = () => {
   visible.value = true
-  listData.value.forEach((item: any) => {
-    item.checked = list.find(x => x[key] == item[key]) ? true : false
-  })
 }
 const colse = () => {
   visible.value = false
 }
-const emits = defineEmits(['confirm'])
 const onConfirm = () => {
-  emits('confirm', selectData.value)
-  colse()
+  visible.value = false
 }
-const listData = ref<any[]>([])
-const handleChange = (item: any) => {
-  if (!props.multiple) {
-    if (item.checked) {
-      listData.value.forEach(x => (x.checked = false))
-    } else {
-      listData.value.forEach(x => (x.checked = false))
-      item.checked = true
-    }
-  } else {
-    item.checked = !item.checked
+// 搜索
+const searchText = ref('')
+const total = ref<number>(0)
+const pageSize = ref<number>(10)
+const curPage = ref<number>(1)
+const handleCurrentChange = (page: number) => {
+  curPage.value = page
+  init()
+}
+// 获取数据
+const getList = async () => {
+  try {
+    if (!props.onLoad) return
+    const res = await props.onLoad({ page: { page: curPage.value, pageSize: pageSize.value }, [name]: searchText.value })
+    rightData.value = res.data || []
+    total.value = res.page.total || 0
+  } catch (error) {
+    console.log('error', error)
   }
 }
-const handleDelete = (item: any) => {
-  item.checked = false
+// 防抖节流、
+const throttledHandleSearch = debounce(getList, 500)
+import { debounce } from '@/utils'
+const handleSearch = async (e: string) => {
+  throttledHandleSearch()
 }
-const selectData = computed(() => listData.value.filter(item => item.checked))
-// 树组件
-const loadNode = async (node: Node, resolve: (data: any[]) => void) => {
+const init = async () => {
+  if (props.data && props.data.length > 0) return
+  if (!props.onLoad) return
+  if (props.type == 'list') {
+    getList()
+  } else {
+    // 树
+  }
+}
+const handleNodeClick = () => {}
+const loadNode = async (node: Node, resolve: (data: any[]) => void, reject: () => void) => {
   try {
-    const res = await props.getList({ parentId: node.data[key] || '0' })
-    resolve(res.data || [])
+    const res = await props.onLoad({ parentId: node.data[key] })
+    console.log('🚀 ~ loadNode ~ res:', res)
   } catch (error) {}
 }
-const handleNodeClick = (node: Node) => {
-  console.log(listData, node)
-  listData.value = [{ ...node, checked: true }]
-}
-defineExpose({ open, colse })
-onMounted(async () => {
-  if (props.prop.type == 'tree') return
-  const res = await props.getList()
-  listData.value = (res.data || []).map((item: any) => {
-    return { ...item, checked: false }
-  })
+const rightData = ref<any[]>([])
+onMounted(() => {
+  init()
 })
+defineExpose({ open, colse })
 </script>
 
 <style lang="scss" scoped>
@@ -122,16 +127,8 @@ onMounted(async () => {
     margin: 24px;
     border: 1px solid #eaeaea;
     border-radius: 2px;
-    &--left {
-      flex: 1;
-      border-right: 1px solid #eaeaea;
-      overflow: hidden;
-    }
-    &--right {
-      width: 320px;
-      overflow: auto;
-      box-sizing: border-box;
-    }
+    min-height: 400px;
+
     &--item {
       padding: 0 8px;
       height: 40px;
@@ -140,6 +137,23 @@ onMounted(async () => {
       justify-content: space-between;
       align-items: center;
     }
+  }
+  &-search {
+    padding: 16px;
+    background-color: #eaeaea;
+  }
+  &-left {
+    flex: 1;
+    border-right: 1px solid #eaeaea;
+    overflow: hidden;
+  }
+  &-right {
+    width: 320px;
+    overflow: auto;
+    box-sizing: border-box;
+  }
+  &-list {
+    padding: 16px;
   }
 }
 </style>

@@ -43,7 +43,8 @@ const activeName = computed(() => route.fullPath)
 const addTab = () => {
   const { fullPath, meta } = route
   const tab: App.TabItem = { fullPath, title: meta.name, ...meta }
-  if (meta.isHidden) return console.log('隐藏的路由不能添加到tabs')
+  console.log('🚀 ~ addTab ~ route:', route)
+  if (meta.isHidden) return console.log('隐藏的路由不能添加到tabs') // 刷新的问题
   navTabStore.addTab(tab)
 }
 // 切换tab

@@ -9,14 +9,14 @@ import baseDialog from '@/components/Dialog/base-dialog/index.vue'
 const props = defineProps({
   multiple: { type: Boolean, default: false }, //   是否多选
 })
-const getList = (data: any) => listRole(data)
+const onLoad = (data: any) => listRole(data)
 const config = ref({
   prop: {
     label: 'roleName', // 显示字段
     value: 'id', // 值字段
     children: 'children', // 子级字段
   },
-  getList,
+  onLoad,
   multiple: props.multiple,
 })
 const emits = defineEmits(['update:modelValue', 'confirm'])

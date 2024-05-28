@@ -22,7 +22,7 @@ const dictItemSchemaRules = {
   dictId: { type: String, required: true }, // 字典id
   dictType: { type: String, required: true }, // 字典code (可以更具type查询下级 则必须唯一)
   parentId: { type: String, default: null }, // 父级id(字典项可能是树形结构)
-  lable: { type: String, required: true }, // 名称
+  label: { type: String, required: true }, // 名称
   value: { type: String, required: true }, // 值
   sort: { type: Number, default: 0 }, // 排序
   remark: { type: String, maxlength: 200 }, // 备注
@@ -56,8 +56,8 @@ const dictPreValidate = () => [
 ]
 const dictItemPreValidate = () => [
   body('dictId').notEmpty().withMessage('字典id不能为空'),
-  body('dictType').notEmpty().withMessage('字典code不能为空'),
-  body('lable').notEmpty().withMessage('名称不能为空'),
+  body('dictType').notEmpty().withMessage('字典Type不能为空'),
+  body('label').notEmpty().withMessage('名称不能为空'),
   body('value').notEmpty().withMessage('值不能为空'),
   body('remark').optional().isLength({ max: 200 }).withMessage('备注不能超过200个字符'),
   body('status').optional().isIn(['1', '0']).withMessage('状态只能为1或0'),

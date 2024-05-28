@@ -34,9 +34,15 @@ router.post('/list', async (req, res) => {
 })
 // 删除角色
 router.delete('/delete', async (req, res) => {
-  const { id } = req.body
+  const { id, ids } = req.query
   try {
-    await Role.deleteOne(id)
+    if (id) {
+      await Role.deleteOne({ id })
+    } else if (ids) {
+      await Role.deleteMany({ id: { $in: ids } })
+    } else {
+      return res.send({ code: 400, message: '缺少查询参数' })
+    }
     res.send({ code: 200, message: '删除成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
@@ -57,7 +63,6 @@ router.put('/update', roleValidationRules(), async (req, res) => {
 // 获取角色详情
 router.get('/detail', async (req, res) => {
   const { id, ids } = req.query
-  console.log('🚀 ~ router.get ~ ids:', ids)
   try {
     let role
     if (id) {

@@ -1,6 +1,6 @@
 <template>
   <div>测试封装的基础弹窗</div>
-  <baseDialog ref="baseDialogRef" v-model:list="list" title="测试" :getList="getList" :multiple="multiple"></baseDialog>
+  <baseDialog ref="baseDialogRef" title="测试" :onLoad="onLoad" :multiple="multiple"></baseDialog>
   <!-- 输入框 -->
   <el-input v-model="input" placeholder="请输入内容" @click="handleFocus" readonly />
   <!-- 是否多选 -->
@@ -40,7 +40,7 @@ const handleFocus = () => {
 }
 const multiple = ref(false)
 // 请求列表的方法
-const getList = (data: any) => {
+const onLoad = (data: any) => {
   return listRole(data)
 }
 </script>

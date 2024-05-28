@@ -5,11 +5,11 @@
         <el-input v-model="roleNames" placeholder="请选择角色" readonly @click="openRoleDialog" />
       </template>
       <template #deptId>
-        <el-input v-model="deptNames" placeholder="请输入部门" readonly @click="openDeptDialog" />
+        <!-- <el-input v-model="deptNames" placeholder="请输入部门" readonly @click="openDeptDialog" /> -->
       </template>
     </Form>
     <RoleDialog ref="roleDialogRef" :multiple="true" @confirm="onRoleConfirm"></RoleDialog>
-    <DeptDialog ref="deptDialogRef" :multiple="false" @confirm="onDeptConfirm"></DeptDialog>
+    <!-- <DeptDialog ref="deptDialogRef" :multiple="false" @confirm="onDeptConfirm"></DeptDialog> -->
   </Outlet>
 </template>
 
@@ -21,8 +21,7 @@ import { detailDept } from '@/api/dept'
 import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 import { DICTS } from '@/utils/enums'
-import RoleDialog from '@/components/Dialog/base-dialog/components/role-dialog.vue'
-import DeptDialog from '@/components/Dialog/base-dialog/components/dept-dialog.vue'
+import RoleDialog from '@/components/Dialog/components/role-dialog.vue'
 const router = useRouter()
 const route = useRoute()
 const columns = reactive([
@@ -89,6 +88,7 @@ const roleNames = computed(() => {
 })
 // 获取角色list详情
 const getRoleList = async () => {
+  if (!form.value.roleIds.length) return
   try {
     const res = await detailRole({ ids: form.value.roleIds })
     roleList.value = res.data || []
@@ -116,6 +116,7 @@ const deptNames = computed(() => {
 })
 // 获取角色list详情
 const getDepList = async () => {
+  if (!form.value.deptId) return
   try {
     const res = await detailDept({ ids: [form.value.deptId] })
     deptList.value = res.data || []
