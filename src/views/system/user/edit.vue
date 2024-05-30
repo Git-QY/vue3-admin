@@ -5,11 +5,11 @@
         <el-input v-model="roleNames" placeholder="请选择角色" readonly @click="openRoleDialog" />
       </template>
       <template #deptId>
-        <!-- <el-input v-model="deptNames" placeholder="请输入部门" readonly @click="openDeptDialog" /> -->
+        <el-input v-model="deptNames" placeholder="请选择部门" readonly @click="openDeptDialog" />
       </template>
     </Form>
     <RoleDialog ref="roleDialogRef" :multiple="true" @confirm="onRoleConfirm"></RoleDialog>
-    <!-- <DeptDialog ref="deptDialogRef" :multiple="false" @confirm="onDeptConfirm"></DeptDialog> -->
+    <DeptDialog ref="deptDialogRef" :multiple="false" @confirm="onDeptConfirm"></DeptDialog>
   </Outlet>
 </template>
 
@@ -22,6 +22,7 @@ import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 import { DICTS } from '@/utils/enums'
 import RoleDialog from '@/components/Dialog/components/role-dialog.vue'
+import DeptDialog from '@/components/Dialog/components/dept-dialog.vue'
 const router = useRouter()
 const route = useRoute()
 const columns = reactive([

@@ -160,6 +160,9 @@
         }
       }
     }
+    .el-menu--horizontal {
+      height: 56px;
+    }
   }
   &-logo {
     height: 56px;
@@ -198,6 +201,7 @@
     .el-header {
       display: flex;
       justify-content: flex-start;
+      height: 56px;
     }
     .layout-aside {
       flex: 1;

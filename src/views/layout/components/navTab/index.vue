@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter, Route } from 'vue-router'
 import { useNavTabStore, useGlobalStore } from '@/store'
 import { onMounted } from 'vue'
 
@@ -44,8 +44,18 @@ const addTab = () => {
   const { fullPath, meta } = route
   const tab: App.TabItem = { fullPath, title: meta.name, ...meta }
   console.log('🚀 ~ addTab ~ route:', route)
-  if (meta.isHidden) return console.log('隐藏的路由不能添加到tabs') // 刷新的问题
-  navTabStore.addTab(tab)
+  if (meta.isHidden) {
+    // 找出当前路由的父级路由
+    const parent: Route = router.getRoutes().find(item => item.path == route.matched[1].path)
+    console.log('🚀 ~ addTab ~ parent:', parent)
+    navTabStore.addTab({
+      fullPath: parent.path,
+      title: parent.meta.name,
+      ...parent.meta,
+    })
+  } else {
+    navTabStore.addTab(tab)
+  }
 }
 // 切换tab
 const handleChange = (fullPath: string) => {
