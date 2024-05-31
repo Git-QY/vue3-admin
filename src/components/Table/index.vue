@@ -12,12 +12,16 @@
     </div>
 
     <!-- 按钮模块 -->
-    <div clss="page-btn">
+    <div class="page-btn">
       <div class="page-btn--lf">
         <slot name="btnleft" />
       </div>
       <div class="page-btn--ri">
         <slot name="btnRight" />
+        <!-- 打印 -->
+        <svg-icon className="icon" iconName="icon-dayin" color="var(--text-color)" :size="18" @click="handlePrint" />
+        <!-- 导出 -->
+        <svg-icon className="icon" iconName="icon-daochu" color="var(--text-color)" :size="18" @click="handleExportExcel" />
       </div>
     </div>
     <!-- 表格模块 -->
@@ -46,21 +50,24 @@
     <div class="page-pagination">
       <div class="page-pagination--lf"></div>
       <div class="page-pagination--ri">
-        <pagination :page="props.page" @set-page="setPage" @set-pageSize="setPageSize"></pagination>
+        <pagination :page="props.page" @set-page="changePage" @set-pageSize="changePageSize"></pagination>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import search from './components/search.vue'
 import pagination from './components/pagination.vue'
 import fileIcon from '@/components/FormItem/fileIcon.vue'
 import { defaultConfig, deepMerge } from './config'
-import { deepClone, getLabel, listToTree } from '@/utils'
+import { deepClone, getLabel } from '@/utils'
+import { useTable } from './useTableHooks'
+import { useDictStore } from '@/store'
 
 const prop = defineProps({
+  type: { type: String },
   data: { type: Array },
   table: { type: Object },
   searchForm: { type: Object },
@@ -70,14 +77,8 @@ const prop = defineProps({
   maxShow: { type: Number, default: 3 },
 }) as tableProps
 const props = reactive(deepMerge(deepClone(defaultConfig), prop))
-// 搜索
-const handleSearch = () => {
-  props.page.page = 1
-  getList()
-}
+const { getTableData, tableData, loading, selectData, changePage, changePageSize, handleSelectionChange, refresh, handleSearch, handleExportExcel, handlePrint } = useTable(props)
 
-// 表格
-import { useDictStore } from '@/store'
 const dictStore = useDictStore()
 const tableColumns = computed(() => {
   return props.columns
@@ -89,46 +90,12 @@ const tableColumns = computed(() => {
       return item
     })
 })
-const tableData = ref<Object[]>([]) // 表格数据
-const loading = ref(false)
-const selectData = ref([]) // 表格选中的数据
-const getList = async () => {
-  if (!props.api) return
-  loading.value = true
-  const params = { page: props.page, ...props.searchForm }
-  try {
-    const res = await props.api(params)
-    tableData.value = listToTree(deepClone(res.data))
-    props.page.total = res.page.total
-  } catch (error) {
-  } finally {
-    loading.value = false
-  }
-}
-
-const handleSelectionChange = (val: any) => {
-  selectData.value = val
-}
-// 分页
-const setPage = (page: number) => {
-  props.page.page = page
-  getList()
-}
-const setPageSize = (pageSize: number) => {
-  props.page.pageSize = pageSize
-  getList()
-}
 onMounted(async () => {
-  getList()
   // *****************统一处理dict
   const dicts = props.columns.filter((item: columnsProps) => item.dict).map((item: columnsProps) => item.dict)
   await dictStore.getDicts(dicts)
   // *****************统一处理dict
 })
-// 暴露方法
-const refresh = () => {
-  getList()
-}
 
 defineExpose({ refresh, selectData })
 </script>
@@ -151,6 +118,19 @@ defineExpose({ refresh, selectData })
   &-pagination {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+  }
+  &-btn {
+    &--ri {
+      display: flex;
+      gap: 20px;
+      .icon {
+        box-sizing: border-box;
+        cursor: pointer;
+        &:hover {
+        }
+      }
+    }
   }
 }
 </style>

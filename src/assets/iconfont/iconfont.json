@@ -6,6 +6,20 @@
   "description": "qyAdmin的icon集合",
   "glyphs": [
     {
+      "icon_id": "722442",
+      "name": "打印",
+      "font_class": "dayin",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "2077528",
+      "name": "导出",
+      "font_class": "daochu",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
       "icon_id": "9929888",
       "name": "语言",
       "font_class": "yuyan",

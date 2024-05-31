@@ -89,4 +89,8 @@ router.get('/area', (req, res) => {
   })
 })
 
+// 导出表格
+const xlsx = require('node-xlsx')
+router.get('/export-xlsx', async (req, res) => {})
+
 module.exports = router

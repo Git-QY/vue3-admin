@@ -15,3 +15,10 @@ export function getImage() {
     method: 'get',
   })
 }
+// 导出
+export function exportXlsx() {
+  return request({
+    url: '/utils/export-xlsx',
+    method: 'get',
+  })
+}

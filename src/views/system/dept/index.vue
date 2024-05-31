@@ -5,6 +5,7 @@ import { listDept, deleteDept } from '../../../api/dept'
 import { DICTS } from '@/utils/enums'
 import { ElMessage, ElMessageBox } from 'element-plus'
 const tableConfig = reactive({
+  type: 'tree',
   table: { rowKey: 'id' },
   searchForm: {},
   api: () => {
