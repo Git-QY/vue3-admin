@@ -6,7 +6,7 @@ const { Menu } = require('../mongodb/models/menu')
 
 // 记录登录接口的请求
 const { Log } = require('../mongodb/models/log')
-var { getClientIp } = require('../utils/auth')
+var { getIp } = require('../utils/auth')
 const IP2Region = require('ip2region').default
 
 const { generateUUID, sendMail } = require('../utils/index')
@@ -82,14 +82,12 @@ router.post('/login', async (req, res) => {
     const { status, id } = user
     if (status == 0) return res.send({ code: 403, message: '该用户已被禁用' })
     let token = createToken({ login: true, name: username, id })
-
     // 登录成功 保存登录日志
     const { method } = req
-    const ip = getClientIp(req)
+    const ip = await getIp()
     const query = new IP2Region()
     const address = query.search(ip)
     await Log.create({ id: $generateUUID(), ip, address, url: '/users/login', method, createTime: new Date(), updateTime: new Date(), createById: id })
-
     res.send({ code: 200, message: '登录成功', data: { token, userInfo: user } })
   } catch (error) {
     res.send({ code: 500, message: error })

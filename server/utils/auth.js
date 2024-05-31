@@ -103,11 +103,35 @@ function hashWithSalt(text) {
 function getClientIp(req) {
   return req.headers['x-forwarded-for'] || req.ip || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress || ''
 }
+const https = require('https')
+// 获取公网ip https://api.ipify.org/?format=json
+function getIp() {
+  return new Promise((resolve, reject) => {
+    const req = https.get('https://api.ipify.org/?format=json', res => {
+      let data = ''
+      res.on('data', chunk => {
+        data += chunk
+      })
+      res.on('end', () => {
+        try {
+          const ip = JSON.parse(data).ip
+          resolve(ip)
+        } catch (error) {
+          reject(error) // JSON 解析失败时 reject 错误
+        }
+      })
+    })
 
+    req.on('error', error => {
+      reject(error) // 请求错误时 reject 错误
+    })
+  })
+}
 module.exports = {
   encrypt,
   decrypt,
   encryptHash,
   hashWithSalt,
   getClientIp,
+  getIp,
 }
