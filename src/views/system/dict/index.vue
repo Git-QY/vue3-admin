@@ -71,12 +71,6 @@ const onDelete = (id: string) => {
 }
 // 刷新表格
 const refresh = () => tableRef.value?.refresh()
-
-import { useDictStore } from '@/store'
-const dictStore = useDictStore()
-onMounted(async () => {
-  await dictStore.getDict('dict_status')
-})
 </script>
 
 <style lang="scss" scoped></style>

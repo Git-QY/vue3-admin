@@ -23,15 +23,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import pageTable from '@/components/Table/index.vue'
 import request from '@/utils/request'
-import { DICTS } from '@/utils/enums'
 import api, { User } from '@/api/user'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
-import { useRouter } from 'vue-router'
-// RoleAssignmentDialog
 import RoleAssignmentDialog from './RoleAssignmentDialog.vue'
+import { useRouter } from 'vue-router'
 const router = useRouter()
 const tableConfig = reactive({
   table: { rowKey: 'id' },
@@ -54,7 +52,7 @@ const tableConfig = reactive({
       prop: 'status',
       label: '状态',
       type: 'slot',
-      query: { type: 'select', options: DICTS.userStatus },
+      query: { type: 'select', dict: 'user_status' },
     },
     {
       prop: 'createTime',

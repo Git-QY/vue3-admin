@@ -65,12 +65,6 @@ const onDelete = () => {
     .catch(() => ElMessage.info('取消删除'))
 }
 const refresh = () => tableRef.value?.refresh()
-
-import { useDictStore } from '@/store'
-const dictStore = useDictStore()
-onMounted(async () => {
-  await dictStore.getDict('dict_item_status')
-})
 </script>
 
 <style lang="scss" scoped></style>

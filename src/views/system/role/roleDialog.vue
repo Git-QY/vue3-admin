@@ -16,7 +16,6 @@
 import { ref, reactive, toRaw } from 'vue'
 import { addRole, updateRole } from '@/api'
 import { ElMessage } from 'element-plus'
-import { DICTS } from '@/utils/enums'
 
 const props = defineProps({
   title: {
@@ -25,7 +24,7 @@ const props = defineProps({
   },
   width: { type: String, default: '50%' },
   // 按钮回调函数
-  confirm: { type: Function, default: () => { } },
+  confirm: { type: Function, default: () => {} },
 })
 const columns = reactive([
   { prop: 'roleName', label: '角色名称', rules: 'must', span: 12 },
@@ -36,7 +35,7 @@ const columns = reactive([
     type: 'radio-group',
     span: 12,
     rules: 'must',
-    options: DICTS.roleStatus,
+    dict: 'role_status',
   },
   { prop: 'sort', type: 'input-number', label: '排序', span: 12 },
   { prop: 'remark', label: '备注', span: 24 },

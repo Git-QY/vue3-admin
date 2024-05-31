@@ -15,7 +15,10 @@
           <template #content>
             <el-button text class="exit" @click="handleLogout">退出登录</el-button>
           </template>
-          <span>{{ userInfo.username }}</span>
+          <div class="layout-header--avatar">
+            <el-avatar :size="30" :src="avatar" />
+            <span>{{ userInfo.username }}</span>
+          </div>
         </el-tooltip>
       </el-space>
     </div>
@@ -31,6 +34,7 @@ import ThemeSetting from './components/ThemeSetting.vue'
 
 import { useRouter } from 'vue-router'
 import { useUserStore, useGlobalStore } from '@/store'
+import { computed } from 'vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -41,6 +45,10 @@ const handleLogout = () => {
   router.push('/login')
   userStore.reset()
 }
+
+const avatar = computed(() => {
+  return userInfo.avatar || 'https://p3-passport.byteacctimg.com/img/user-avatar/1f21e9f5c7724b9112d7a7f4a2405858~120x120.awebp'
+})
 </script>
 
 <style scoped lang="scss"></style>

@@ -118,7 +118,13 @@ const setPageSize = (pageSize: number) => {
   props.page.pageSize = pageSize
   getList()
 }
-onMounted(getList)
+onMounted(async () => {
+  getList()
+  // *****************统一处理dict
+  const dicts = props.columns.filter((item: columnsProps) => item.dict).map((item: columnsProps) => item.dict)
+  await dictStore.getDicts(dicts)
+  // *****************统一处理dict
+})
 // 暴露方法
 const refresh = () => {
   getList()

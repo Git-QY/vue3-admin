@@ -20,17 +20,18 @@ import { detailRole } from '@/api'
 import { detailDept } from '@/api/dept'
 import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
-import { DICTS } from '@/utils/enums'
+
 import RoleDialog from '@/components/Dialog/components/role-dialog.vue'
 import DeptDialog from '@/components/Dialog/components/dept-dialog.vue'
+
 const router = useRouter()
 const route = useRoute()
 const columns = reactive([
   { label: '用户名', prop: 'username', rules: 'must' },
   { label: '头像', prop: 'avatar', type: 'upload', rules: 'must' },
-  { label: '邮箱', prop: 'email', rules: 'email', rules: 'must' },
-  { label: '性别', prop: 'sex', type: 'select', options: DICTS.userSex, span: 12 },
-  { label: '状态', prop: 'status', type: 'select', options: DICTS.userStatus, span: 12 },
+  { label: '邮箱', prop: 'email', rules: 'must' },
+  { label: '性别', prop: 'sex', type: 'select', dict: 'user_sex', span: 12 },
+  { label: '状态', prop: 'status', type: 'select', dict: 'user_status', span: 12 },
   { label: '角色', prop: 'roleIds', type: 'solt', span: 12 },
   { label: '所属部门', prop: 'deptId', type: 'solt', span: 12 },
   { label: '备注', prop: 'remark', type: 'textarea' },

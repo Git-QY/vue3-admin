@@ -34,5 +34,5 @@ export const useDictStore = defineStore('dict', {
       return lists
     },
   },
-  persist: true,
+  // persist: true,
 })

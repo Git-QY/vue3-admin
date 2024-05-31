@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import FormItem from '../FormItem/index.vue'
 import type { FormInstance } from 'element-plus'
 
@@ -71,5 +71,11 @@ const resetForm = () => {
   formRef.value?.resetFields()
 }
 defineExpose({ formRef, resetForm, validateForm })
+
+onMounted(async () => {
+  // 统一处理dict
+  const dicts = props.columns.filter(item => item.dict).map(item => item.dict)
+  await dictStore.getDicts(dicts)
+})
 </script>
 <style lang="scss" scoped></style>
