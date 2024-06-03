@@ -16,7 +16,7 @@ const themeColor = ref('')
 themeColor.value = globalStore.themeColor
 const theme = useTheme()
 const changeTheme = () => {
-  theme.setTheme(themeColor.value)
+  theme.setThemeColor(themeColor.value)
   globalStore.setGlobalState('themeColor', themeColor.value)
 }
 const predefineColors = ref([

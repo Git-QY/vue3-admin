@@ -78,12 +78,9 @@ const setLayout = (value: any) => globalStore.setGlobalState('layout', value)
       border-radius: 3px;
     }
     .layout-light {
-      background-color: var(--el-color-primary-light-5);
       border-radius: 3px;
     }
     .layout-content {
-      background-color: var(--el-color-primary-light-8);
-      border: 1px dashed var(--el-color-primary);
       border-radius: 3px;
     }
     .el-icon {

@@ -6,6 +6,27 @@
   "description": "qyAdmin的icon集合",
   "glyphs": [
     {
+      "icon_id": "1724889",
+      "name": "太阳",
+      "font_class": "taiyang",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "1724899",
+      "name": "月亮",
+      "font_class": "yueliang",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "34197055",
+      "name": "跟随系统",
+      "font_class": "gensuixitong",
+      "unicode": "e947",
+      "unicode_decimal": 59719
+    },
+    {
       "icon_id": "722442",
       "name": "打印",
       "font_class": "dayin",

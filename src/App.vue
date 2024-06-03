@@ -6,7 +6,8 @@
 import useTheme from '@/hooks/themeColor'
 import { useGlobalStore } from '@/store'
 const globalStore = useGlobalStore()
-const { setTheme } = useTheme()
-setTheme(globalStore.themeColor)
+const { setThemeColor, setTheme } = useTheme()
+setThemeColor(globalStore.themeColor)
+setTheme(globalStore.theme)
 </script>
 <style lang="scss"></style>

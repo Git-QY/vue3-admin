@@ -1,13 +1,50 @@
-import { storeToRefs } from 'pinia'
-import { useGlobalStore } from '@/store'
+import { ref } from 'vue'
 const useTheme = () => {
   const html = document.documentElement
-  const PRE = '--el-color-primary'
-  const PRE_LIGHT = `${PRE}-light`
-  const PRE_DARK = `${PRE}-dark`
-  const Levels: number[] = [3, 5, 7, 8, 9]
+  // const PRE = '--el-color-primary'
+  // const PRE_LIGHT = `${PRE}-light`
+  // const PRE_DARK = `${PRE}-dark`
+  // const Levels: number[] = [3, 5, 7, 8, 9]
   const WHITE = '#FFFFFF'
   const BLACK = '#000000'
+  const isDark = ref(false)
+
+  // /* 模式切换变量，默认light模式 */
+  // --current-background-color: var(--light-background-color);
+  // --current-primary-color: var(--light-primary-color);
+
+  // /* 浅色主题 */
+  // --light-primary-color: #666;
+  // --light-background-color: #fff;
+
+  // /* 深色主题 */
+  // --dark-primary-color: #fff;
+  // --dark-background-color: #282c34;
+
+  // 写一个方法替换var(--light-background-color) => var(--dark-background-color);
+  function findCurrentCssVariables(): string[] {
+    const currentCssVars: string[] = []
+    const styleSheets = Array.from(document.styleSheets)
+
+    for (const sheet of styleSheets) {
+      if (sheet instanceof CSSStyleSheet) {
+        const cssRules = Array.from(sheet.cssRules)
+        for (const rule of cssRules) {
+          if (rule instanceof CSSStyleRule && rule.selectorText === ':root') {
+            const style = rule.style as CSSStyleDeclaration
+            for (let i = 0; i < style.length; i++) {
+              const name = style[i]
+              if (name.startsWith('--current')) {
+                currentCssVars.push(name)
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return currentCssVars
+  }
 
   const mix = (color1: string, color2: string, weight: number): string => {
     weight = Math.max(Math.min(Number(weight), 1), 0)
@@ -31,14 +68,10 @@ const useTheme = () => {
       console.warn('Color value is not provided')
       return
     }
-    html.style.setProperty(PRE, color)
-
-    Levels.forEach((level: number) => {
-      html.style.setProperty(`${PRE_LIGHT}-${level}`, mix(color, WHITE, level * 0.1))
-    })
-
-    const dark = mix(color, BLACK, 0.2)
-    html.style.setProperty(`${PRE_DARK}-2`, dark)
+    // html.style.setProperty(PRE, color)
+    // Levels.forEach((level: number) => {
+    //   html.style.setProperty(`${PRE_LIGHT}-${level}`, mix(color, WHITE, level * 0.1))
+    // })
 
     // 本身设置的颜色
     html.style.setProperty(`--primary`, color)
@@ -46,7 +79,7 @@ const useTheme = () => {
       html.style.setProperty(`--light-${i}`, mix(color, WHITE, i * 0.1))
     }
   }
-  const setTheme = (color: string | null): void => {
+  const setThemeColor = (color: string | null): void => {
     changeTheme(color)
   }
   // 改变具体 参数的 颜色
@@ -54,22 +87,36 @@ const useTheme = () => {
     html.style.setProperty(`--${str}`, color)
     html.style.setProperty(`--text-color`, textColor)
   }
-  // const globalStore = useGlobalStore()
-  // const { isDark, themeColor } = storeToRefs(globalStore)
-  // 暗黑明亮切换
-  const switchDark = (): void => {
-    // 获取HTML根节点
-    // const html = document.documentElement as HTMLElement
-    // html.setAttribute('class', isDark.value ? 'dark' : '')
-    // changeTheme(themeColor.value)
-    // setAsideTheme()
-    // setHeaderTheme()
+  // 暗黑明亮跟随系统切换 light dark auto
+  const setTheme = (mode: string): void => {
+    const html = document.documentElement as HTMLElement
+    const currentCssVariables = findCurrentCssVariables()
+    let theme = mode
+    if (mode === 'auto') {
+      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    } else if (mode !== 'dark' && mode !== 'light') {
+      console.warn('Invalid theme mode:', mode)
+      return
+    }
+    html.classList.toggle('dark', theme === 'dark')
+    html.removeAttribute('class')
+    if (theme === 'dark') {
+      html.classList.add('dark') // 对于element元素
+    }
+    currentCssVariables.forEach(item => {
+      const value = `var(--${theme}${item.substring(9)})`
+      document.documentElement.style.setProperty(item, value) // 自定义元素
+    })
+    isDark.value = !!(theme == 'dark')
   }
 
+  // 切换dark
+
   return {
-    setTheme,
-    switchDark,
+    setThemeColor,
     changeThemeColor,
+    setTheme,
+    isDark,
   }
 }
 

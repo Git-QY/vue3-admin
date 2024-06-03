@@ -11,6 +11,7 @@ import pinia from '@/store' // 注册Pinia
 import ElementPlus from 'element-plus' // ElementPlus
 import * as ElementPlusIconsVue from '@element-plus/icons-vue' // ElementPlus图标
 import 'element-plus/dist/index.css' // ElementPlus样式
+import 'element-plus/theme-chalk/dark/css-vars.css' // 引入ElementPlus的暗黑模式css
 import './router/permission'
 
 // 注册公共组件
