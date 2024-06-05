@@ -1,6 +1,15 @@
 <template>
   <div class="layout-aside" :class="{ 'layout-aside--collapse': isCollapse }">
-    <el-menu router :mode="mode" :collapse="isCollapse" active-text-color="var(--primary)" :default-active="activePath" :collapse-transition="false" popper-class="pop-menu">
+    <el-menu
+      router
+      :mode="mode"
+      :collapse="isCollapse"
+      active-text-color="var(--primary)"
+      :default-active="activePath"
+      :collapse-transition="false"
+      :default-openeds="defaultOpeneds"
+      popper-class="pop-menu"
+    >
       <template v-for="item in menuList">
         <aside-item :item="item"></aside-item>
       </template>
@@ -38,6 +47,9 @@ const activePath = computed(() => {
     if (isSame.path) return isSame.path
     return menu.filter((item: Menu) => full.startsWith(item.path)).sort((a: Menu, b: Menu) => b.path.length - a.path.length)[0].path
   } catch (error) {}
+})
+const defaultOpeneds = computed(() => {
+  return authStore.permissionsMenus.filter(item => !item.isFold && item.path).map(item => item.path)
 })
 </script>
 <style lang="scss" scoped></style>

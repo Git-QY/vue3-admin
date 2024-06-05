@@ -10,6 +10,7 @@ interface globalState {
   layout: LayoutType
   isCollapse: Boolean
   reloadFlag: Boolean
+  isDarkSidebar: Boolean
 }
 export const useGlobalStore = defineStore('global', {
   state: (): globalState => {
@@ -21,6 +22,7 @@ export const useGlobalStore = defineStore('global', {
       layout: 'vertical', // 布局方式
       isCollapse: false, // 是否折叠
       reloadFlag: true, // 是否刷新页面
+      isDarkSidebar: true, // 是否暗黑侧边栏
     }
   },
   getters: {},

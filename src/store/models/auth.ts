@@ -49,8 +49,8 @@ function generateRouter(router: Router, menus: Menu[]) {
   const newMenus = menus
     .filter((item: Menu) => item.menuType !== '2')
     .map((item: Menu) => {
-      const { id, parentId, menuType, menuName, path, component, isHidden } = item
-      const meta = { name: menuName, isHidden }
+      const { id, parentId, menuType, menuName, path, component, isHidden, isKeepAlive } = item
+      const meta = { name: menuName, isHidden, isKeepAlive }
       if (parentId === '0' && menuType === '1') {
         return {
           id,

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-main"  v-if="isShow">
+  <div class="page-main"  v-show="isShow">
     <slot></slot>
   </div>
   <router-view></router-view>
