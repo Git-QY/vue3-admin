@@ -117,3 +117,14 @@ export const updateDictItem = (data: any): Promise<response> => request({ url: '
 export const deleteDictItem = (id: string): Promise<response> => request({ url: '/dicts/item/delete', method: 'delete', params: { id } })
 
 // 部门
+export interface Dept {
+  id?: string
+  parentId?: string
+  deptName: string
+  [key: string]: any
+}
+export const listDept = (data?: any): Promise<response> => request({ url: '/depts/list', method: 'post', data })
+export const addDept = (data?: Dept): Promise<response> => request({ url: '/depts/add', method: 'post', data })
+export const updateDept = (data?: Dept): Promise<response> => request({ url: '/depts/update', method: 'put', data })
+export const deleteDept = (id: string): Promise<response> => request({ url: '/depts/delete', method: 'delete', params: { id } })
+export const detailDept = (params: any): Promise<response> => request({ url: '/depts/detail', method: 'get', params })

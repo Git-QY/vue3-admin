@@ -1,13 +1,13 @@
 var express = require('express')
 var router = express.Router()
-const { Department, departmentValidationRules, validationResult } = require('../mongodb/models/department')
+const { Dept, deptValidationRules, validationResult } = require('../mongodb/models/Dept')
 // 添加部门
-router.post('/add', departmentValidationRules(true), async (req, res) => {
+router.post('/add', deptValidationRules(true), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   const { body, user } = req
   try {
-    await Department.create({ ...body, id: $generateUUID() }) // 创建新用户
+    await Dept.create({ ...body, id: $generateUUID() }) // 创建新用户
     res.send({ code: 200, message: '创建成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
@@ -17,23 +17,23 @@ router.post('/add', departmentValidationRules(true), async (req, res) => {
 router.delete('/delete', async (req, res) => {
   const { id } = req.query
   try {
-    const hasChildren = await Department.findOne({ parentId: id })
+    const hasChildren = await Dept.findOne({ parentId: id })
     if (hasChildren) return res.send({ code: 500, message: '存在子部门，不允许删除' })
-    await Department.deleteOne({ id })
+    await Dept.deleteOne({ id })
     res.send({ code: 200, message: '删除成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
   }
 })
 // 更新列表
-router.put('/update', departmentValidationRules(false), async (req, res) => {
+router.put('/update', deptValidationRules(false), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   const { body } = req
   try {
     // 更新时间
     body.updateTime = new Date()
-    await Department.updateOne({ id: body.id }, { ...body })
+    await Dept.updateOne({ id: body.id }, { ...body })
     res.send({ code: 200, message: '修改成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
@@ -43,7 +43,7 @@ router.put('/update', departmentValidationRules(false), async (req, res) => {
 router.post('/list', async (req, res) => {
   const { ...query } = req.body
   try {
-    const list = await Department.find({ ...query, deptName: { $regex: query.deptName ?? '' } })
+    const list = await Dept.find({ ...query, deptName: { $regex: query.deptName ?? '' } })
     res.send({ code: 200, message: '获取成功', data: list })
   } catch (error) {
     res.send({ code: 500, message: error })
@@ -55,9 +55,9 @@ router.get('/detail', async (req, res) => {
   try {
     let role
     if (id) {
-      role = await Department.findById(id).select('-permissions')
+      role = await Dept.findById(id).select('-permissions')
     } else if (ids) {
-      role = await Department.find({ id: { $in: ids } }).select('-permissions')
+      role = await Dept.find({ id: { $in: ids } }).select('-permissions')
     } else {
       return res.send({ code: 400, message: '缺少查询参数' })
     }

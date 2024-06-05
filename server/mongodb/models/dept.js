@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const { body, validationResult } = require('express-validator')
 
 // 部门
-const departmentSchemaRules = {
+const deptSchemaRules = {
   id: { type: String }, // id
   deptName: { type: String, required: true }, // 部门名称
   remark: { type: String, default: null }, // 备注
@@ -18,10 +18,10 @@ const departmentSchemaRules = {
 }
 
 // 创建部门模型
-const Department = mongoose.model('Department', new mongoose.Schema(departmentSchemaRules))
+const Dept = mongoose.model('Dept', new mongoose.Schema(deptSchemaRules))
 
 // 预校验规则
-const departmentValidationRules = isNewUser => [
+const deptValidationRules = isNewUser => [
   // 部门名称全局唯一
   body('deptName')
     .notEmpty()
@@ -31,8 +31,8 @@ const departmentValidationRules = isNewUser => [
       if (!isNewUser) {
         query._id = { $ne: req.body._id }
       }
-      const department = await Department.findOne(query)
-      if (department) {
+      const dept = await Dept.findOne(query)
+      if (dept) {
         throw new Error('部门名称已存在')
       }
     }),
@@ -48,4 +48,4 @@ const departmentValidationRules = isNewUser => [
   body('status').optional().isIn(['0', '1']).withMessage('部门状态必须为0或1'),
 ]
 
-module.exports = { Department, departmentValidationRules, validationResult }
+module.exports = { Dept, deptValidationRules, validationResult }
