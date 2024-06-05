@@ -50,7 +50,7 @@
     <div class="page-pagination">
       <div class="page-pagination--lf"></div>
       <div class="page-pagination--ri">
-        <pagination :page="props.page" @set-page="changePage" @set-pageSize="changePageSize"></pagination>
+        <pagination :page="props.page" @set-page="changePage" @set-pageSize="changePageSize" v-if="!isPage"></pagination>
       </div>
     </div>
   </div>
@@ -77,7 +77,7 @@ const prop = defineProps({
   maxShow: { type: Number, default: 3 },
 }) as tableProps
 const props = reactive(deepMerge(deepClone(defaultConfig), prop))
-const { getTableData, tableData, loading, selectData, changePage, changePageSize, handleSelectionChange, refresh, handleSearch, handleExportExcel, handlePrint } = useTable(props)
+const { tableData, loading, selectData, changePage, changePageSize, handleSelectionChange, refresh, handleSearch, handleExportExcel, handlePrint, isPage } = useTable(props)
 
 const dictStore = useDictStore()
 const tableColumns = computed(() => {

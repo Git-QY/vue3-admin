@@ -1,5 +1,5 @@
 //  抽取table
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { exportXlsx } from '@/api/utils'
 import { deepClone, listToTree } from '@/utils'
 
@@ -24,6 +24,7 @@ export function useTable(options: any) {
       loading.value = false
     }
   }
+  const isPage = computed(() => options.type == 'tree')
   // 搜索
   const handleSearch = () => {
     options.page.page = 1
@@ -68,5 +69,6 @@ export function useTable(options: any) {
     handleSelectionChange,
     handleExportExcel,
     handlePrint,
+    isPage,
   }
 }

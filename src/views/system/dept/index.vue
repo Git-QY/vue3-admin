@@ -15,10 +15,12 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { listDept, Dept } from '@/api'
+import { listDept, deleteDept, Dept } from '@/api'
 import editDialog from './dialog.vue'
+import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 const tableConfig = ref({
   table: { rowKey: 'id' },
+  type: 'tree',
   searchForm: {},
   // 可以通过pomise构建需要的格式
   api: (data: any) => {
@@ -26,15 +28,13 @@ const tableConfig = ref({
   },
   columns: [
     { prop: 'deptName', label: '部门名称', query: {} },
-    { prop: 'remark', label: '备注' },
     { prop: 'leader', label: '部门负责人' },
     { prop: 'phone', label: '联系电话' },
     { prop: 'email', label: '联系邮箱' },
     { prop: 'status', label: '状态' },
-    { prop: 'createTime', label: '创建时间', formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') },
-    { prop: 'updateTime', label: '更新时间', formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') },
     { prop: 'createBy', label: '创建人' },
-    { prop: 'operate', label: '操作', type: 'operate' },
+    { prop: 'remark', label: '备注' },
+    { prop: 'operate', label: '操作', type: 'slot' },
   ],
 })
 const editDialogRef = ref<HTMLFormElement | null>(null)
@@ -47,7 +47,26 @@ const onEdit = (row: Dept) => {
   editDialogRef.value?.open(row)
   title.value = '编辑'
 }
-const onDelete = () => {}
+const onDelete = (id: string) => {
+  ElMessageBox.confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(async () => {
+      await deleteDept(id)
+      ElMessage({
+        type: 'success',
+        message: '删除成功!',
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '已取消删除',
+      })
+    })
+}
 </script>
 
 <style lang="scss" scoped></style>

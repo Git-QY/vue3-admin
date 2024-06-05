@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { computed, ref, toRef, watch } from 'vue'
-import { listDept } from '@/api/dept'
+import { listDept } from '@/api'
 import { debounce } from '@/utils'
 const props = {
   label: 'deptName',

@@ -16,8 +16,7 @@
 <script lang="ts" setup>
 import { reactive, ref, onMounted, computed } from 'vue'
 import api, { User } from '@/api/user'
-import { detailRole } from '@/api'
-import { detailDept } from '@/api/dept'
+import { detailRole, detailDept } from '@/api'
 import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 

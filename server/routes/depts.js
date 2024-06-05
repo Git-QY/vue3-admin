@@ -2,7 +2,7 @@ var express = require('express')
 var router = express.Router()
 const { Dept, deptValidationRules, validationResult } = require('../mongodb/models/Dept')
 // 添加部门
-router.post('/add', deptValidationRules(true), async (req, res) => {
+router.post('/add', deptValidationRules(), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   const { body, user } = req
@@ -26,7 +26,7 @@ router.delete('/delete', async (req, res) => {
   }
 })
 // 更新列表
-router.put('/update', deptValidationRules(false), async (req, res) => {
+router.put('/update', deptValidationRules(), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
   const { body } = req

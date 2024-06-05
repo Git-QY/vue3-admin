@@ -36,11 +36,12 @@ const columns = reactive([
 ])
 const form = ref({
   id: '',
-  deptName: '',
+  deptName: '人事部',
+  parentId: '0',
   leader: '',
   phone: '',
   email: '',
-  status: '',
+  status: '1',
   remark: '',
 })
 const _form = toRaw(form.value) // 获取初始表单数据
