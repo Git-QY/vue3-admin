@@ -16,7 +16,6 @@ const icons = [
 ]
 const globalStore = useGlobalStore()
 const { setTheme, isDark } = useTheme()
-console.log('🚀 ~ isDark:', isDark)
 
 const index = computed(() => icons.findIndex(item => item.value === globalStore.theme))
 const currentIndex = ref(index.value)

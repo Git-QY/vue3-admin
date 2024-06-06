@@ -1,4 +1,6 @@
 $dark: #001529;
+$navTab-height: 42px;
+$header-height: 56px;
 .layout {
   .el-aside {
     padding: 0;
@@ -20,7 +22,7 @@ $dark: #001529;
     margin: 0;
   }
   &-header {
-    height: 56px;
+    height: $header-height;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -37,14 +39,12 @@ $dark: #001529;
     }
   }
   &-navTab {
-    height: 40px;
+    height: $navTab-height;
     box-sizing: border-box;
     // box-shadow: 1px 0 1px rgba(136, 136, 136);
     border-top: 1px solid var(--el-border-color-lighter);
     border-bottom: 1px solid var(--el-border-color-lighter);
     display: flex;
-    align-items: center;
-    // background-color: #fff;
     .el-tabs {
       width: calc(100% - 80px);
 
@@ -89,10 +89,9 @@ $dark: #001529;
       justify-content: center;
       padding: 0 9px 0 12px;
       border: 1px solid var(--el-border-color-light);
-      height: 31px;
+      height: 30px;
       margin-left: 8px;
       border-radius: 5px;
-
       .el-icon {
         &:hover {
           background-color: var(--primary);
@@ -189,9 +188,10 @@ $dark: #001529;
     }
   }
   &-main {
-    height: calc(100vh - 56px - 40px);
+    height: calc(100vh - $header-height - $navTab-height);
     box-sizing: border-box;
     padding: 16px;
+    background-color: var(--current--main-background-color);
   }
   // 布局样式
   &-vertical {

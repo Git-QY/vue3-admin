@@ -37,7 +37,6 @@ router.post('/list', async (req, res) => {
       { $addFields: { createBy: '$user.username' } }, // 生成一个新字段  updateBy:user.username
       { $project: { user: 0 } }, // 删除 user 字段
     ])
-    console.log('🚀 ~ router.post ~ logs:', logs)
     const total = await Log.countDocuments(query)
     res.send({ code: 200, data: logs, page: { ...page, total }, message: '获取成功' })
   } catch (error) {}

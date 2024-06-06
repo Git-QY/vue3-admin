@@ -89,6 +89,53 @@ router.get('/area', (req, res) => {
   })
 })
 
+// 读取对应gitee仓库动态
+const axios = require('axios')
+const owner = 'Git-QY'
+const repo = 'vue3-admin'
+// 用户授权码
+const access_token = '0c2badccddd48644ea7eca35f3d6b08f'
+const apiUrl = `https://gitee.com/api/v5/repos/${owner}/${repo}/events`
+router.get('/gitee-events', async (req, res) => {
+  try {
+    const response = await axios.get(apiUrl)
+    const events = response.data
+    const results = events.map(event => {
+      const { id, type, created_at, actor, repo } = event
+      return { id, type, created_at, actor, repo }
+    })
+    res.send({ code: 200, data: results, msg: '查询成功', total: results.length })
+  } catch (error) {
+    res.send({ code: 400, msg: error })
+  }
+})
+// 读取对应gitee仓库commit
+router.get('/gitee-commits', async (req, res) => {
+  const { branch, page = { page: 1, pageSize: 10 } } = req.query
+  try {
+    const response = await axios.get(`https://gitee.com/api/v5/repos/${owner}/${repo}/commits`, {
+      params: { access_token, sha: branch, page: page.page, per_page: page.pageSize },
+    })
+    const events = response.data
+    res.send({ code: 200, data: events, msg: '查询成功', total: events.length })
+  } catch (error) {
+    res.send({ code: 400, msg: error })
+  }
+})
+// 读取对应gitee仓库分支
+router.get('/gitee-branches', async (req, res) => {
+  const { page = { page: 1, pageSize: 10 } } = req.query
+  try {
+    const response = await axios.get(`https://gitee.com/api/v5/repos/${owner}/${repo}/branches`, { params: { access_token, page: page.page, per_page: page.pageSize } })
+    const events = response.data
+    console.log('🚀 ~ router.get ~ events:', events)
+    res.send({ code: 200, data: events, msg: '查询成功', total: events.length })
+  } catch (error) {
+    res.send({ code: 400, msg: error })
+    console.log('🚀 ~ router.get ~ error:', error)
+  }
+})
+
 // 导出表格
 const xlsx = require('node-xlsx')
 router.get('/export-xlsx', async (req, res) => {})

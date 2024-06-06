@@ -11,7 +11,6 @@
 import { useRoute } from 'vue-router'
 import { useGlobalStore } from '@/store'
 const route = useRoute()
-console.log('🚀 ~ route:', route)
 const globalStore = useGlobalStore()
 </script>
 <style lang="scss" scoped></style>

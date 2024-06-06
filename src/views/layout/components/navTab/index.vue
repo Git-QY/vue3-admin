@@ -43,11 +43,9 @@ const activeName = computed(() => route.fullPath)
 const addTab = () => {
   const { fullPath, meta } = route
   const tab: App.TabItem = { fullPath, title: meta.name, ...meta }
-  console.log('🚀 ~ addTab ~ route:', route)
   if (meta.isHidden) {
     // 找出当前路由的父级路由
     const parent: Route = router.getRoutes().find(item => item.path == route.matched[1].path)
-    console.log('🚀 ~ addTab ~ parent:', parent)
     navTabStore.addTab({
       fullPath: parent.path,
       title: parent.meta.name,

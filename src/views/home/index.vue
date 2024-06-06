@@ -1,9 +1,11 @@
 <template>
-  <div>{{ $t('menus.home') }}</div>
+  <div>
+    <ProjectDynamics />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import ProjectDynamics from './components/ProjectDynamics.vue'
 </script>
 
 <style lang="scss" scoped></style>

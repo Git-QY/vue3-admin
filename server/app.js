@@ -31,6 +31,7 @@ app.all('*', function (req, res, next) {
 app.use(checkToken) // 验证token
 
 require('./utils/route')(app) // 自动注册路由
+require('./utils/git') // 自动注册路由
 
 // 捕获404错误并转发到错误处理程序
 app.use(function (req, res, next) {

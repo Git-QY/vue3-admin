@@ -22,3 +22,27 @@ export function exportXlsx() {
     method: 'get',
   })
 }
+
+// 获取gitee events
+export function giteeEvents() {
+  return request({
+    url: '/utils/gitee-events',
+    method: 'get',
+  })
+}
+// gitee-commits
+export function giteeCommits(params: any) {
+  return request({
+    url: '/utils/gitee-commits',
+    method: 'get',
+    params,
+  })
+}
+// gitee-branches
+export function giteeBranches(params: any) {
+  return request({
+    url: '/utils/gitee-branches',
+    method: 'get',
+    params,
+  })
+}
