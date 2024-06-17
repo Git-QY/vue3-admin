@@ -21,6 +21,7 @@ import Directives from '@/directives/index.ts'
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
+import VueGridLayout from 'vue-grid-layout'
 
 app.use(router)
 app.use(pinia)
@@ -28,4 +29,5 @@ app.use(ElementPlus)
 app.use(Components)
 app.use(Directives)
 app.use(i18n)
+app.use(VueGridLayout)
 app.mount('#app')

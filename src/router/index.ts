@@ -12,57 +12,9 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     redirect: '/home',
     component: layout,
-    children: [
-      {
-        path: '/home',
-        name: 'home',
-        component: () => import('@/views/home/index.vue'),
-        meta: {
-          name: '首页',
-        },
-      },
-    ],
+    children: [{ path: '/home', name: 'home', component: () => import('@/views/home/index.vue'), meta: { name: '首页' } }],
   },
-  // {
-  //   path: '/system',
-  //   name: 'system',
-  //   component: layout,
-  //   meta: { title: '系统管理' },
-  //   children: [
-  //     {
-  //       path: 'user',
-  //       name: 'user',
-  //       component: () => import('@/views/system/user/index.vue'),
-  //       meta: { title: '用户管理' },
-  //       children: [
-  //         {
-  //           path: 'add',
-  //           name: 'addUser',
-  //           component: () => import('@/views/system/user/edit.vue'),
-  //           meta: { title: '添加用户', hidden: true },
-  //         },
-  //         {
-  //           path: 'edit',
-  //           name: 'editUser',
-  //           component: () => import('@/views/system/user/edit.vue'),
-  //           meta: { title: '编辑用户', hidden: true },
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       path: 'role',
-  //       name: 'role',
-  //       component: () => import('@/views/system/role/index.vue'),
-  //       meta: { title: '角色管理' },
-  //     },
-  //     {
-  //       path: 'menu',
-  //       name: 'menu',
-  //       component: () => import('@/views/system/menu/index.vue'),
-  //       meta: { title: '菜单管理' },
-  //     },
-  //   ],
-  // },
+  { path: '/layout/edit', component: () => import('@/views/home/edit.vue') },
   { path: '/:pathMatch(.*)*', component: () => import('@/views/error/404.vue') },
 ]
 

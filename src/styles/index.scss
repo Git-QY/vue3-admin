@@ -13,19 +13,16 @@
   --text-color: '#000';
 
   /* 模式切换变量，默认light模式 */
-  --current-background-color: var(--light-background-color);
-  --current-primary-color: var(--light-primary-color);
-  --current--main-background-color: var(--light--main-background-color);
+  --current-background-color: var(--light-background-color); // 背景颜色
+  --current-primary-color: var(--light-primary-color); // 主题颜色
 
   /* 浅色主题 */
   --light-primary-color: #666;
   --light-background-color: #fff;
-  --light--main-background-color: #f7fafc;
 
   /* 深色主题 */
   --dark-primary-color: #fff;
   --dark-background-color: #282c34;
-  --dark--main-background-color: #121212;
 }
 
 @import './reset.scss'; // 初始化样式scss

@@ -28,7 +28,6 @@ interface CommitItem {
     message: string
   }
 }
-
 interface BranchOption {
   label: string
   value: string
@@ -64,31 +63,4 @@ const changeBranche = () => {
 }
 </script>
 
-<style lang="scss" scoped>
-.ProjectDynamics {
-  width: 500px;
-  border-radius: 4px;
-  background-color: var(--el-bg-color);
-  border: 1px solid var(--el-border-color-light);
-  &-title {
-    margin: 0 16px;
-    padding: 10px 0;
-  }
-  &-branche {
-    margin: 0 16px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    padding: 10px 0;
-    .el-select {
-      flex: 1;
-    }
-  }
-  &-contant {
-    max-height: 500px;
-    min-height: 200px;
-    padding: 16px;
-    overflow: auto;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

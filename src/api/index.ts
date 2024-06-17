@@ -1,4 +1,32 @@
 import request from '@/utils/request'
+
+// 布局
+export interface LayoutItem {
+  i: string
+  name: string
+  x: number
+  y: number
+  w: number
+  h: number
+  display?: boolean
+  moved?: boolean
+}
+export interface Layout {
+  id?: string
+  userId: string // 用户id隔离
+  viewName: string
+  moduleList: LayoutItem[]
+  sort?: number
+  createTime?: Date
+  updateTime?: Date
+}
+
+export const addLayout = (data?: Layout): Promise<response> => request({ url: '/layouts/add', method: 'post', data })
+export const updateLayout = (data?: Layout): Promise<response> => request({ url: '/layouts/update', method: 'put', data })
+export const deleteLayout = (id: string): Promise<response> => request({ url: `/layouts/delete/${id}`, method: 'delete' })
+export const listLayout = (params?: any): Promise<response> => request({ url: '/layouts/list', method: 'get', params })
+export const detailLayout = (id: string): Promise<response> => request({ url: `/layouts/detail`, method: 'get', params: { id } })
+
 // 用户
 export interface User {
   id?: string

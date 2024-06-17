@@ -12,7 +12,7 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 camera.position.z = 5
 const renderer = new THREE.WebGLRenderer()
 // renderer.setSize(window.innerWidth, window.innerHeight)
-renderer.setSize(800, 600) // 设置渲染器的大小为800x600
+renderer.setSize(200, 100) // 设置渲染器的大小为800x600
 
 // 将渲染器的 DOM 元素添加到页面中
 const canvasContainer = ref<HTMLElement | null>(null)
