@@ -1,6 +1,5 @@
 <template>
   <div class="viewEdit">
-    {{ layout }}
     <el-container style="height: 100%">
       <el-header class="viewEdit-header">
         <el-input class="viewEdit-header--search" v-model="layout.viewName" placeholder="请输入内容"></el-input>
@@ -27,15 +26,14 @@
           </div>
         </el-aside>
         <el-main class="viewEdit-view">
-          <grid-layout :layout.sync="showModuleList" :col-num="24" :row-height="10" :margin="[16, 16]"
-            :is-resizable="false">
-            <grid-item style="touch-action: none" v-for="it in showModuleList" :x="it.x" :y="it.y" :w="it.w" :h="it.h"
-              :i="it.i" :key="it.mark" class="griditem">
+          <grid-layout :layout.sync="showModuleList" :col-num="24" :row-height="10" :margin="[16, 16]">
+            <grid-item style="touch-action: none" v-for="it in showModuleList" :x="it.x" :y="it.y" :w="it.w" :h="it.h" :i="it.i" class="griditem">
               <span>{{ it.name }}</span>
               <component :is="LayoutComponent[it.i]" :preview="true"></component>
-              <i class="el-icon-close" @click="removeItem(it)"></i>
+              <Icon class="el-icon-close" name="Close" @click="removeItem(it)" />
             </grid-item>
           </grid-layout>
+          {{ layout }}
         </el-main>
       </el-container>
     </el-container>
@@ -44,12 +42,11 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
-import { detailLayout, deleteLayout, addLayout, Layout, LayoutItem } from '@/api'
+import { detailLayout, deleteLayout, addLayout, updateLayout, Layout, LayoutItem } from '@/api'
 import { useRoute, useRouter } from 'vue-router'
 import { useDefault } from './default.ts'
 import { deepClone } from '@/utils'
 import { ElMessage } from 'element-plus'
-import Item from '../system/dict/item.vue'
 
 const { LayoutComponent, defaultView, userId } = useDefault()
 const route = useRoute()
@@ -106,8 +103,14 @@ const onCancel = () => {
 
 const onSave = async () => {
   try {
-    await addLayout(layout.value)
+    if (route.query.id) {
+      await updateLayout(layout.value)
+    } else {
+      await addLayout(layout.value)
+    }
+
     ElMessage.success('视图保存成功')
+    router.go(-1)
   } catch (error) {
     ElMessage.error('视图保存失败')
   }
@@ -117,17 +120,8 @@ const onSave = async () => {
 const totalWidth = 24
 const handelItem = (item: LayoutItem) => {
   // 堆放规则
-  /**
-   * x: number
-   * y: number
-   * w: number
-   * h: number
-   * disabled: boolean
-   * 1 计算每一行的间隔
-   */
   item.display = !item.display
   if (item.display) return
-
 }
 </script>
 
@@ -138,11 +132,13 @@ const handelItem = (item: LayoutItem) => {
   &-header {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     padding: 0;
     line-height: 60px;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.07);
 
     &--search {
+      height: 40px;
       margin: 0 10px;
       width: 180px;
       border-radius: 3px;
@@ -248,7 +244,7 @@ const handelItem = (item: LayoutItem) => {
 }
 
 .vue-grid-layout {
-  .vue-grid-item.vue-grid-placeholder {
+  ::v-deep(.vue-grid-item.vue-grid-placeholder) {
     border: 1px dashed #020814;
     background: #f4f5f6;
     opacity: 0.2;

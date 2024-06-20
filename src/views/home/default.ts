@@ -23,17 +23,16 @@ export function useDefault() {
   }
   // 默认视图
   const defaultView: Layout = {
-    id: 'default',
     viewName: '默认视图',
     userId: userInfo.id,
     moduleList: [
-      { name: '项目动态', x: 0, y: 0, w: 12, h: 12, i: 'ProjectDynamics', display: false },
-      { name: '3D模型', x: 0, y: 0, w: 12, h: 12, i: 'Threejs', display: false },
-      { name: '模型1', x: 0, y: 0, w: 2, h: 2, i: 'Model1', display: false },
-      { name: '模型2', x: 0, y: 0, w: 2, h: 2, i: 'Model2', display: false },
-      { name: '模型3', x: 0, y: 0, w: 2, h: 2, i: 'Model3', display: false },
-      { name: '模型4', x: 0, y: 0, w: 2, h: 2, i: 'Model4', display: false },
-      { name: '模型5', x: 0, y: 0, w: 2, h: 2, i: 'Model5', display: false },
+      { name: '项目动态', x: 0, y: 0, w: 12, h: 12, i: 'ProjectDynamics', display: true, moved: false },
+      { name: '3D模型', x: 0, y: 12, w: 12, h: 12, i: 'Threejs', display: true, moved: false },
+      { name: '模型1', x: 12, y: 0, w: 10, h: 16, i: 'Model1', display: true, moved: false },
+      { name: '模型2', x: 22, y: 0, w: 2, h: 2, i: 'Model2', display: true, moved: false },
+      { name: '模型3', x: 22, y: 2, w: 2, h: 14, i: 'Model3', display: true, moved: false },
+      { name: '模型4', x: 12, y: 16, w: 3, h: 8, i: 'Model4', display: true, moved: false },
+      { name: '模型5', x: 15, y: 16, w: 9, h: 8, i: 'Model5', display: true, moved: false },
     ],
   }
   onMounted(() => {})

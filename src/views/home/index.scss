@@ -1,0 +1,37 @@
+.workbench {
+  height: 100%;
+  overflow: auto;
+  padding: 0;
+
+  &-header {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    .workbench-list {
+      display: flex;
+      &--item {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: relative;
+        width: 120px;
+        height: 32px;
+        line-height: 32px;
+        margin-right: 4px;
+        overflow: hidden;
+        box-sizing: border-box;
+        user-select: none;
+        cursor: pointer;
+        border-radius: 4px;
+        background: #e7e7e7;
+        color: #000;
+      }
+    }
+    &-add {
+      cursor: pointer;
+    }
+  }
+  .griditem {
+    border: 1px solid #e7e7e7;
+  }
+}
