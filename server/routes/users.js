@@ -19,6 +19,12 @@ router.get('/', function (req, res, next) {
 // 根据邮箱获取code
 // 设置一个定时器 定时清除check和邮箱的对应关系
 const check = {}
+/**
+ * @api {get} /users/code 获取邮箱code
+ * @apiGroup 用户
+ * @apiParam {String} email 邮箱
+ * @apiVersion 0.0.1
+ */
 router.get('/code', function (req, res, next) {
   let email = req.query.email
   // 获取邮箱
@@ -38,7 +44,15 @@ router.get('/code', function (req, res, next) {
     }
   })
 })
-// 注册用户
+/**
+ * @api {post} /users/register 注册用户
+ * @apiGroup 用户
+ * @apiBody {String} username 用户登录名
+ * @apiBody {String} password 用户密码
+ * @apiBody {String} email 邮箱
+ * @apiBody {String} code 验证码
+ * @apiVersion 0.0.1
+ */
 router.post('/register', async function (req, res) {
   const { username, password, email, code } = req.body // 必填账号密码邮箱
   if (!username || !password || !email || !code) return res.send({ code: 400, message: '缺少必填参数' })

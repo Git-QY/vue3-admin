@@ -1,0 +1,9 @@
+{
+  "watch": ["routes", "apidoc"],
+  "execMap": {
+    "js": "node"
+  },
+  "events": {
+    "restart": "apidoc -i routes/ apidoc/ -o public/apidoc/"
+  }
+}

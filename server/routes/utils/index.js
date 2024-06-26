@@ -9,7 +9,7 @@ const readline = require('readline')
 router.get('/area', (req, res) => {
   let { parentId = 0 } = req.query
   const results = []
-  let filePath = path.resolve(__dirname, `../public/resources/area_code_2023.csv`)
+  let filePath = path.resolve(__dirname, `../../public/resources/area_code_2023.csv`)
   const rl = readline.createInterface({
     input: fs.createReadStream(filePath),
     crlfDelay: Infinity,

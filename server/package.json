@@ -7,6 +7,7 @@
     "apidoc": "apidoc -i routes/ apidoc/ -o public/apidoc/"
   },
   "dependencies": {
+    "apidoc": "^1.2.0",
     "axios": "^1.6.8",
     "connect-multiparty": "^2.2.0",
     "cookie-parser": "~1.4.4",

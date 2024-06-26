@@ -6,6 +6,8 @@ export const upload = (data: any) => request({ url: '/utils/uploads', method: 'p
 export const uploadChunk = (data: any) => request({ url: '/utils/uploads/chunk', method: 'post', data })
 // 全部切片上传完成合并
 export const uploadChunkMerge = (data: any) => request({ url: '/utils/uploads/merge', method: 'post', data })
+// 获取地区
+export const getArea = (params: { parentId: string }) => request({ url: '/utils/area', method: 'get', params })
 
 export function getImage() {
   return request({
