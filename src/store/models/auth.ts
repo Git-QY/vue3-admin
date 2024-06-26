@@ -46,27 +46,31 @@ export const useAuthStore = defineStore('auth', {
 // 生成路由表
 function generateRouter(router: Router, menus: Menu[]) {
   let modules = import.meta.glob('@/views/**/*.vue')
+  const iframeComponent = modules['/src/views/iframe/index.vue'] // iframe组件
+  const layoutComponent = modules['/src/views/layout/index.vue'] // layout组件
+  const Component = (component?: string) => modules[`/src/views${component}.vue`]
   const newMenus = menus
     .filter((item: Menu) => item.menuType !== '2')
     .map((item: Menu) => {
-      const { id, parentId, menuType, menuName, path, component, isHidden, isKeepAlive } = item
-      const meta = { name: menuName, isHidden, isKeepAlive }
+      const { id, parentId, menuType, menuName, path, component, isHidden, isKeepAlive, isLink } = item
+      const meta = { name: menuName, isHidden, isKeepAlive, isLink }
       if (parentId === '0' && menuType === '1') {
         return {
           id,
           parentId: '0',
           path: '/',
-          component: modules['src/views/layout/index.vue'],
-          children: [{ path, component: modules[`/src/views${component}.vue`], meta }],
+          component: layoutComponent,
+          children: [{ path, component: Component(component), meta }],
         }
       }
       return {
         id,
         parentId,
         path,
-        component: modules[menuType === '0' ? '/src/views/layout/index.vue' : `/src/views${component}.vue`],
+        component: isLink ? iframeComponent : menuType === '0' ? layoutComponent : Component(component),
         meta,
       }
     })
+  console.log('🚀 ~ generateRouter ~ newMenus:', newMenus)
   listToTree(deepClone(newMenus)).forEach(route => router.addRoute(route))
 }

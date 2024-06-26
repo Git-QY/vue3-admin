@@ -188,3 +188,15 @@ export function debounce(fn: Function, delay: number) {
     }, delay)
   }
 }
+
+// 动态加载js
+export function loadScript(url: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = url
+    script.onload = () => resolve()
+    script.onerror = error => reject(error)
+    document.body.appendChild(script)
+  })
+}

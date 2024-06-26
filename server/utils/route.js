@@ -20,6 +20,6 @@ module.exports = function (app) {
   app.use('/roles', require(routesDir('roles')))
   app.use('/tasks', require(routesDir('tasks')))
   app.use('/users', require(routesDir('users')))
-  app.use('/utils', require(routesDir('utils')))
+  app.use('/utils', require(routesDir('utils/index')))
   app.use('/utils/uploads', require(routesDir('utils/uploads')))
 }

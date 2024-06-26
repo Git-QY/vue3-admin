@@ -1,10 +1,12 @@
 import { App } from 'vue'
 import auth from './modules/auth'
 import copy from './modules/copy'
+import expandText from './modules/expand-text'
 
 const directivesList: any = {
   auth,
   copy,
+  expandText,
 }
 
 const directives = {

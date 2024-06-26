@@ -153,35 +153,6 @@ router.post('/login/email', async (req, res) => {
   }
 })
 // 第三方登录
-/**
- * @api {post} /users/login/third 第三方登录
- * @apiHeader {String} token token
- * @apiDescription   
-  1 创建第三方应用 填写回调地址(项目的一个页面来获取code)<br>
-  2 点击第三方提供的链接跳转 会自动给回调地址拼接上code<br>
-  3 根据回调地址获取code code用过第三方的开放接口获取用户信息<br>
-  4 根据用户信息生成账号 成功登录<br>
-  5 在我们的回调地址页面 页面会更具监听是否成功登陆来跳转
- * @apiGroup users
- * @apiBody {String} type 第三方登录的类型(目前只支持gitee)
- * @apiBody {String} code 获取用户信息的code
- * @apiSuccess {String} code 状态码
- * @apiSuccess {String} message 消息
- * @apiSuccess {String} data 数据
- * @apiSuccessExample {json} Success-Response:
- * {
- *   "code": 200,
- *   "message": "登录成功"
- *   "data": {}
- * }
- * @apiErrorExample {json} Error-Response:
- * {
- *   "code": 500,
- *   "message": "登录失败"
- * }
- * @apiVersion 0.0.1
- *
- */
 const axios = require('axios')
 // 目前有个问题就是如果注册的邮箱和第三方登录的邮箱相同 怎么处理
 router.post('/login/third', async (req, res) => {
@@ -234,8 +205,6 @@ router.post('/login/third', async (req, res) => {
     res.send({ code: 500, error })
   }
 })
-
-// ******************************************************************************************************************
 // 新增用户
 router.post('/add', userValidationRules(), async (req, res) => {
   const errors = validationResult(req)
@@ -322,47 +291,7 @@ router.get('/detail', async (req, res) => {
     res.send({ code: 500, message: error })
   }
 })
-/**
- * @api {post} /users/assign/roles 给用户分配角色
- * @apiDescription 根据用户 ID 给用户分配角色
- * @apiGroup 用户接口
- * @apiParam {Array} userIds 用户 ID 列表
- * @apiParam {Array} roleIds 角色 ID 列表
- * @apiParamExample {json} Request-Example:
- *     {
- *       "userIds": ["605c72c1d3b2a832b2e8e001", "605c72c1d3b2a832b2e8e002"],
- *       "roleIds": ["605c72c1d3b2a832b2e8e032", "605c72c1d3b2a832b2e8e033"]
- *     }
- * @apiSuccess {Number} code 响应状态码
- * @apiSuccess {String} message 成功信息
- * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *       "code": 200,
- *       "message": "角色分配成功"
- *     }
- * @apiError {Number} code 错误状态码
- * @apiError {String} message 错误信息
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "code": 404,
- *       "message": "用户不存在"
- *     }
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "code": 404,
- *       "message": "部分角色不存在"
- *     }
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 500 Internal Server Error
- *     {
- *       "code": 500,
- *       "message": "服务器内部错误"
- *     }
- * @apiVersion 0.0.1
- */
+// 给用户分配角色
 router.post('/assign/roles', async (req, res) => {
   const { userIds, roleIds } = req.body
   if (!userIds || !roleIds || !Array.isArray(userIds) || !Array.isArray(roleIds)) {
@@ -408,5 +337,4 @@ router.get('/menus/:userId', async (req, res) => {
     res.send({ code: 500, message: error })
   }
 })
-// ******************************************************************************************************************
 module.exports = router

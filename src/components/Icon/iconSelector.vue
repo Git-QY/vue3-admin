@@ -4,21 +4,15 @@
       <div class="icon">
         <div class="icon-search">
           <el-input v-model="searchInput" placeholder="搜索图标名称" :prefix-icon="Search" @input="handleSearch" />
-          <svg-icon :iconName="`icon-${layout}`" className="icon-search--svg" @click="handleLayout" />
+          <svg-icon :iconName="layout" className="icon-search--svg" @click="handleLayout" />
         </div>
         <div class="icon-bars" v-if="layout == 'bars'">
-          <div v-for="item in iconData" :key="item.name" :class="`${item.font_class == props.modelValue ? ' icon-item icon-active' : 'icon-item'}`" @click="handleItem(item)">
-            <svg-icon :iconName="`icon-${item.font_class}`" /> <span>{{ item.font_class }}</span>
+          <div v-for="item in iconData" :key="item" :class="`${item == props.modelValue ? ' icon-item icon-active' : 'icon-item'}`" @click="handleItem(item)">
+            <svg-icon :iconName="item" /> <span>{{ item }}</span>
           </div>
         </div>
         <div class="icon-braille" v-else>
-          <svg-icon
-            v-for="item in iconData"
-            :key="item.name"
-            :className="`${item.font_class == props.modelValue ? ' icon-item icon-active' : 'icon-item'}`"
-            :iconName="`icon-${item.font_class}`"
-            @click="handleItem(item)"
-          />
+          <svg-icon v-for="item in iconData" :key="item" :className="`${item == props.modelValue ? ' icon-item icon-active' : 'icon-item'}`" :iconName="item" @click="handleItem(item)" />
         </div>
         <el-pagination background :page-size="size" :current-page="page" layout="prev, pager, next" :total="total" @current-change="currentChange"> </el-pagination>
       </div>
@@ -26,7 +20,7 @@
         <slot :value="props.modelValue">
           <el-input :value="props.modelValue" placeholder="请选择图标">
             <template #prefix>
-              <svg-icon :iconName="`icon-${props.modelValue}`" />
+              <svg-icon :iconName="props.modelValue" />
             </template>
           </el-input>
         </slot>
@@ -38,30 +32,29 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { Search } from '@element-plus/icons-vue'
-import jsonData from '@/assets/iconfont/iconfont.json'
+
+function getSymbolIDsFromString(svgString: string): string[] {
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(svgString, 'image/svg+xml')
+  const symbols = doc.querySelectorAll('symbol')
+  return Array.from(symbols).map(symbol => symbol.id)
+}
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
 })
 const emits = defineEmits(['update:modelValue'])
 
-interface iconItem {
-  name: string
-  font_class: string
-  unicode: string
-  unicode_decimal: number
-  icon_id: string
-}
-
-const iconData = ref<iconItem[]>([])
+const iconData = ref<string[]>([])
 const page = ref(1)
 const size = ref(60)
 const total = ref(0)
-const allData = jsonData.glyphs // 全部数据
+const allData: string[] = getSymbolIDsFromString(window._iconfont_svg_string_4388344) // 全部数据
+console.log("🚀 ~ allData:", allData)
 // 临时数据
-const tableData = ref<iconItem[]>([])
+const tableData = ref<string[]>([])
 
-const getIconData = (data: iconItem[]) => {
+const getIconData = (data: string[]) => {
   tableData.value = data
   //allData为全部数据，tableData是目前表格绑定的数据
   iconData.value = data.slice((page.value - 1) * size.value, page.value * size.value)
@@ -74,8 +67,8 @@ const currentChange = (val: number) => {
 onMounted(() => {
   getIconData(allData)
 })
-const handleItem = (item: iconItem) => {
-  emits('update:modelValue', item.font_class)
+const handleItem = (item: string) => {
+  emits('update:modelValue', item)
 }
 
 const searchInput = ref('')
@@ -84,13 +77,13 @@ const layout = ref('braille')
 const handleSearch = () => {
   if (searchInput.value) {
     const reg = new RegExp(searchInput.value, 'i')
-    getIconData(jsonData.glyphs.filter(item => reg.test(item.font_class)))
+    getIconData(allData.filter(item => reg.test(item)))
   } else {
     getIconData(allData)
   }
 }
 const handleShow = () => {
-  const index = tableData.value.map(item => item.font_class).indexOf(props.modelValue)
+  const index = tableData.value.map(item => item).indexOf(props.modelValue)
   page.value = index > 0 ? Math.ceil(index / size.value) : 1
   getIconData(tableData.value)
 }

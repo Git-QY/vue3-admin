@@ -9,7 +9,12 @@
     <div v-for="item in list">
       <div style="display: flex; justify-content: space-between; margin: 10px 0">
         <div>上传进度：{{ item.fileName }}</div>
-        <el-button type="primary" @click="abortUpload">取消上传</el-button>
+        <div>
+          <!-- 取消上传是将文件所有请求取消并发送请求删除文件 -->
+          <el-button type="primary" @click="abortUpload">取消上传</el-button>
+          <!-- 暂停上传即根据取消标识将当前文件的所有请求进行取消 可以继续上传  点断续传 -->
+          <el-button type="primary" @click="pauseUpload">暂停上传</el-button>
+        </div>
       </div>
       <el-progress :stroke-width="20" :text-inside="true" :percentage="item.uploaedProgress"></el-progress>
     </div>
@@ -84,6 +89,7 @@ const uploadFiles = async () => {
     await uploadFile(item)
   })
 }
+// 上传逻辑
 const uploadFile = async (item: List) => {
   let uploadedCount = 0 // 已上传的切片数量
   const totalChunks = item.chunkList.length // 总切片数量
@@ -113,8 +119,6 @@ const uploadFile = async (item: List) => {
     emits('update:modelValue', res.data.url)
   } catch (error) {}
 }
-// 中断上传
-const abortUpload = () => {}
 const limitConcurrency = async (requestList: any[] = [], limit: number = 3) => {
   return new Promise((resolve, reject) => {
     const length = requestList.length
@@ -146,6 +150,10 @@ const limitConcurrency = async (requestList: any[] = [], limit: number = 3) => {
     }
   })
 }
+// 中断上传
+const abortUpload = () => {}
+// 暂停上传
+const pauseUpload = () => {}
 </script>
 
 <style lang="scss" scoped></style>

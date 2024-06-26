@@ -12,7 +12,7 @@
         :class="{ 'is-active': columnActive === item.path || `/${columnActive.split('/')[1]}` === item.path }"
         @click="handleSubMenu(item)"
       >
-        <el-icon><svg-icon :iconName="`icon-${item.icon}`" /></el-icon>
+        <el-icon><svg-icon :iconName="item.icon" /></el-icon>
         <p>{{ item.menuName }}</p>
       </div>
     </div>
