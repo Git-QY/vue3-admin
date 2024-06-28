@@ -8,6 +8,7 @@
       clearable
       :disabled="props.disabled || loading"
       class="area-select-item"
+      :loading="level.loading"
     >
       <el-option v-for="item in area[`${level.code}List`]" :label="item.name" :value="item.code" />
     </el-select>
@@ -127,8 +128,10 @@ const handleUpdateModel = async (e: any, index: number) => {
     console.log('已经是当前的最后一级 不进行加载 和 清空')
   } else {
     handleClear(index) // 清空数组
+    levels.value[index + 1].loading = true
     const list = await getArea({ parentId: e })
     area[`${levelList[index + 1].code}List`] = list.data
+    levels.value[index + 1].loading = false
   }
   updateModelValue()
 }

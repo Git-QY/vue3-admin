@@ -6,6 +6,7 @@ export function createMyApp() {
       const isLoaded = ref(false)
       onMounted(async () => {
         await init()
+        console.log('项目初始化完成,进行页面渲染')
         isLoaded.value = true
       })
       return { isLoaded }

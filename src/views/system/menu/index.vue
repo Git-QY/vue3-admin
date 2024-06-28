@@ -13,7 +13,7 @@
     <el-table-column prop="component" label="组件路径" />
     <el-table-column prop="icon" label="菜单图标">
       <template #default="{ row }">
-        <svg-icon :iconName="row.icon" style="margin-right: 10px" />
+        <svg-icon v-if="row.icon" :iconName="row.icon" style="margin-right: 10px" />
         <span>{{ row.icon }}</span>
       </template>
     </el-table-column>

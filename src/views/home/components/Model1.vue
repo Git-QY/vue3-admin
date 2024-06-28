@@ -1,5 +1,5 @@
 <template>
-  <div>1</div>
+  <div>中国地图</div>
 </template>
 
 <script lang="ts" setup>

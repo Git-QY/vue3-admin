@@ -102,6 +102,7 @@ defineExpose({ refresh, selectData })
 
 <style lang="scss" scoped>
 .page {
+  margin: 20px;
   padding: 20px;
   // background-color: #fff;
   border-radius: 4px;
