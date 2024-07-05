@@ -31,7 +31,7 @@ const axios = require('axios')
 const owner = 'Git-QY'
 const repo = 'vue3-admin'
 // 用户授权码
-const access_token = '0c2badccddd48644ea7eca35f3d6b08f'
+const access_token = '17c6073c929edf2c26b9bd83b6286867'
 const apiUrl = `https://gitee.com/api/v5/repos/${owner}/${repo}/events`
 router.get('/gitee-events', async (req, res) => {
   try {

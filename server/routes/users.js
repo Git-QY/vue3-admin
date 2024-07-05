@@ -3,6 +3,7 @@ var router = express.Router()
 const { User, userValidationRules, validationResult } = require('../mongodb/models/user')
 const { Role } = require('../mongodb/models/role')
 const { Menu } = require('../mongodb/models/menu')
+const { Token } = require('../mongodb/models/token')
 
 // 记录登录接口的请求
 const { Log } = require('../mongodb/models/log')
@@ -86,6 +87,8 @@ router.post('/checkCode', async function (req, res) {
   }
 })
 // 用户登录
+// 过期时间
+const expiresIn = 60 * 60 * 24 * 7
 router.post('/login', async (req, res) => {
   let { username, password } = req.body
   if (!username || !password) return res.send({ code: 500, message: '用户名或密码不能为空' })
@@ -102,6 +105,19 @@ router.post('/login', async (req, res) => {
     const query = new IP2Region()
     const address = query.search(ip)
     await Log.create({ id: $generateUUID(), ip, address, url: '/users/login', method, createTime: new Date(), updateTime: new Date(), createById: id })
+    // 新增维护token表
+    user.deviceId = '123456'
+    user.isDevice = true
+    user.isMultiple = false
+    // 需求
+    // 同一设备限制一个账号
+    let params = []
+    if (user.isDevice) params.push({ deviceId: user.deviceId })
+    if (user.isMultiple) params.push({ userId: user.id })
+    // 查询存在deviceId和userId的共集 直接删除
+    if (!user.isAdmin) await Token.deleteMany({ $and: params })
+    // 新增token
+    Token.create({ id: generateUUID(), userId: user.id, deviceId: user.deviceId, token, expiresTime: expiresIn })
     res.send({ code: 200, message: '登录成功', data: { token, userInfo: user } })
   } catch (error) {
     res.send({ code: 500, message: error })

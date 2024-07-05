@@ -14,15 +14,15 @@
 
   /* 模式切换变量，默认light模式 */
   --current-background-color: var(--light-background-color); // 背景颜色
-  --current-primary-color: var(--light-primary-color); // 主题颜色
+  --current-text-color: var(--dark-text-color); // 字体颜色
 
   /* 浅色主题 */
-  --light-primary-color: #666;
-  --light-background-color: #fff;
+  --light-text-color: #000000;
+  --light-background-color: #f3f4f5;
 
   /* 深色主题 */
-  --dark-primary-color: #fff;
-  --dark-background-color: #282c34;
+  --dark-text-color: #ffffff;
+  --dark-background-color: #000000;
 }
 
 @import './reset.scss'; // 初始化样式scss

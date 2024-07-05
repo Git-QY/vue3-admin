@@ -67,7 +67,11 @@ const hashProgress = ref(0)
 const hash = ref('') // 文件hash
 const fileName = ref('')
 const list = ref<List[]>([]) // 上传列表
+const totalSize = ref(0) // 总文件大小
+const uploadedSize = ref(0) // 已上传的总大小
+const speed = ref(0) // 当前网速，单位可以是字节/秒
 const handleChange = async (file: UploadFile) => {
+  totalSize.value += file.size || 0
   const chunks = createFileChunk(file.raw as File)
   hash.value = await calculationChunksMd5(chunks)
   fileName.value = file.name || file.raw?.name || ''

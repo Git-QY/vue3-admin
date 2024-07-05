@@ -1,4 +1,39 @@
 import { ref } from 'vue'
+
+/**
+ * 函数用于计算基于主色的变浅衍生色
+ * @param baseColor 主色，格式为 '#RRGGBB'
+ * @param steps 一个数组，包含每个衍生色相对于主色的变浅程度（百分比增量，0 到 1 之间）
+ * @returns 变浅衍生色数组，格式为 ['#RRGGBB', '#RRGGBB', ...]
+ */
+const calculateLighterColors = (baseColor: string, steps: number[]): string[] => {
+  const lightenColor = (color: string, weight: number): string => {
+    weight = Math.max(Math.min(Number(weight / 10), 1), 0) // 确保 weight 在 0 到 10 之间
+    const r = parseInt(color.substring(1, 3), 16)
+    const g = parseInt(color.substring(3, 5), 16)
+    const b = parseInt(color.substring(5, 7), 16)
+
+    // 计算变浅后的颜色值
+    const lightenedR = Math.round(r + (255 - r) * weight)
+    const lightenedG = Math.round(g + (255 - g) * weight)
+    const lightenedB = Math.round(b + (255 - b) * weight)
+
+    // 转换为十六进制，并确保每个颜色通道的值在合法范围内
+    const _r = ('0' + Math.min(lightenedR, 255).toString(16)).slice(-2)
+    const _g = ('0' + Math.min(lightenedG, 255).toString(16)).slice(-2)
+    const _b = ('0' + Math.min(lightenedB, 255).toString(16)).slice(-2)
+
+    return '#' + _r + _g + _b
+  }
+
+  // 计算衍生色数组
+  const lighterColors: string[] = steps.map(step => {
+    const lightenedColor = lightenColor(baseColor, step)
+    return lightenedColor
+  })
+
+  return lighterColors
+}
 const useTheme = () => {
   const html = document.documentElement
   // const PRE = '--el-color-primary'
@@ -106,11 +141,25 @@ const useTheme = () => {
     currentCssVariables.forEach(item => {
       const value = `var(--${theme}${item.substring(9)})`
       document.documentElement.style.setProperty(item, value) // 自定义元素
+
+      // 自定义衍生色
+      const color = getComputedStyle(html).getPropertyValue(item)
+      const Levels = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      if (theme === 'dark') {
+        calculateLighterColors(color, Levels)
+          .reverse()
+          .forEach((color, index) => {
+            document.documentElement.style.setProperty(`${item}-${Levels[index]}`, color)
+          })
+      } else {
+        calculateLighterColors(color, Levels).forEach((color, index) => {
+          document.documentElement.style.setProperty(`${item}-${Levels[index]}`, color)
+        })
+      }
     })
+
     isDark.value = !!(theme == 'dark')
   }
-
-  // 切换dark
 
   return {
     setThemeColor,

@@ -2,6 +2,7 @@
   height: 100%;
   overflow: auto;
   padding: 0;
+  background-color: var(--current-background-color);
   &-header {
     display: flex;
     gap: 20px;
@@ -31,6 +32,9 @@
     }
   }
   .griditem {
-    border: 1px solid #e7e7e7;
+    background-color: #fff;
+    overflow: auto;
+    border-radius: 4px;
+    background-color: var(--current-background-color-9);
   }
 }

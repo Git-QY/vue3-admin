@@ -33,7 +33,7 @@ const columns = reactive([
   { label: '状态', prop: 'status', type: 'select', dict: 'user_status', span: 12 },
   { label: '角色', prop: 'roleIds', type: 'solt', span: 12 },
   { label: '所属部门', prop: 'deptId', type: 'solt', span: 12 },
-  { label: '备注', prop: 'remark', type: 'textarea' },
+  { label: '备注', prop: 'remark', props: { type: 'textarea' } },
 ])
 const form = ref<User>({
   id: '',
