@@ -28,15 +28,19 @@ router.post('/chunk', multipartMiddleware, async (req, res) => {
   const { fileName, hash } = req.body
   try {
     const chunkDir = path.resolve(CHUNK_DIR, hash) // 拼接切片文件夹路径
-    await createFolder(chunkDir)
+    const chunkPath = path.resolve(chunkDir, fileName)
+
+    // 检查是否已存在该分片
+    if (fs.existsSync(chunkPath)) {
+      return res.send({ code: 200, message: '分片已存在，无需重复上传' })
+    }
 
     // 上传分片
     const file = req.files.file
-    const chunkPath = path.resolve(chunkDir, fileName)
-
+    await createFolder(chunkDir)
     await fs.copyFile(file.path, chunkPath)
     fs.unlinkSync(file.path) // 删除临时文件
-    // fs.renameSync(file.path, chunkPath)
+
     res.send({ code: 200, message: '上传成功' })
   } catch (error) {
     console.error(error)

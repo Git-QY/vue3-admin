@@ -1,9 +1,5 @@
 import request from '@/utils/request'
 
-
-// 图床上传
-// https://picui.cn/api/v1 Authorization
-
 // 上传
 export const upload = (data: any) => request({ url: '/utils/uploads', method: 'post', data })
 // 单个切片上传
@@ -26,7 +22,6 @@ export function exportXlsx() {
     method: 'get',
   })
 }
-
 // 获取gitee events
 export function giteeEvents() {
   return request({

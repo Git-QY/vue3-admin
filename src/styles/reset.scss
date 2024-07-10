@@ -48,8 +48,8 @@
 // dt,
 // dd,
 // ol,
-// ul,
-// li,
+ul,
+li
 // fieldset,
 // form,
 // label,
@@ -81,14 +81,15 @@
 // time,
 // mark,
 // audio,
-// video {
-//   padding: 0;
-//   margin: 0;
-//   font: inherit;
-//   font-size: 100%;
-//   vertical-align: baseline;
-//   border: 0;
-// }
+// video
+{
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+  border: 0;
+}
 
 // /* HTML5 display-role reset for older browsers */
 // article,
@@ -106,9 +107,9 @@
 // }
 
 // ol,
-// ul {
-//   list-style: none;
-// }
+ul {
+  list-style: none;
+}
 // blockquote,
 // q {
 //   quotes: none;

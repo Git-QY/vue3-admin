@@ -1,9 +1,16 @@
 <template>
-  <Echarts :option="defaultOptions"></Echarts>
+  <Echarts :option="option"></Echarts>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+const option = ref({})
+// 模拟请求数据
+onMounted(() => {
+  setTimeout(() => {
+    option.value = defaultOptions
+  }, 3000)
+})
 const defaultOptions = {
   tooltip: {
     trigger: 'axis',

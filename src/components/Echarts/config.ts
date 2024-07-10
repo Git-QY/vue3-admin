@@ -1,6 +1,6 @@
 import * as echarts from 'echarts/core'
 // 引入用到的图表
-import { LineChart, BarChart, PieChart, type LineSeriesOption, type BarSeriesOption, type PieSeriesOption } from 'echarts/charts'
+import { LineChart, BarChart, PieChart, MapChart, type LineSeriesOption, type BarSeriesOption, type PieSeriesOption, type MapSeriesOption } from 'echarts/charts'
 // 引入提示框、数据集等组件
 import {
   TitleComponent,
@@ -20,9 +20,11 @@ import { CanvasRenderer } from 'echarts/renderers'
 import type { ComposeOption } from 'echarts/core'
 
 // 通过 ComposeOption 来组合出一个只有必须组件和图表的 Option 类型
-export type ECOption = ComposeOption<LineSeriesOption | BarSeriesOption | PieSeriesOption | GridComponentOption | TitleComponentOption | TooltipComponentOption | LegendComponentOption>
+export type ECOption = ComposeOption<
+  LineSeriesOption | BarSeriesOption | PieSeriesOption | MapSeriesOption | GridComponentOption | TitleComponentOption | TooltipComponentOption | LegendComponentOption
+>
 
 // 注册必须的组件
-echarts.use([LineChart, BarChart, PieChart, TitleComponent, TooltipComponent, GridComponent, CanvasRenderer, LabelLayout, LegendComponent])
+echarts.use([LineChart, BarChart, PieChart, MapChart, TitleComponent, TooltipComponent, GridComponent, CanvasRenderer, LabelLayout, LegendComponent])
 
 export default echarts

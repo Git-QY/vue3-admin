@@ -1,8 +1,9 @@
 <template>
-  <div :id="chartId" ref="chartRef" :style="style" v-loading="loading" />
+  <div :id="chartId" ref="chartRef" :style="style" />
 </template>
+
 <script setup lang="ts">
-import { shallowRef, onMounted, computed, nextTick, onBeforeUnmount } from 'vue'
+import { shallowRef, onMounted, computed, nextTick, onBeforeUnmount, watch } from 'vue'
 import echarts, { ECOption } from './config'
 import { debounce } from '@/utils'
 
@@ -23,17 +24,36 @@ const chart = shallowRef<any>() // shallowRef 创建浅层响应式引用的函�
 const chartId = computed(() => `chart-${new Date().getTime()}-${Math.random()}`)
 const initChart = () => {
   chart.value = echarts.init(document.getElementById(chartId.value))
-  chart.value.setOption(props.option)
+  // props.option == {} 不渲染展示加载中
+  function isEmptyObject(obj: object) {
+    return Object.keys(obj).length === 0 && obj.constructor === Object
+  }
+  showLoading()
+  if (!isEmptyObject(props.option)) {
+    chart.value.setOption(props.option)
+    hideLoading()
+  }
 }
 const resize = () => {
   chart.value.resize({ animation: { duration: 300 } })
 }
 onMounted(async () => {
   await nextTick()
-  // await new Promise(resolve => setTimeout(resolve, 1000)) // 延迟1s
   initChart()
   window.addEventListener('resize', debounce(resize, 300))
 })
+
+watch(
+  () => props.option,
+  newVal => {
+    if (newVal) {
+      chart.value.setOption(newVal)
+      hideLoading()
+    }
+  },
+  { deep: true },
+)
+
 // 即将销毁的生命周期
 onBeforeUnmount(() => {
   chart.value.dispose()
@@ -44,5 +64,21 @@ onBeforeUnmount(() => {
 defineExpose({
   getInstance: () => chart.value,
 })
+
+// 加载中
+const showLoading = () => {
+  chart.value.showLoading({
+    text: '加载中...',
+    color: '#409EFF',
+    textColor: '#333',
+    maskColor: 'rgba(255, 255, 255, 0.8)',
+    zlevel: 0,
+  })
+}
+// 移除加载中
+const hideLoading = () => {
+  chart.value.hideLoading()
+}
 </script>
+
 <style lang="scss" scoped></style>
