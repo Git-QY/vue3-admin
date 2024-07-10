@@ -42,7 +42,6 @@
 
 <script lang="ts" setup>
 import { detailLayout, deleteLayout, addLayout, updateLayout, Layout, LayoutItem } from '@/api'
-import { useRoute, useRouter } from 'vue-router'
 import { useDefault } from './default.ts'
 import { deepClone } from '@/utils'
 import { ElMessage } from 'element-plus'

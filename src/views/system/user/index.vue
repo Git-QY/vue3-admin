@@ -28,7 +28,6 @@ import request from '@/utils/request'
 import api, { User } from '@/api/user'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 import RoleAssignmentDialog from './RoleAssignmentDialog.vue'
-import { useRouter } from 'vue-router'
 const router = useRouter()
 const tableConfig = reactive({
   table: { rowKey: 'id' },

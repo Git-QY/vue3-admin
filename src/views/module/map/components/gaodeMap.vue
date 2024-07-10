@@ -6,11 +6,6 @@
 import AMapLoader from '@amap/amap-jsapi-loader'
 import Constants from '@/constants'
 const gaudMap = ref(null)
-console.log("🚀 ~ gaudMap:", gaudMap)
-onMounted(() => {
-  initGaudMap()
-})
-const initGaudMap = () => {}
 </script>
 
 <style lang="scss" scoped></style>

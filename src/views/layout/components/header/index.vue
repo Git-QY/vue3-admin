@@ -34,7 +34,6 @@ import FullScreen from './components/FullScreen.vue'
 import ThemeSetting from './components/ThemeSetting.vue'
 import SwitchTheme from './components/SwitchTheme.vue'
 
-import { useRouter } from 'vue-router'
 import { useUserStore, useGlobalStore } from '@/store'
 
 const router = useRouter()

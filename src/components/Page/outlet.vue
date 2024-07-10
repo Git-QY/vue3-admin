@@ -26,7 +26,6 @@ const props = defineProps({
   showBack: { type: Boolean, default: true },
   showFinish: { type: Boolean, default: true },
 })
-import { useRouter } from 'vue-router'
 const router = useRouter()
 const onBack = () => {
   if (props.back) return props.back()

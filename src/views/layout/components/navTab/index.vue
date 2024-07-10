@@ -28,7 +28,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute, useRouter, Route } from 'vue-router'
 import { useNavTabStore, useGlobalStore } from '@/store'
 
 const route = useRoute()

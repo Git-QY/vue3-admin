@@ -8,7 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { useGlobalStore } from '@/store'
 const route = useRoute()
 const globalStore = useGlobalStore()

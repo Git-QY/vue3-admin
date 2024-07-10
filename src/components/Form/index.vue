@@ -13,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+import FormItem from '../FormItem/index.vue'
 import type { FormInstance } from 'element-plus'
 
 interface Props {
@@ -34,6 +35,7 @@ const editColumns = computed(() => {
     return item
   })
 })
+
 // addRules
 const addRules = (rules: any, item: any) => {
   if (!rules) return

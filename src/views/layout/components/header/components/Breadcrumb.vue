@@ -7,8 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-
 const router = useRouter()
 
 // 获取当前路由的匹配记录

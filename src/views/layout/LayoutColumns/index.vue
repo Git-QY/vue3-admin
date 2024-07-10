@@ -30,7 +30,6 @@
 <script lang="ts" setup>
 import { useAuthStore } from '@/store'
 import { Menu } from '@/api'
-import { useRouter } from 'vue-router'
 import Header from '../components/header/index.vue'
 import Logo from '../components/logo/index.vue'
 import Main from '../components/main/index.vue'

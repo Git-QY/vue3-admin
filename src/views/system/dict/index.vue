@@ -23,7 +23,6 @@
 <script lang="ts" setup>
 import { listDict, Dict, deleteDict } from '@/api'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
-import { useRouter } from 'vue-router'
 import dictDialog from './dictDialog.vue'
 
 const tableConfig = reactive({

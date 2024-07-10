@@ -15,8 +15,6 @@
 <script lang="ts" setup>
 import { addDictItem, updateDictItem, Dict } from '@/api'
 import { ElMessage } from 'element-plus'
-// 路由
-import { useRoute } from 'vue-router'
 const props = defineProps({
   width: { type: String, default: '50%' },
   confirm: { type: Function, default: () => {} },

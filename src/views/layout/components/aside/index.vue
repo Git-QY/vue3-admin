@@ -20,7 +20,6 @@
 <script setup lang="ts">
 import asideItem from './aside-item.vue'
 import { useGlobalStore, useAuthStore } from '@/store'
-import { useRoute } from 'vue-router'
 import { Menu } from '@/api'
 const props = defineProps({
   menuList: { type: Array, default: () => [] },

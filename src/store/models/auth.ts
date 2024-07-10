@@ -2,7 +2,6 @@
 import { defineStore } from 'pinia'
 import { Menu, listMenuByUserId } from '@/api'
 import { listToTree, deepClone } from '@/utils'
-import { Router } from 'vue-router'
 
 interface authState {
   permissionsMenus: Menu[]

@@ -17,7 +17,6 @@
 import api, { User } from '@/api/user'
 import { detailRole, detailDept } from '@/api'
 import { ElMessage } from 'element-plus'
-import { useRouter, useRoute } from 'vue-router'
 
 import RoleDialog from '@/components/Dialog/components/role-dialog.vue'
 import DeptDialog from '@/components/Dialog/components/dept-dialog.vue'

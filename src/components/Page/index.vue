@@ -1,12 +1,11 @@
 <template>
-  <div class="page-main"  v-show="isShow">
+  <div class="page-main" v-show="isShow">
     <slot></slot>
   </div>
   <router-view></router-view>
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 const route = useRoute()
 const props = defineProps({ main: String })
 const isShow = computed(() => props.main == route.path)

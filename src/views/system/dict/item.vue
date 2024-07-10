@@ -17,7 +17,6 @@
 import { listDictItem, DictItem, deleteDictItem } from '@/api'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 import dictItemDialog from './dictItemDialog.vue'
-import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const tableConfig = ref({

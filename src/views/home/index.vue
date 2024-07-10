@@ -24,7 +24,6 @@
 import { VueDraggableNext } from 'vue-draggable-next'
 import { listLayout, addLayout, updateLayout, Layout, LayoutItem } from '@/api'
 import { useDefault } from './default.ts'
-import { useRouter } from 'vue-router'
 const router = useRouter()
 const { LayoutComponent, defaultView, userId } = useDefault()
 const viewList = ref<Layout[]>([])

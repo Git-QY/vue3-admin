@@ -26,8 +26,8 @@ const components: { [name: string]: Component } = {
 export default {
   // install方法， Object.keys()得到对象所有的key
   install(app: App) {
-    // Object.keys(components).forEach((key: string) => {
-    //   app.component(key, components[key])
-    // })
+    Object.keys(components).forEach((key: string) => {
+      app.component(key, components[key])
+    })
   },
 }
