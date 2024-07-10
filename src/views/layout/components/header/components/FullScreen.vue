@@ -9,7 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import { watch } from 'vue'
 import { useFullscreen } from '@vueuse/core'
 import { useGlobalStore } from '@/store'
 const { isFullscreen, toggle } = useFullscreen()

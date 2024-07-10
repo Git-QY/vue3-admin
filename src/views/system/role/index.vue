@@ -18,7 +18,6 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 import roleDialog from './roleDialog.vue'
 import permissinTrees from './permissinTrees.vue'

@@ -36,7 +36,6 @@ import SwitchTheme from './components/SwitchTheme.vue'
 
 import { useRouter } from 'vue-router'
 import { useUserStore, useGlobalStore } from '@/store'
-import { computed } from 'vue'
 
 const router = useRouter()
 const userStore = useUserStore()

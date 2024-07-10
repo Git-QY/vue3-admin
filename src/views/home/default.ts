@@ -1,5 +1,4 @@
 //  抽取table
-import { ref, onMounted, computed, type Component } from 'vue'
 import { useUserStore } from '@/store'
 import { Layout } from '@/api'
 import ProjectDynamics from './components/ProjectDynamics.vue'

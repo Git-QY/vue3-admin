@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import LayoutSelect from './LayoutSelect.vue'
 import ThemeColor from './ThemeColor.vue'
 import SelectColor from './SelectColor.vue'

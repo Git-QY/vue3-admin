@@ -17,7 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, markRaw, provide, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import login from './login.vue'
 import forget from './forget.vue'

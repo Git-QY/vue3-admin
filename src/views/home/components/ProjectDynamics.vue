@@ -14,7 +14,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
 import { giteeCommits, giteeBranches } from '@/api/utils'
 import { dayjs } from 'element-plus'
 interface CommitItem {

@@ -4,7 +4,6 @@
 
 <script setup lang="ts">
 import * as THREE from 'three'
-import { ref, onMounted } from 'vue'
 
 // 定义场景、相机和渲染器
 const scene = new THREE.Scene()

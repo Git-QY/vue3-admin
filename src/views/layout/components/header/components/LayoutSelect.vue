@@ -47,7 +47,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
 import { useGlobalStore } from '@/store'
 const globalStore = useGlobalStore()
 const layout = computed(() => globalStore.layout)

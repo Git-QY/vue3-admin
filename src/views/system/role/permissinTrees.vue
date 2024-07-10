@@ -19,7 +19,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, toRef, nextTick } from 'vue'
 import { useUserStore } from '@/store'
 import { Role, listMenuByRoleIds, updateRoleField } from '@/api'
 import { ElMessage } from 'element-plus'

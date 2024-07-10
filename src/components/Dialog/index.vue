@@ -27,7 +27,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRefs } from 'vue'
 interface IDialogProps {
   title?: string
   modelValue?: boolean

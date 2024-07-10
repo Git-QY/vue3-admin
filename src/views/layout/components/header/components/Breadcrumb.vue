@@ -8,7 +8,6 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { computed } from 'vue'
 
 const router = useRouter()
 

@@ -9,7 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 // 获取当前路由信息

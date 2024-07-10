@@ -9,7 +9,7 @@ import LayoutVertical from './LayoutVertical/index.vue'
 import LayoutHorizontal from './LayoutHorizontal/index.vue'
 import LayoutColumns from './LayoutColumns/index.vue'
 
-import { computed, type Component } from 'vue'
+import { type Component } from 'vue'
 
 const globalState = useGlobalStore()
 const layout = computed(() => globalState.layout)

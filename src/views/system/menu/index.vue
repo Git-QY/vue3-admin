@@ -46,7 +46,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
 import { listMenu, Menu, deleteMenu } from '@/api'
 import { listToTree, deepClone } from '@/utils'
 import { AllEnum } from '@/utils/enums.ts'

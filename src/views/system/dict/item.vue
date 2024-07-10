@@ -14,7 +14,6 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
 import { listDictItem, DictItem, deleteDictItem } from '@/api'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
 import dictItemDialog from './dictItemDialog.vue'

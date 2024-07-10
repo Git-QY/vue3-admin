@@ -5,7 +5,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
 import { useGlobalStore } from '@/store'
 import useTheme from '@/hooks/themeColor'
 

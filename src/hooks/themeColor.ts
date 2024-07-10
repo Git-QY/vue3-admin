@@ -1,5 +1,3 @@
-import { ref } from 'vue'
-
 /**
  * 函数用于计算基于主色的变浅衍生色
  * @param baseColor 主色，格式为 '#RRGGBB'

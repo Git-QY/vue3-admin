@@ -28,10 +28,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter, Route } from 'vue-router'
 import { useNavTabStore, useGlobalStore } from '@/store'
-import { onMounted } from 'vue'
 
 const route = useRoute()
 const router = useRouter()

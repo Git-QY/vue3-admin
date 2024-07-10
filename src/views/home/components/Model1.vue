@@ -3,7 +3,6 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
 const option = ref({})
 // 模拟请求数据
 onMounted(() => {

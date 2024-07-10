@@ -41,7 +41,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
 import { detailLayout, deleteLayout, addLayout, updateLayout, Layout, LayoutItem } from '@/api'
 import { useRoute, useRouter } from 'vue-router'
 import { useDefault } from './default.ts'

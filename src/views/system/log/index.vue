@@ -9,7 +9,6 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
 import { dayjs } from 'element-plus'
 import { Log, listLog, deleteLog } from '@/api'
 import { useHandleData } from '@/utils'

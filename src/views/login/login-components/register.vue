@@ -42,7 +42,6 @@
 <script lang="ts" setup>
 import api, { RegisterType } from '@/api/user.ts'
 import { FormRules, ElMessage } from 'element-plus'
-import { ref, reactive, inject, computed } from 'vue'
 import verifycodeField from './components/verifycode-field.vue'
 import { User,Lock,Message} from '@element-plus/icons-vue'
 import CryptoJS from 'crypto-js'

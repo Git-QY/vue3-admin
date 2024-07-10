@@ -7,7 +7,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onBeforeUnmount, shallowRef } from 'vue'
 import { upload } from '@/api/utils'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { SlateElement } from '@wangeditor/editor'

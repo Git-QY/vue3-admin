@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 import Region from '@/components/FormItem/region.vue'
-import { ref, markRaw, reactive, type Component } from 'vue'
+import { type Component } from 'vue'
 interface ComponentItem {
   label: string
   component: Component

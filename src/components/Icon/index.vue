@@ -1,5 +1,4 @@
 <script lang="ts">
-import { h, defineComponent, resolveComponent } from 'vue'
 import { ElIcon } from 'element-plus'
 export default defineComponent({
   name: 'Icon',

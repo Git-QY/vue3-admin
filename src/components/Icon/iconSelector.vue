@@ -30,7 +30,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 
 function getSymbolIDsFromString(svgString: string): string[] {
@@ -50,7 +49,7 @@ const page = ref(1)
 const size = ref(60)
 const total = ref(0)
 const allData: string[] = getSymbolIDsFromString(window._iconfont_svg_string_4388344) // 全部数据
-console.log("🚀 ~ allData:", allData)
+console.log('🚀 ~ allData:', allData)
 // 临时数据
 const tableData = ref<string[]>([])
 

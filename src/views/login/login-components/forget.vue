@@ -28,7 +28,6 @@
 
 <script setup lang="ts">
 import api, { ForgetType } from '@/api/user.ts'
-import { ref, reactive, inject, computed } from 'vue'
 import verifycodeField from './components/verifycode-field.vue'
 import { ElMessage, FormRules } from 'element-plus'
 import { Lock, Message } from '@element-plus/icons-vue'

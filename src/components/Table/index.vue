@@ -57,7 +57,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive } from 'vue'
 import search from './components/search.vue'
 import pagination from './components/pagination.vue'
 import fileIcon from '@/components/FormItem/fileIcon.vue'

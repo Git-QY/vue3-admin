@@ -23,7 +23,6 @@ import api, { LoginType } from '@/api/user.ts'
 import router from '@/router'
 import { ElMessage } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
-import { ref, reactive, onMounted, inject } from 'vue'
 import { useUserStore, useAuthStore } from '@/store'
 import CryptoJS from 'crypto-js'
 const userStore = useUserStore()

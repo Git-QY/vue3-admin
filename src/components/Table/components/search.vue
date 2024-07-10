@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
 const props = defineProps<{ columns: any; modelValue: any; maxShow: number }>()
 
 // 搜索栏

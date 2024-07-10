@@ -28,7 +28,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
 import { useAuthStore } from '@/store'
 import { Menu } from '@/api'
 import { useRouter } from 'vue-router'

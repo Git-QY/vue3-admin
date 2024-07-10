@@ -17,7 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { getArea } from '@/api/utils'
 import { deepClone } from '@/utils'
 interface Area {

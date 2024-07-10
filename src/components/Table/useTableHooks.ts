@@ -1,5 +1,4 @@
 //  抽取table
-import { ref, onMounted, computed } from 'vue'
 import { exportXlsx } from '@/api/utils'
 import { deepClone, listToTree } from '@/utils'
 

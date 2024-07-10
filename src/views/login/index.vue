@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } 
 import Login from './login-components/index.vue'
 const bgImg = ref('https://picui.cn//uploads/background/auth/382ae767058ba05c1eb2e6ba56cb1264.jpg')
 onMounted(() => {})

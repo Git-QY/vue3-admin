@@ -13,8 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import FormItem from '../FormItem/index.vue'
 import type { FormInstance } from 'element-plus'
 
 interface Props {

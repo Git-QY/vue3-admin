@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import asideItem from './aside-item.vue'
 import { useGlobalStore, useAuthStore } from '@/store'
 import { useRoute } from 'vue-router'

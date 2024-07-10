@@ -22,7 +22,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { createFileChunk, calculationChunksMd5 } from '@/utils/upload'
 import request from '@/utils/request'
 import { uploadChunkMerge } from '@/api/utils'

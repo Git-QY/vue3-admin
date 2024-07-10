@@ -14,7 +14,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { listDept, deleteDept, Dept } from '@/api'
 import editDialog from './dialog.vue'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'

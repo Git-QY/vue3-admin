@@ -21,7 +21,6 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, computed } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { listLayout, addLayout, updateLayout, Layout, LayoutItem } from '@/api'
 import { useDefault } from './default.ts'

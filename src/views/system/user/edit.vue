@@ -14,7 +14,6 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted, computed } from 'vue'
 import api, { User } from '@/api/user'
 import { detailRole, detailDept } from '@/api'
 import { ElMessage } from 'element-plus'

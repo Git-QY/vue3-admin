@@ -23,7 +23,6 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted } from 'vue'
 import pageTable from '@/components/Table/index.vue'
 import request from '@/utils/request'
 import api, { User } from '@/api/user'

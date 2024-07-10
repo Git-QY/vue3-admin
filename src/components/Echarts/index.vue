@@ -3,7 +3,6 @@
 </template>
 
 <script setup lang="ts">
-import { shallowRef, onMounted, computed, nextTick, onBeforeUnmount, watch } from 'vue'
 import echarts, { ECOption } from './config'
 import { debounce } from '@/utils'
 

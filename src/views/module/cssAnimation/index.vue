@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import AnimationButton1 from './components/animationButton1.vue'
 </script>
 

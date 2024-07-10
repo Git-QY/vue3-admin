@@ -1,6 +1,5 @@
 // 全局通用状态管理
 import { defineStore } from 'pinia'
-import { nextTick } from 'vue'
 import { LanguageType, LayoutType } from '../interface'
 interface globalState {
   isFullscreen: Boolean

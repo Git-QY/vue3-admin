@@ -7,7 +7,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { listRole, Role } from '@/api'
 import api, { User } from '@/api/user'
 import { ElMessage } from 'element-plus'

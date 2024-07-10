@@ -3,7 +3,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { getAssetsImge } from '@/utils'
 // 引入图片资源
 // import PDF from '@/assets/image/fileType/pdf.png'

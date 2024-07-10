@@ -23,7 +23,6 @@
 import LargeUpload from './components/LargeUpload.vue'
 import Upload from '@/components/FormItem/upload.vue'
 // import SimpleUpload from './components/SimpleUpload.vue'
-import { ref, markRaw, reactive, type Component } from 'vue'
 interface ComponentItem {
   label: string
   component: Component

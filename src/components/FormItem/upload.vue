@@ -36,7 +36,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
 import { upload } from '@/api/utils'
 import { ElMessage } from 'element-plus'
 import fileIcon from '@/components/FormItem/fileIcon.vue'
