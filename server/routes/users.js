@@ -90,6 +90,7 @@ router.post('/checkCode', async function (req, res) {
 // 过期时间
 const expiresIn = 60 * 60 * 24 * 7
 router.post('/login', async (req, res) => {
+  console.log('开始登录')
   let { username, password } = req.body
   if (!username || !password) return res.send({ code: 500, message: '用户名或密码不能为空' })
   try {

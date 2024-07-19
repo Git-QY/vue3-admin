@@ -1,71 +1,71 @@
 <template>
-  <!-- 新增 -->
-  <el-button type="primary" @click="onAdd" v-auth="['system:menu:add']">新增</el-button>
-  <el-table :data="tableData" row-key="id" border style="margin: 10px 0" v-loading="loading" max-height="800px" :expand-row-keys="expands">
-    <el-table-column prop="menuName" label="菜单名称" show-overflow-tooltip />
-    <el-table-column prop="menuType" label="菜单类型">
-      <template #default="{ row }">
-        <el-tag type="info">{{ AllEnum.MenuType.getLabel(row.menuType) }}</el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column prop="sort" label="排序" width="60" />
-    <el-table-column prop="path" label="路由路径" />
-    <el-table-column prop="component" label="组件路径" />
-    <el-table-column prop="icon" label="菜单图标">
-      <template #default="{ row }">
-        <svg-icon v-if="row.icon" :iconName="row.icon" style="margin-right: 10px" />
-        <span>{{ row.icon }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column prop="status" label="状态">
-      <template #default="{ row }">
-        <el-tag v-if="row.status === '1'" type="success">正常</el-tag>
-        <el-tag v-else type="danger">禁用</el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column prop="isHidden" label="是否隐藏">
-      <template #default="{ row }">
-        <el-tag v-if="row.isHidden" type="danger">隐藏</el-tag>
-        <el-tag v-else type="success">显示</el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column prop="isFold" label="是否折叠">
-      <template #default="{ row }">
-        <el-tag v-if="row.isFold" type="danger">折叠</el-tag>
-        <el-tag v-else type="success">展开</el-tag>
-      </template>
-    </el-table-column>
-    <el-table-column prop="perms" label="权限标识" />
-    <el-table-column prop="buttons" v-slot="{ row }" label="操作" fixed="right">
-      <el-button type="primary" link @click="onAdd(row)" v-auth="['system:menu:add']">添加</el-button>
-      <el-button type="primary" link @click="onEdit(row)" v-auth="['system:menu:edit']">编辑</el-button>
-      <el-button type="danger" link @click="onDelete(row.id)" v-auth="['system:menu:delete']">删除</el-button>
-    </el-table-column>
-  </el-table>
-  <menuDialog ref="menuDialogRef" :tree-data="tableData" :title="title" :confirm="getList"></menuDialog>
+  <page-table v-bind="tableConfig" ref="tableRef">
+    <template #btnleft>
+      <el-button type="primary" v-auth="['system.menu.add']" @click="onAdd">新增</el-button>
+    </template>
+
+    <template #icon="{ item }">
+      <el-table-column v-slot="{ row }" v-bind="item">
+        <svg-icon :iconName="row.icon" style="margin-right: 10px" />
+      </el-table-column>
+    </template>
+
+    <template #operate="{ item }">
+      <el-table-column prop="buttons" v-slot="{ row }" v-bind="item">
+        <el-button type="primary" link @click="onAdd(row)" v-auth="['system:menu:add']">添加</el-button>
+        <el-button type="primary" link @click="onEdit(row)" v-auth="['system:menu:edit']">编辑</el-button>
+        <el-button type="danger" link @click="onDelete(row.id)" v-auth="['system:menu:delete']">删除</el-button>
+      </el-table-column>
+    </template>
+  </page-table>
+  <menuDialog ref="menuDialogRef" :title="title" :confirm="getList"></menuDialog>
 </template>
 
 <script lang="ts" setup>
 import { listMenu, Menu, deleteMenu } from '@/api'
-import { listToTree, deepClone } from '@/utils'
-import { AllEnum } from '@/utils/enums.ts'
 import menuDialog from './menuDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-
-const tableData = ref<Menu[]>([])
-const loading = ref<Boolean>(false)
-const expands = ref<string[]>([])
-const getList = async () => {
-  try {
-    const res = await listMenu()
-    tableData.value = listToTree(
-      res.data.map((item: Menu) => {
-        return { ...item, label: item.menuName, value: item.value }
-      }),
-    )
-    expands.value = res.data.filter((item: Menu) => !item.isFold).map((item: Menu) => item.id)
-  } catch (error) {}
-}
+import { deepClone } from '@/utils'
+const tableConfig = ref({
+  table: { rowKey: 'id' },
+  type: 'tree',
+  searchForm: {},
+  // 可以通过pomise构建需要的格式
+  api: (data: any) => {
+    return listMenu(data)
+  },
+  columns: [
+    // 菜单名称
+    { prop: 'menuName', label: '菜单名称', query: {}, 'show-overflow-tooltip': true, width: 200 },
+    { prop: 'menuType', label: '菜单类型', type: 'tag', dict: 'menu_type' },
+    { prop: 'sort', label: '排序' },
+    { prop: 'path', label: '路由路径', 'show-overflow-tooltip': true },
+    { prop: 'component', label: '组件路径', 'show-overflow-tooltip': true },
+    { prop: 'icon', label: '菜单图标', type: 'slot' },
+    { prop: 'status', label: '状态', type: 'tag', dict: 'menu_status' },
+    {
+      prop: 'isHidden',
+      label: '是否隐藏',
+      type: 'tag',
+      options: [
+        { label: '隐藏', value: '1' },
+        { label: '显示', value: '0' },
+      ],
+    },
+    {
+      prop: 'isFold',
+      label: '是否折叠',
+      type: 'tag',
+      options: [
+        { label: '折叠', value: '1' },
+        { label: '展开', value: '0' },
+      ],
+    },
+    { prop: 'perms', label: '权限标识', width: 200 },
+    { prop: 'operate', label: '操作', type: 'slot', fixed: 'right', width: 200 },
+  ],
+})
+const tableRef = ref<HTMLFormElement | null>(null)
 const menuDialogRef = ref<HTMLFormElement | null>(null)
 const title = ref<string>('')
 const onAdd = (row: Menu) => {
@@ -95,11 +95,9 @@ const onDelete = (id: string) => {
       ElMessage.info('取消删除')
     })
 }
-
-// 刷新表格
-onMounted(() => {
-  getList()
-})
+const getList = () => {
+  tableRef.value?.refresh()
+}
 </script>
 
 <style lang="scss" scoped></style>

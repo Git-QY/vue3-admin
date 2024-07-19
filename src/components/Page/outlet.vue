@@ -38,7 +38,7 @@ const onFinish = () => {
 
 <style scoped lang="scss">
 .outlet {
-  height: calc(100vh - 59px - 40px - 32px);
+  height: calc(100vh - 59px - 40px);
   position: relative;
   display: flex;
   flex-direction: column;

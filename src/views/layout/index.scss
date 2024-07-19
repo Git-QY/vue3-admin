@@ -118,10 +118,11 @@ $header-height: 56px;
     }
   }
   &-aside {
-    height: 100%;
+    height: calc(100vh - $header-height);
     box-sizing: border-box;
     width: 200px;
     transition: width 0.3s;
+    overflow: auto;
     &--collapse {
       width: 64px;
     }

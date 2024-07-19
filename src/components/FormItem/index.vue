@@ -60,6 +60,10 @@
 </template>
 
 <script setup lang="ts">
+// IconSelector
+import IconSelector from '@/components/Icon/iconSelector.vue'
+import Region from '@/components/FormItem/region.vue'
+import Upload from '@/components/FormItem/upload.vue'
 defineProps<{ item: any; form: any }>()
 </script>
 <style lang="scss" scoped></style>

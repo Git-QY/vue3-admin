@@ -21,17 +21,17 @@ app.use(express.static(path.join(__dirname, 'public'))) // 设置静态文件目
 
 //  跨域
 app.all('*', function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173') // 允许的来源域名
+  res.header('Access-Control-Allow-Origin', 'http://localhost:9000') // 允许的来源域名
   res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length,Authorization,Accept,X-Requested-With,token')
   res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
   res.header('Access-Control-Allow-Credentials', 'true') // 允许携带凭据
   res.header('X-Powered-By', '3.2.1')
   next()
 })
-app.use(checkToken) // 验证token
+// app.use(checkToken) // 验证token
 
 require('./utils/route')(app) // 自动注册路由
-require('./utils/git') // 自动注册路由
+require('./utils/socketIo')(app) // 链接socket
 
 // 捕获404错误并转发到错误处理程序
 app.use(function (req, res, next) {
@@ -40,6 +40,7 @@ app.use(function (req, res, next) {
 
 // 错误处理程序
 app.use(function (err, req, res, next) {
+  console.log('🚀 ~ app:', app)
   // 设置本地变量，仅在开发环境中提供错误信息
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
@@ -52,7 +53,6 @@ app.use(function (err, req, res, next) {
 // 设置全局变量
 const { generateUUID } = require('./utils')
 const { verifyToken } = require('./utils/token')
-const { log } = require('console')
 
 global.$generateUUID = generateUUID
 global.$verifyToken = verifyToken

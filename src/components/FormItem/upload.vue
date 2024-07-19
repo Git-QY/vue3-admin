@@ -58,7 +58,7 @@ const props = defineProps({
   limit: { type: Number, default: 9 }, // 最大上传数量
   beforeUpload: { type: Function }, // 上传前的钩子
   returnAttributes: { type: Array, default: () => ['url', 'name'] }, // 返回那几个属性
-  mode: { type: String, default: 'list' }, // 显示模式 card | list
+  mode: { type: String, default: 'card' }, // 显示模式 card | list
   chunkSize: { type: Number, default: 1024 * 1024 * 2 }, // 上传文件大于多少开启分片上传
 })
 const emits = defineEmits(['update:modelValue'])
