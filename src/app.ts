@@ -1,4 +1,6 @@
 import APP from './App.vue'
+import gif from '@/assets/images/loader-light.gif'
+
 export function createMyApp() {
   const app = createApp({
     setup() {
@@ -11,20 +13,17 @@ export function createMyApp() {
       return { isLoaded }
     },
     render() {
-      return this.isLoaded
-        ? h(APP)
-        : h(
-            'div',
-            {
-              style: {
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
-              },
-            },
-            'Loading...',
-          )
+      return this.isLoaded ? h(APP) : h()
+      // 'div',
+      // {
+      //   style: {
+      //     display: 'flex',
+      //     justifyContent: 'center',
+      //     alignItems: 'center',
+      //     height: '100vh',
+      //   },
+      // },
+      // h('img', { src: gif, style: { width: '100px' } }),
     },
   })
 
@@ -42,4 +41,7 @@ const init = async () => {
   // 动态设置iconfont
   // 加载js
   await loadScript(globalStore.iconfontUrl)
+
+  // 等待 5s
+  // await new Promise(resolve => setTimeout(resolve, 5000))
 }

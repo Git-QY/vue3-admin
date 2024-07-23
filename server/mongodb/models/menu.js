@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { db1Connection } = require('../index')
 const { body, validationResult } = require('express-validator') // 引入验证规则
 // 菜单
 const schemaRules = {
@@ -24,7 +25,7 @@ const schemaRules = {
 const menuSchema = new mongoose.Schema(schemaRules)
 
 // 创建用户模型
-const Menu = mongoose.model('Menu', menuSchema)
+const Menu = db1Connection.model('Menu', menuSchema)
 
 // 预校验规则
 const menuValidationRules = () => [

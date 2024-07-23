@@ -19,7 +19,7 @@ router.post('/list', async (req, res) => {
   const { page = { pageSize: 10, page: 1 }, ...data } = req.body
   const query = { ...data, roleName: { $regex: data.roleName ?? '' } }
   try {
-    const role = await await Role.aggregate([
+    const role = await Role.aggregate([
       { $match: query }, // 匹配查询条件
       { $sort: { sort: 1 } }, // 按创建时间倒序排序
       { $skip: (page.page - 1) * page.pageSize }, // 跳过指定数量的文档

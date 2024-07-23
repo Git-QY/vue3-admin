@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { db1Connection } = require('../index')
 const { body, validationResult } = require('express-validator')
 const schemaRules = {
   room: String,
@@ -8,4 +9,4 @@ const schemaRules = {
   timestamp: { type: Date, default: Date.now },
 }
 
-module.exports = { Chat: mongoose.model('Chat', new mongoose.Schema(schemaRules)), validationResult }
+module.exports = { Chat: db1Connection.model('Chat', new mongoose.Schema(schemaRules)), validationResult }

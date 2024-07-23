@@ -16,7 +16,6 @@ router.post('/add', menuValidationRules(), async (req, res, next) => {
   }
 })
 
-
 // 菜单全部列表
 router.post('/list', async (req, res, next) => {
   const { menuName = '' } = req.body

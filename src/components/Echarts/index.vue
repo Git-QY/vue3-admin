@@ -21,12 +21,14 @@ const props = withDefaults(defineProps<Props>(), {
 const style = computed(() => ({ width: props.width, height: props.height }))
 const chart = shallowRef<any>() // shallowRef 创建浅层响应式引用的函数
 const chartId = computed(() => `chart-${new Date().getTime()}-${Math.random()}`)
-const initChart = () => {
+const initChart = async () => {
+  await new Promise(resolve => setTimeout(resolve, 500))
   chart.value = echarts.init(document.getElementById(chartId.value))
   // props.option == {} 不渲染展示加载中
   function isEmptyObject(obj: object) {
     return Object.keys(obj).length === 0 && obj.constructor === Object
   }
+
   showLoading()
   if (!isEmptyObject(props.option)) {
     chart.value.setOption(props.option)
@@ -37,6 +39,7 @@ const resize = () => {
   chart.value.resize({ animation: { duration: 300 } })
 }
 onMounted(async () => {
+  console.log('onMounted')
   await nextTick()
   initChart()
   window.addEventListener('resize', debounce(resize, 300))

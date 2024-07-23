@@ -9,6 +9,7 @@
 // | 认领人   | string | 无     | 非空              | 否       | 存储用户id                              |
 
 const mongoose = require('mongoose')
+const { db1Connection } = require('../index')
 const Schema = mongoose.Schema
 const { body, validationResult } = require('express-validator')
 // 任务 Schema
@@ -54,7 +55,7 @@ const taskPreValidate = () => [
 // 导出模块
 module.exports = {
   validationResult,
-  Task: mongoose.model('Task', taskSchema),
+  Task: db1Connection.model('Task', taskSchema),
   taskPreValidate,
-  Comment: mongoose.model('Comment', commentSchema),
+  Comment: db1Connection.model('Comment', commentSchema),
 }

@@ -28,7 +28,7 @@ app.all('*', function (req, res, next) {
   res.header('X-Powered-By', '3.2.1')
   next()
 })
-// app.use(checkToken) // 验证token
+app.use(checkToken) // 验证token
 
 require('./utils/route')(app) // 自动注册路由
 require('./utils/socketIo')(app) // 链接socket
@@ -40,7 +40,6 @@ app.use(function (req, res, next) {
 
 // 错误处理程序
 app.use(function (err, req, res, next) {
-  console.log('🚀 ~ app:', app)
   // 设置本地变量，仅在开发环境中提供错误信息
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}

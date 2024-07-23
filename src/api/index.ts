@@ -156,3 +156,22 @@ export const addDept = (data?: Dept): Promise<response> => request({ url: '/dept
 export const updateDept = (data?: Dept): Promise<response> => request({ url: '/depts/update', method: 'put', data })
 export const deleteDept = (id: string): Promise<response> => request({ url: '/depts/delete', method: 'delete', params: { id } })
 export const detailDept = (params: any): Promise<response> => request({ url: '/depts/detail', method: 'get', params })
+
+// 题库
+export interface Interview {
+  id?: string
+  type: string
+  stem: string
+  tags?: string[]
+  level: number
+  score?: number
+  options?: { type: string; value: string[] }[]
+  answer: any
+  analysis?: string
+  source?: string
+}
+export const listInterview = (data?: any): Promise<response> => request({ url: '/interviews/list', method: 'post', data })
+export const addInterview = (data?: Dept): Promise<response> => request({ url: '/interviews/add', method: 'post', data })
+export const updateInterview = (data?: Dept): Promise<response> => request({ url: '/interviews/update', method: 'put', data })
+export const deleteInterview = (params: { id?: string; ids?: array }): Promise<response> => request({ url: '/interviews/delete', method: 'delete', params })
+export const detailInterview = (params: any): Promise<response> => request({ url: '/interviews/detail', method: 'get', params })

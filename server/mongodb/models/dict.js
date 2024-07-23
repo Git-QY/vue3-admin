@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { db1Connection } = require('../index')
 const { v4: uuidv4 } = require('uuid')
 const { body, validationResult } = require('express-validator')
 
@@ -34,8 +35,8 @@ const dictItemSchemaRules = {
 }
 
 // 创建字典(项)模型
-const Dict = mongoose.model('Dict', new mongoose.Schema(dictSchemaRules))
-const DictItem = mongoose.model('DictItem', new mongoose.Schema(dictItemSchemaRules))
+const Dict = db1Connection.model('Dict', new mongoose.Schema(dictSchemaRules))
+const DictItem = db1Connection.model('DictItem', new mongoose.Schema(dictItemSchemaRules))
 
 // 预校验
 const dictPreValidate = () => [

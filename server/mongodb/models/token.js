@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { db1Connection } = require('../index')
 
 const tokenSchema = new mongoose.Schema({
   userId: { type: String, required: true, comment: '用户id' },
@@ -12,5 +13,5 @@ const tokenSchema = new mongoose.Schema({
 })
 
 module.exports = {
-  Token: mongoose.model('Token', tokenSchema),
+  Token: db1Connection.model('Token', tokenSchema),
 }
