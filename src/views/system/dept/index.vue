@@ -16,7 +16,7 @@
 <script lang="ts" setup>
 import { listDept, deleteDept, Dept } from '@/api'
 import editDialog from './dialog.vue'
-import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 const tableConfig = ref({
   table: { rowKey: 'id' },
   type: 'tree',

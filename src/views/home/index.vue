@@ -21,10 +21,11 @@
 </template>
 
 <script lang="ts" setup>
-import { VueDraggableNext } from 'vue-draggable-next'
-import { listLayout, addLayout, updateLayout, Layout, LayoutItem } from '@/api'
+// import { VueDraggableNext } from 'vue-draggable-next'
+// import { listLayout, addLayout, updateLayout, Layout, LayoutItem } from '@/api'
+import { listLayout, Layout, LayoutItem } from '@/api'
 import { useDefault } from './default.ts'
-const router = useRouter()
+// const router = useRouter()
 const { LayoutComponent, defaultView, userId } = useDefault()
 const viewList = ref<Layout[]>([])
 const layout = ref<Layout>({ moduleList: [], userId, viewName: '' })
@@ -42,21 +43,18 @@ onMounted(() => {
   getViewList()
 })
 
-const onAdd = () => {
-  router.push('/layout/edit')
-}
-const onEdit = (id: string = '') => {
-  router.push(`/layout/edit?id=${id}`)
-}
-const onEnd = (id: string) => {
-  // let data = viewList.value.map((item, index) => {
-  //   return { ...item, sort: index++ }
-  // })
-  console.log('排序后面开发')
-}
-const onClick = (item: Layout) => {
-  layout.value = item
-}
+// const onAdd = () => {
+//   router.push('/layout/edit')
+// }
+// const onEdit = (id: string = '') => {
+//   router.push(`/layout/edit?id=${id}`)
+// }
+// const onEnd = (id: string) => {
+//   console.log('排序后面开发')
+// }
+// const onClick = (item: Layout) => {
+//   layout.value = item
+// }
 const showModuleList = computed(() => layout.value.moduleList.filter((item: LayoutItem) => item.display))
 </script>
 

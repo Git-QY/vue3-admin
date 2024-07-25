@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { Menu, listMenuByUserId } from '@/api'
 import { listToTree, deepClone } from '@/utils'
+import { Router } from 'vue-router'
 
 interface authState {
   permissionsMenus: Menu[]
@@ -52,7 +53,7 @@ function generateRouter(router: Router, menus: Menu[]) {
     .filter((item: Menu) => item.menuType !== '2')
     .map((item: Menu) => {
       const { id, parentId, menuType, menuName, path, component, isHidden, isKeepAlive, isLink } = item
-      const meta = { name: menuName, isHidden, isKeepAlive, isLink }
+      const meta = { name: menuName, isHidden, isKeepAlive, isLink, parentId, id }
       if (parentId === '0' && menuType === '1') {
         return {
           id,

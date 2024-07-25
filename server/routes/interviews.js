@@ -1,4 +1,5 @@
 const express = require('express')
+const { User } = require('../mongodb/models/user')
 const router = express.Router()
 const { Interview, validationResult, interviewValidationRules } = require('../mongodb/models/interview')
 
@@ -32,9 +33,9 @@ router.delete('/delete', async (req, res) => {
 router.put('/update', interviewValidationRules(), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
-  const { body } = req
+  const { body, user } = req
   try {
-    await Interview.updateOne({ id: body.id }, { ...body, updateTime: new Date() })
+    await Interview.updateOne({ id: body.id }, { ...body, updateTime: new Date(), updateById: user.id })
     res.send({ code: 200, message: '修改成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
@@ -61,14 +62,28 @@ router.get('/detail', async (req, res) => {
 router.post('/list', async (req, res) => {
   const { page = { pageSize: 10, page: 1 }, ...data } = req.body
   const query = { ...data, stem: { $regex: data.stem ?? '' } }
+
   try {
     const list = await Interview.aggregate([
       { $match: query }, // 匹配查询条件
-      { $sort: { sort: 1 } }, // 按创建时间倒序排序
+      { $sort: { updateTime: 1 } }, // 按更新时间倒序排序
       { $skip: (page.page - 1) * page.pageSize }, // 跳过指定数量的文档
       { $limit: page.pageSize }, // 限制返回的文档数量
-      // { $project: { field_to_exclude: 0 } }, // 排除指定字段
     ])
+    // 循环查询
+    // 提取所有面试文档中涉及的唯一用户 id
+    const userIds = [...new Set(list.map(item => item.createById).concat(list.map(item => item.updateById)))]
+    // 并行获取所有用户信息
+    const users = await User.find({ id: { $in: userIds } }).lean()
+    // 创建用户 id 到用户名的映射，以便快速查找
+    const userMap = users.reduce((acc, user) => {
+      acc[user.id] = user.username
+      return acc
+    }, {})
+    list.forEach(item => {
+      item.createBy = userMap[item.createById] || 'Unknown'
+      item.updateBy = userMap[item.updateById] || 'Unknown'
+    })
     const total = await Interview.countDocuments(query) // 获取符合条件的用户总数
     res.send({ code: 200, data: list, page: { ...page, total }, message: '获取成功' })
   } catch (error) {

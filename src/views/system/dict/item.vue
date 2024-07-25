@@ -49,7 +49,7 @@ const onAdd = () => {
 const onEdit = (row: DictItem) => {
   dictItemDialogRef.value?.open(row, { title: '新增字典项' })
 }
-const onDelete = () => {
+const onDelete = (id: string) => {
   ElMessageBox.confirm('确定删除吗？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',

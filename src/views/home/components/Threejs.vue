@@ -28,8 +28,8 @@ const cube = new THREE.Mesh(geometry, material)
 scene.add(cube)
 
 // 设置立方体的初始位置和速度
-let cubePositionX = 0
-let cubeVelocity = 0.05
+// let cubePositionX = 0
+// let cubeVelocity = 0.05
 
 // 渲染场景
 const animate = () => {

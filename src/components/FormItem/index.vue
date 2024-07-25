@@ -57,6 +57,14 @@
   <template v-if="item.type === 'daterange'">
     <el-date-picker v-model="form[item.prop]" type="daterange" unlink-panels range-separator="To" start-placeholder="Start date" end-placeholder="End date" />
   </template>
+  <!-- 评分 -->
+  <template v-if="item.type === 'rate'">
+    <el-rate v-model="form[item.prop]" v-bind="item.props"></el-rate>
+  </template>
+  <!-- 富文本 -->
+  <template v-if="item.type === 'rich-text'">
+    <RichText v-model="form[item.prop]" v-bind="item.props"></RichText>
+  </template>
 </template>
 
 <script setup lang="ts">

@@ -1,16 +1,15 @@
 <template>
-  <div class="page">
+  <div class="page" v-if="showPage">
     <!-- 基础page配置 搜索表格分页 -->
     <!-- 搜索模块 -->
     <div class="page-search">
-      <search :columns="props.columns" v-model="props.searchForm" :maxShow="maxShow" @on-search="handleSearch">
+      <search :columns="tableColumns" v-model="props.searchForm" :maxShow="maxShow" @on-search="handleSearch">
         <!-- 获取全部插槽映射 -->
         <template v-for="(_, slot) in $slots" v-slot:[slot]="{ item }">
           <slot :name="slot" :item="item"></slot>
         </template>
       </search>
     </div>
-
     <!-- 按钮模块 -->
     <div class="page-btn">
       <div class="page-btn--lf">
@@ -33,11 +32,13 @@
           <el-table-column v-else-if="item.type == 'upload'" v-bind="item" v-slot="{ row }">
             <fileIcon :data="row[item.prop]"></fileIcon>
           </el-table-column>
+          <!-- tag -->
           <el-table-column v-else-if="item.type == 'tag'" v-bind="item" v-slot="{ row }">
             <el-tag :type="getLabel(item.options, row[item.prop], true).type">{{ getLabel(item.options, row[item.prop]) }}</el-tag>
           </el-table-column>
-          <!-- tag -->
-          <el-table-column v-else v-bind="item"></el-table-column>
+          <el-table-column v-else v-bind="item" v-slot="{ row }">
+            <template v-if="item.options"> {{ getLabel(item.options, row[item.prop]) }} </template>
+          </el-table-column>
         </template>
         <template #empty>
           <slot name="empty">
@@ -89,11 +90,21 @@ const tableColumns = computed(() => {
       return item
     })
 })
-onMounted(async () => {
-  // *****************统一处理dict
-  const dicts = props.columns.filter((item: columnsProps) => item.dict).map((item: columnsProps) => item.dict)
-  await dictStore.getDicts(dicts)
-  // *****************统一处理dict
+const showPage = ref(true)
+const initTable = async () => {
+  try {
+    showPage.value = false
+    // *****************统一处理dict
+    const dicts = props.columns.filter((item: columnsProps) => item.dict).map((item: columnsProps) => item.dict)
+    await dictStore.getDicts(dicts)
+    // *****************统一处理dict
+  } catch (error) {
+  } finally {
+    showPage.value = true
+  }
+}
+onMounted(() => {
+  initTable()
 })
 
 defineExpose({ refresh, selectData })

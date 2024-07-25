@@ -28,7 +28,7 @@ import { uploadChunkMerge } from '@/api/utils'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
 
-const props = defineProps({
+defineProps({
   modelValue: { type: Array, default: () => [] }, // 绑定值
   multiple: { type: Boolean, default: false }, // 是否多选
   limit: { type: Number, default: 1 }, // 最大上传数量
@@ -71,7 +71,7 @@ interface List {
 const emits = defineEmits(['update:modelValue'])
 
 const chunkList = ref<Chunk[]>([])
-const hashProgress = ref(0)
+// const hashProgress = ref(0)
 const hash = ref('') // 文件hash
 const fileName = ref('')
 const list = ref<List[]>([]) // 上传列表
@@ -143,13 +143,14 @@ const uploadFile = async (item: List) => {
             uploadedSize.value += progressEvent.loaded // 更新已上传大小
           }
         },
-      })
+      } as any)
     }
   })
   try {
     await limitConcurrency(requestChunks, 5)
     const res = await uploadChunkMerge({ hash: item.hash, fileName: item.fileName })
     ElMessage.success('上传成功')
+    intervalTimer = null
     emits('update:modelValue', res.data.url)
   } catch (error) {
     ElMessage.error('上传失败')
@@ -158,7 +159,7 @@ const uploadFile = async (item: List) => {
 
 // 限制并发数
 const limitConcurrency = async (requestList: any[] = [], limit: number = 3) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     const length = requestList.length
     if (length === 0) return resolve([])
     const result: any[] = [] // 存储结果

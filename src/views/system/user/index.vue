@@ -85,7 +85,7 @@ const onDelete = (id: string) => {
       ElMessage.info('取消删除')
     })
 }
-const onChangeStatus = async (row: User) => {
+const onChangeStatus = async (row: any) => {
   try {
     const res = await api.updateUserField({ id: row.id, fieldName: 'status', fieldValue: row.status })
     ElMessage.success(res.message)

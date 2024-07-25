@@ -65,11 +65,9 @@ router.get('/gitee-branches', async (req, res) => {
   try {
     const response = await axios.get(`https://gitee.com/api/v5/repos/${owner}/${repo}/branches`, { params: { access_token, page: page.page, per_page: page.pageSize } })
     const events = response.data
-    console.log('🚀 ~ router.get ~ events:', events)
     res.send({ code: 200, data: events, msg: '查询成功', total: events.length })
   } catch (error) {
     res.send({ code: 400, msg: error })
-    console.log('🚀 ~ router.get ~ error:', error)
   }
 })
 

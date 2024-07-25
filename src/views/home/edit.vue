@@ -7,7 +7,7 @@
         <div class="viewEdit-header--tool">
           <div @click="onDel" v-if="route.query.id"><span>删除视图</span></div>
           <div @click="restoreDefault"><span>恢复默认</span></div>
-          <div @click="empty(false)"><span>清空</span></div>
+          <div @click="empty()"><span>清空</span></div>
           <el-button type="primary" plain @click="onCancel">取消</el-button>
           <el-button type="primary" @click="onSave">保存</el-button>
         </div>
@@ -115,7 +115,7 @@ const onSave = async () => {
 }
 
 // 总宽度
-const totalWidth = 24
+// const totalWidth = 24
 const handelItem = (item: LayoutItem) => {
   // 堆放规则
   item.display = !item.display

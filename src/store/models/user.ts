@@ -25,10 +25,10 @@ export const useUserStore = defineStore('user', {
       this.$patch({ [args[0]]: args[1] })
     },
     reset() {
-      const globalStore = useGlobalStore()
+      // const globalStore = useGlobalStore()
       this.token = ''
       this.userInfo = {}
-      globalStore.tabList = []
+      // globalStore.tabList = []
     },
     logout() {
       router.push('/login')

@@ -3,13 +3,18 @@
     <!-- 工具栏 -->
     <Toolbar class="wangEditor-toolbar" :editor="editorRef" :defaultConfig="toolbarConfig" />
     <!-- 编辑器 -->
-    <Editor class="wangEditor-container" v-model="modal" :defaultConfig="editorConfig" @onCreated="handleCreated" />
+    <Editor class="wangEditor-container" :style="{ height: props.height }" v-model="modal" :defaultConfig="editorConfig" @onCreated="handleCreated" />
   </div>
 </template>
 <script setup lang="ts">
 import { upload } from '@/api/utils'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { SlateElement } from '@wangeditor/editor'
+
+// 高度默认
+const props = defineProps({
+  height: { type: String, default: '500px' },
+})
 
 type VideoElement = SlateElement & {
   src: string
@@ -75,7 +80,7 @@ onBeforeUnmount(() => {
     border-bottom: 1px solid #ccc;
   }
   &-container {
-    height: 500px !important;
+    // height: 500px !important;
     overflow-y: hidden;
   }
 }

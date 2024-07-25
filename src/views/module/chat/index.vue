@@ -16,7 +16,7 @@ loadScript('http://localhost:3000/socket.io/socket.io.js')
         token: userStore.token,
       },
     })
-    socket.on('connect', data => {
+    socket.on('connect', () => {
       console.log('socket连接成功')
     })
   })

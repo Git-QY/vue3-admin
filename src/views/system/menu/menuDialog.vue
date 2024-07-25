@@ -144,7 +144,7 @@ watch(
         fields = ['parentId', 'menuType', 'icon', 'menuName', 'perms', 'path', 'sort', 'isHidden', 'isFold', 'isLink', 'status', 'remark']
         break
       case '1':
-        fields = ['parentId', 'menuType', 'icon', 'menuName', 'perms', 'path', 'component', 'sort', 'isHidden', 'isKeepAlive', 'isFold', 'isLink', 'status', 'remark']
+        fields = ['parentId', 'menuType', 'icon', 'menuName', 'perms', 'path', 'component', 'sort', 'isHidden', 'isKeepAlive', 'isLink', 'status', 'remark']
         break
       case '2':
         fields = ['parentId', 'menuType', 'menuName', 'sort', 'isHidden', 'perms', 'isLink', 'status', 'remark']

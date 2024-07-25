@@ -165,13 +165,13 @@ export interface Interview {
   tags?: string[]
   level: number
   score?: number
-  options?: { type: string; value: string[] }[]
+  options?: { type: string; value: string }[]
   answer: any
   analysis?: string
   source?: string
 }
 export const listInterview = (data?: any): Promise<response> => request({ url: '/interviews/list', method: 'post', data })
-export const addInterview = (data?: Dept): Promise<response> => request({ url: '/interviews/add', method: 'post', data })
-export const updateInterview = (data?: Dept): Promise<response> => request({ url: '/interviews/update', method: 'put', data })
-export const deleteInterview = (params: { id?: string; ids?: array }): Promise<response> => request({ url: '/interviews/delete', method: 'delete', params })
+export const addInterview = (data?: Interview): Promise<response> => request({ url: '/interviews/add', method: 'post', data })
+export const updateInterview = (data?: Interview): Promise<response> => request({ url: '/interviews/update', method: 'put', data })
+export const deleteInterview = (params: { id?: string; ids?: any }): Promise<response> => request({ url: '/interviews/delete', method: 'delete', params })
 export const detailInterview = (params: any): Promise<response> => request({ url: '/interviews/detail', method: 'get', params })

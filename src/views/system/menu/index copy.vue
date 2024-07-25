@@ -87,8 +87,9 @@ const onDelete = (id: string) => {
         await deleteMenu(id)
         ElMessage.success('删除成功')
         getList()
-      } catch (error: resEorror) {
-        ElMessage.error(error)
+      } catch (error) {
+        const err = error as resEorror
+        ElMessage.error(err)
       }
     })
     .catch(() => {

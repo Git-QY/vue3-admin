@@ -9,7 +9,6 @@ router.post('/add', async (req, res) => {
     await Layout.create({ ...body })
     res.send({ code: 200, msg: '新增成功' })
   } catch (error) {
-    console.log('🚀 ~ router.post ~ error:', error)
     res.send({ code: 500, msg: '新增失败' })
   }
 })

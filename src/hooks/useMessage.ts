@@ -30,16 +30,29 @@ export function useElementUI() {
     if (onlyOne.value) {
       ElMessageBox.close()
     }
-    try {
-      const result = await ElMessageBox.confirm(message, title, {
+    // try {
+    //   const result = await ElMessageBox.confirm(message, title, {
+    //     confirmButtonText: options.confirmButtonText || '确认',
+    //     cancelButtonText: options.cancelButtonText || '取消',
+    //     type: options.type || 'warning',
+    //   })
+    //   return result === 'confirm' // 用户点击了确认按钮
+    // } catch (error) {
+    //   return false // 用户点击了取消按钮或关闭了对话框
+    // }
+    return new Promise((resolve, reject) => {
+      ElMessageBox.confirm(message, title, {
         confirmButtonText: options.confirmButtonText || '确认',
         cancelButtonText: options.cancelButtonText || '取消',
         type: options.type || 'warning',
       })
-      return result === 'confirm' // 用户点击了确认按钮
-    } catch (error) {
-      return false // 用户点击了取消按钮或关闭了对话框
-    }
+        .then(() => {
+          resolve(true)
+        })
+        .catch(() => {
+          resolve(false)
+        })
+    })
   }
 
   return {

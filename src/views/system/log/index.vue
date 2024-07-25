@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import { dayjs } from 'element-plus'
-import { Log, listLog, deleteLog } from '@/api'
+import { listLog, deleteLog } from '@/api'
 import { useHandleData } from '@/utils'
 
 const tableConfig = reactive({
@@ -39,7 +39,7 @@ const getAddress = (row: any) => {
 const tableRef = ref(null as any)
 const operate = {
   delete: (id: number) => {
-    useHandleData(deleteLog, id, `确认删除`).then(callback => {
+    useHandleData(deleteLog, id, `确认删除`).then(() => {
       refresh()
     })
   },

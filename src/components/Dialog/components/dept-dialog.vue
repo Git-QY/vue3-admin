@@ -39,8 +39,8 @@ const props = {
 }
 
 const visible = ref(false)
-const loading = ref(false)
-const listData = ref<any[]>([])
+// const loading = ref(false)
+// const listData = ref<any[]>([])
 const selectData = ref<any[]>([]) // 选中数据
 const loadNode = async (node: any, resolve: any) => {
   console.log('🚀 ~ loadNode ~ node:', node)
@@ -63,7 +63,7 @@ const open = (data: any) => {
   visible.value = true
   selectData.value = data
 }
-const onDelete = data => {
+const onDelete = (data: any) => {
   selectData.value = selectData.value.filter((item: any) => item.id !== data.id)
 }
 const colse = () => {

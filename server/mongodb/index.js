@@ -25,5 +25,4 @@ Promise.all([db1Connection.asPromise(), db2Connection.asPromise()]).then(() => {
   console.log('db1Connection, db2Connection ok')
 })
 
-
 module.exports = { db1Connection, db2Connection }

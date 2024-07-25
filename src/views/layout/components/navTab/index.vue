@@ -39,10 +39,10 @@ const activeName = computed(() => route.fullPath)
 // 路由添加tab
 const addTab = () => {
   const { fullPath, meta } = route
-  const tab: App.TabItem = { fullPath, title: meta.name, ...meta }
+  const tab: App.TabItem = { fullPath, title: meta.name, ...meta } as any
   if (meta.isHidden) {
     // 找出当前路由的父级路由
-    const parent: Route = router.getRoutes().find(item => item.path == route.matched[1].path)
+    const parent: any = router.getRoutes().find(item => item.meta.id == meta.parentId)
     navTabStore.addTab({
       fullPath: parent.path,
       title: parent.meta.name,

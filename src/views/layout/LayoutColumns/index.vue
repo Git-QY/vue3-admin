@@ -31,7 +31,7 @@
 import { useAuthStore } from '@/store'
 import { Menu } from '@/api'
 import Header from '../components/header/index.vue'
-import Logo from '../components/logo/index.vue'
+// import Logo from '../components/logo/index.vue'
 import Main from '../components/main/index.vue'
 import NavTab from '../components/navTab/index.vue'
 import Aside from '../components/aside/index.vue'

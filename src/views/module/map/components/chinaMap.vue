@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import { useElementUI } from '@/hooks/useMessage'
-import echarts, { ECOption } from '@/components/Echarts/config'
+import echarts from '@/components/Echarts/config'
 const { showMessage } = useElementUI()
 // 获取地图json https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json
 const mapJson = ref<any>(null)

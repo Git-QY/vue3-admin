@@ -1,5 +1,5 @@
 import APP from './App.vue'
-import gif from '@/assets/images/loader-light.gif'
+// import gif from '@/assets/images/loader-light.gif'
 
 export function createMyApp() {
   const app = createApp({
@@ -13,17 +13,20 @@ export function createMyApp() {
       return { isLoaded }
     },
     render() {
-      return this.isLoaded ? h(APP) : h()
-      // 'div',
-      // {
-      //   style: {
-      //     display: 'flex',
-      //     justifyContent: 'center',
-      //     alignItems: 'center',
-      //     height: '100vh',
-      //   },
-      // },
-      // h('img', { src: gif, style: { width: '100px' } }),
+      return this.isLoaded
+        ? h(APP)
+        : h(
+            'div',
+            {
+              style: {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+              },
+            },
+            // h('img', { src: gif, style: { width: '100px' } }),
+          )
     },
   })
 

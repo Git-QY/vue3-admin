@@ -38,7 +38,7 @@ const _form = toRaw(form.value) // 获取初始表单数据
 // 命令式
 const dialogVisible = ref(false)
 const title = ref('')
-const open = (row: any, { title }: any) => {
+const open = (row: any) => {
   if (row) form.value = { ...row }
   dialogVisible.value = true
 }

@@ -5,6 +5,7 @@ import SvgIcon from './Icon/svgIcon.vue'
 import Icon from './Icon/index.vue'
 import Upload from './FormItem/upload.vue'
 import Region from './FormItem/region.vue'
+import RichText from './FormItem/richText.vue'
 import Form from './Form/index.vue'
 import Dialog from './Dialog/index.vue'
 import Echarts from './Echarts/index.vue'
@@ -18,6 +19,7 @@ const components: { [name: string]: Component } = {
   SvgIcon,
   Upload,
   Region,
+  RichText,
   Form,
   Dialog,
   Icon,

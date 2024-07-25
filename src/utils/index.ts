@@ -132,10 +132,12 @@ export function getLabel(data: { value: any; label: string }[], value: any, isIt
  * @param {Function} api 操作数据接口的api方法 (必传)
  * @param {Object} params 携带的操作数据参数 {id,params} (必传)
  * @param {String} message 提示信息 (必传)
+ * @param {Function} success 成功回调函数
+ * @param {Function} error 失败回调函数
  * @returns {Promise}
  */
 export const useHandleData = (api: (params: any) => Promise<any>, params: any = {}, message: string) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     ElMessageBox.confirm(`是否${message}?`, '温馨提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
@@ -143,12 +145,8 @@ export const useHandleData = (api: (params: any) => Promise<any>, params: any = 
       draggable: true,
     })
       .then(async () => {
-        const res = await api(params)
-        if (!res) return reject(false)
-        ElMessage({
-          type: 'success',
-          message: `${message}成功!`,
-        })
+        await api(params)
+        ElMessage({ type: 'success', message: `${message}成功!` })
         resolve(true)
       })
       .catch(() => {
