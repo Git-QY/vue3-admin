@@ -85,7 +85,7 @@ export interface Role {
   [key: string]: any
   page?: object
 }
-export const listRole = (data?: Role): Promise<response> => request({ url: '/roles/list', method: 'post', data })
+export const listRole = (data: any): Promise<response> => request({ url: '/roles/list', method: 'post', data })
 export const addRole = (data?: Role): Promise<response> => request({ url: '/roles/add', method: 'post', data })
 export const updateRole = (data?: Role): Promise<response> => request({ url: '/roles/update', method: 'put', data })
 export const deleteRole = (params: any): Promise<response> => request({ url: '/roles/delete', method: 'delete', params })

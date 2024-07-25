@@ -36,7 +36,6 @@
 </template>
 
 <script lang="ts" setup>
-import { upload } from '@/api/utils'
 import { ElMessage } from 'element-plus'
 import fileIcon from '@/components/FormItem/fileIcon.vue'
 import request from '@/utils/request'
@@ -94,7 +93,7 @@ const onChange = async (e: any) => {
           onUploadProgress: function (progressEvent: ProgressEvent) {
             curFile.value.progress = ((progressEvent.loaded / progressEvent.total) * 100) | 0
           },
-        })
+        } as any)
         .then(res => {
           curFile.value.isUpload = true
           curFile.value.url = res.data.url
@@ -117,8 +116,8 @@ const onRemove = (item: File) => {
 // 更新v-model值
 const updateModelValue = () => {
   // returnAttributes =》 ['url', 'name']
-  const list = fileList.value.map(item => {
-    return props.returnAttributes.reduce((obj: any, key: string) => {
+  const list = fileList.value.map((item: any) => {
+    return props.returnAttributes.reduce((obj: any, key: any) => {
       obj[key] = item[key]
       return obj
     }, {})

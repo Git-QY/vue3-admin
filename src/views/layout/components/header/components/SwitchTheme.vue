@@ -26,13 +26,14 @@ const changeTheme = () => {
 
 // 暗黑主题和明亮主题切换
 const handleSwitch = async (event: MouseEvent) => {
+  const anydocument: any = document
   const x = event.clientX
   const y = event.clientY
   const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
-  const transition = document?.startViewTransition(() => changeTheme())
+  const transition = anydocument?.startViewTransition(() => changeTheme())
   await transition.ready
   const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
-  document.documentElement.animate(
+  anydocument.documentElement.animate(
     { clipPath: isDark.value ? clipPath : [...clipPath].reverse() },
     {
       duration: 300,

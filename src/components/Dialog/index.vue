@@ -31,7 +31,7 @@ interface IDialogProps {
   title?: string
   modelValue?: boolean
   width?: number
-  style?: object
+  style: any
   confirmText?: string
   cancelText?: string
   destroyOnClose?: boolean
@@ -45,6 +45,7 @@ const props = withDefaults(defineProps<IDialogProps>(), {
   title: '标题',
   height: 300,
   width: 650,
+  style: {},
   modelValue: false,
   confirmText: '确定',
   cancelText: '取消',

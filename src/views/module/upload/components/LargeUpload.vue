@@ -80,7 +80,7 @@ const uploadedSize = ref(0) // 已上传的总大小
 const speed = ref(0) // 当前网速，单位可以是字节/秒
 
 let startTime: number | null = null // 开始上传的时间戳
-let intervalTimer: any = null // 定时器
+const intervalTimer = ref<any>(null)
 
 // 处理文件变化
 const handleChange = async (file: UploadFile) => {
@@ -109,7 +109,7 @@ const handleChange = async (file: UploadFile) => {
 // 确定上传
 const uploadFiles = async () => {
   startTime = Date.now() // 记录开始上传时间
-  intervalTimer = setInterval(() => {
+  intervalTimer.value = setInterval(() => {
     // 计算上传速度
     if (startTime !== null && uploadedSize.value > 0) {
       const elapsedTime = (Date.now() - startTime) / 1000 // 已经过的时间（秒）
@@ -150,7 +150,7 @@ const uploadFile = async (item: List) => {
     await limitConcurrency(requestChunks, 5)
     const res = await uploadChunkMerge({ hash: item.hash, fileName: item.fileName })
     ElMessage.success('上传成功')
-    intervalTimer = null
+    intervalTimer.value = null
     emits('update:modelValue', res.data.url)
   } catch (error) {
     ElMessage.error('上传失败')

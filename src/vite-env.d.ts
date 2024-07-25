@@ -14,3 +14,15 @@ declare module 'vue-grid-layout' {
 
   export default VueGridLayout
 }
+
+declare module 'three'
+declare module 'spark-md5'
+declare module '@wangeditor/editor-for-vue' {
+  import { Editor, Toolbar } from '@wangeditor/editor'
+  export { Editor, Toolbar }
+}
+declare global {
+  interface Window {
+    _iconfont_svg_string_4388344?: string;
+  }
+}

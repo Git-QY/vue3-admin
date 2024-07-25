@@ -16,10 +16,10 @@ const props = defineProps({
   height: { type: String, default: '500px' },
 })
 
-type VideoElement = SlateElement & {
-  src: string
-  poster?: string
-}
+// type VideoElement = SlateElement & {
+//   src: string
+//   poster?: string
+// }
 // 编辑器配置
 const editorConfig = {
   placeholder: '请输入内容...',

@@ -28,7 +28,7 @@ const urls = computed(() => {
     return [props.data]
   }
 })
-const getFileImage = (url: string): string => {
+const getFileImage = (url: any): string => {
   if (url.endsWith('.pdf')) {
     return getAssetsImge('images/fileType/pdf.png')
   } else if (url.endsWith('.doc') || url.endsWith('.docx')) {
