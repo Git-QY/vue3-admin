@@ -100,7 +100,7 @@ const onChange = async (e: any) => {
           updateModelValue()
           ElMessage.success('上传成功')
         })
-        .catch(err => {
+        .catch(() => {
           curFile.value.isUpload = false
         })
     }

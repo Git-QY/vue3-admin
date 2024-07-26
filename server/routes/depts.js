@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-const { Dept, deptValidationRules, validationResult } = require('../mongodb/models/Dept')
+const { Dept, deptValidationRules, validationResult } = require('../mongodb/models/dept')
 // 添加部门
 router.post('/add', deptValidationRules(), async (req, res) => {
   const errors = validationResult(req)
