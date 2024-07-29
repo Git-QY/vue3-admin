@@ -18,7 +18,7 @@ router.post('/', multipartMiddleware, async (req, res) => {
     await fs.copyFile(file.path, newPath)
     fs.unlinkSync(file.path) // 删除临时文件
 
-    const url = `http://localhost:3000/uploads/${file.originalFilename}`
+    const url = `${$base_url}/uploads/${file.originalFilename}`
     res.send({ code: 200, message: '上传成功', data: { url, fileName: file.originalFilename } })
   } catch (error) {
     return res.send({ code: 500, message: '上传失败' })
@@ -60,7 +60,7 @@ router.post('/merge', async (req, res) => {
     for (let chunk of chunks) fs.unlinkSync(path.resolve(chunkDir, chunk))
     // 删除空的切片文件夹
     fs.rmdirSync(chunkDir)
-    const url = `http://localhost:3000/uploads/${fileName}`
+    const url = `${$base_url}/uploads/${fileName}`
     res.send({ code: 200, msg: '合并成功', data: { url, fileName } })
   } catch (error) {}
 })

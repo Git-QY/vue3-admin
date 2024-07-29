@@ -55,5 +55,6 @@ const { verifyToken } = require('./utils/token')
 
 global.$generateUUID = generateUUID
 global.$verifyToken = verifyToken
+global.$base_url = 'http://27c906c0.r9.cpolar.top'
 
 module.exports = app // 导出Express应用程序实例

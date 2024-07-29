@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"vite --mode dev\" \"npm start --prefix server\"",
+    "test": "concurrently \"vite --mode test\" \"npm start --prefix server\"",
+    "prod": "vite --mode prod",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "build:no-vue-tsc": "vite build"
@@ -37,6 +39,7 @@
     "@types/node": "^20.12.7",
     "@types/nprogress": "^0.2.3",
     "@vitejs/plugin-vue": "^5.0.4",
+    "concurrently": "^8.2.2",
     "sass": "^1.74.1",
     "typescript": "^5.2.2",
     "unplugin-auto-import": "^0.17.6",

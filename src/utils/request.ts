@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { useUserStore } from '@/store'
 const instance: AxiosInstance = axios.create({
-  baseURL: '/api', // 基础 URL
+  baseURL: import.meta.env.VITE_API_BASE_URL, // 基础 URL
   timeout: 50000, // 请求超时时间
 })
 // 请求拦截器

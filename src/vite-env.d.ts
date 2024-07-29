@@ -1,4 +1,9 @@
 /// <reference types="vite/client" />
+// 环境变量
+interface ImportMetaEnv {
+  readonly VITE_API_BASE_URL: string
+}
+
 // App 全局变量声明
 declare namespace App {
   // tabsList
@@ -23,6 +28,6 @@ declare module '@wangeditor/editor-for-vue' {
 }
 declare global {
   interface Window {
-    _iconfont_svg_string_4388344?: string;
+    _iconfont_svg_string_4388344?: string
   }
 }

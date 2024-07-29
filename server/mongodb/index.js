@@ -8,21 +8,28 @@
 // db.once('open', res => console.log('db ok'))
 // mongodb+srv://595870773:hAOxUTXHyxNApZfL@cluster0.luetbep.mongodb.net/
 
-const mongoose = require('mongoose')
-mongoose.set('strictQuery', true)
-// 连接数据库1
-const db1URI = 'mongodb+srv://qinyu:13512319102.@qycluster.xsk1hfo.mongodb.net/vue3admin'
-const db1Options = {}
-const db1Connection = mongoose.createConnection(db1URI, db1Options)
+var mongoose = require('mongoose')
 
-// 连接数据库2
-const db2URI = 'mongodb+srv://595870773:hAOxUTXHyxNApZfL@cluster0.luetbep.mongodb.net'
-const db2Options = {}
-const db2Connection = mongoose.createConnection(db2URI, db2Options)
+const connections = [
+  { name: 'db1Connection', url: 'mongodb+srv://qinyu:13512319102.@qycluster.xsk1hfo.mongodb.net/vue3admin' },
+  { name: 'db2Connection', url: 'mongodb+srv://qy:13512319102.@cluster0.xv6lm6l.mongodb.net/' },
+]
 
-// 成功链接2个数据库打印
-Promise.all([db1Connection.asPromise(), db2Connection.asPromise()]).then(() => {
-  console.log('db1Connection, db2Connection ok')
+mongoose.Promise = global.Promise
+
+// 创建连接并导出
+const connectionObjects = {}
+connections.forEach(connection => {
+  connectionObjects[connection.name] = mongoose.createConnection(connection.url)
+  connectionObjects[connection.name].on('connected', function () {
+    console.log(`Mongoose 连接成功，连接到 ${connection.name}: ${connection.url}`)
+  })
+  connectionObjects[connection.name].on('error', function (err) {
+    console.log(`Mongoose 连接错误 ${connection.name}: ${err}`)
+  })
+  connectionObjects[connection.name].on('disconnected', function () {
+    console.log(`Mongoose 连接断开 ${connection.name}`)
+  })
 })
 
-module.exports = { db1Connection, db2Connection }
+module.exports = connectionObjects

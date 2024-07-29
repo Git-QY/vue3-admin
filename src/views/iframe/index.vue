@@ -9,11 +9,14 @@
 </template>
 
 <script setup lang="ts">
-
 // 获取当前路由信息
 const route = useRoute()
+// 判断是否存在https和http
+const isHttps = (url: any) => {
+  return url.startsWith('https://') || url.startsWith('http://')
+}
 // 默认URL，通过路由元数据获取
-const defaultUrl: string = route.meta.isLink as string
+const defaultUrl: any = isHttps(route.meta.isLink) ? route.meta.isLink : `${import.meta.env.VITE_API_BASE_URL}${route.meta.isLink}`
 
 // 定义组件的props
 const props = defineProps({ url: { type: String, default: '' } })
