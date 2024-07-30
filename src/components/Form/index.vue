@@ -42,6 +42,7 @@ const addRules = (rules: any, item: any) => {
   if (!rules) return
   if (typeof rules === 'object') return rules // 如果是数组直接返回
   const [type, folg] = rules.split('-')
+  console.log('🚀 ~ addRules ~ type, folg:', type, folg)
   const validationRules: any = {
     must: {
       required: true,
@@ -50,7 +51,7 @@ const addRules = (rules: any, item: any) => {
     },
     // 正整数
     int: checkRule(item, folg, (rule: any, value: any, callback: any) => {
-      if (!/^[1-9]\d*$/.test(value)) {
+      if (!/^[1-9]\d*$/.test(value) && value) {
         callback(new Error(`${item.label}必须为正整数`))
       } else {
         callback()
@@ -58,7 +59,7 @@ const addRules = (rules: any, item: any) => {
     }),
     // 移动手机
     phone: checkRule(item, folg, (rule: any, value: any, callback: any) => {
-      if (!/^1[3-9]\d{9}$/.test(value)) {
+      if (!/^1[3-9]\d{9}$/.test(value) && value) {
         callback(new Error(`${item.label}格式不正确`))
       } else {
         callback()
@@ -66,7 +67,7 @@ const addRules = (rules: any, item: any) => {
     }),
     // 邮箱
     email: checkRule(item, folg, (rule: any, value: any, callback: any) => {
-      if (!/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)) {
+      if (!/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value) && value) {
         callback(new Error(`${item.label}格式不正确`))
       } else {
         callback()
@@ -74,7 +75,7 @@ const addRules = (rules: any, item: any) => {
     }),
     // 小数
     decimal2: checkRule(item, folg, (rule: any, value: any, callback: any) => {
-      if (!/^(0|[1-9][0-9]*)(\.[0-9]{1,2})?$/.test(value)) {
+      if (!/^(0|[1-9][0-9]*)(\.[0-9]{1,2})?$/.test(value) && value) {
         callback(new Error(`${item.label}保留2位小数`))
       } else {
         callback()

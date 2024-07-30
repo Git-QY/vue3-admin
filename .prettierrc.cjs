@@ -1,6 +1,6 @@
 module.exports = {
   // 一行最多多少字符
-  printWidth: 200,
+  printWidth: 150,
   // 使用 2 个空格缩进
   tabWidth: 2,
   // 不使用缩进符，而使用空格
@@ -12,15 +12,15 @@ module.exports = {
   // 在 JSX 中使用单引号
   jsxSingleQuote: true,
   // 对象的 key 仅在必要时用引号
-  quoteProps: "as-needed",
+  quoteProps: 'as-needed',
   // 换行符使用 lf
-  endOfLine: "lf",
+  endOfLine: 'lf',
   // 强制在括号内使用一致的空格
   bracketSpacing: true,
   // 箭头函数，尽可能不用括号
-  arrowParens: "avoid",
+  arrowParens: 'avoid',
   // 尾随逗号, 'none': 不要有尾随逗号, 'es5': 在 ES5 模式下要有尾随逗号, 'all': 在所有情况下都要有尾随逗号
-  trailingComma: "all",
+  trailingComma: 'all',
   // 使用默认的折行标准
-  proseWrap: "preserve",
-};
+  proseWrap: 'preserve',
+}

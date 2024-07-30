@@ -41,10 +41,19 @@ router.put('/update', deptValidationRules(), async (req, res) => {
 })
 // 部门列表
 router.post('/list', async (req, res) => {
-  const { ...query } = req.body
+  const { page = { page: 1, pageSize: 10, isAll: false }, ...data } = req.body
+  const query = { ...data, deptName: { $regex: data.deptName ?? '' } }
   try {
-    const list = await Dept.find({ ...query, deptName: { $regex: query.deptName ?? '' } })
-    res.send({ code: 200, message: '获取成功', data: list })
+    if (page.isAll) {
+      const list = await Dept.find(query)
+      res.send({ code: 200, message: '获取成功', data: list })
+    } else {
+      const list = await Dept.find(query)
+        .skip((page.page - 1) * page.pageSize)
+        .limit(page.pageSize)
+      const total = await Dept.countDocuments(query)
+      res.send({ code: 200, message: '获取成功', data: list, page: { ...page, total } })
+    }
   } catch (error) {
     res.send({ code: 500, message: error })
   }

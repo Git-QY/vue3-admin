@@ -10,7 +10,7 @@
       </el-table-column>
     </template>
   </page-table>
-  <editDialog :title="title" ref="editDialogRef"></editDialog>
+  <editDialog :title="title" ref="editDialogRef" :confirm="refresh"></editDialog>
 </template>
 
 <script lang="ts" setup>
@@ -54,6 +54,7 @@ const onDelete = (id: string) => {
   })
     .then(async () => {
       await deleteDept(id)
+      refresh()
       ElMessage({
         type: 'success',
         message: '删除成功!',
@@ -66,6 +67,9 @@ const onDelete = (id: string) => {
       })
     })
 }
+const tableRef = ref<HTMLFormElement | null>(null)
+// 刷新表格
+const refresh = () => tableRef.value?.refresh()
 </script>
 
 <style lang="scss" scoped></style>
