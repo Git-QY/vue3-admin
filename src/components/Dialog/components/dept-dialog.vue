@@ -43,7 +43,6 @@ const visible = ref(false)
 // const listData = ref<any[]>([])
 const selectData = ref<any[]>([]) // 选中数据
 const loadNode = async (node: any, resolve: any) => {
-  console.log('🚀 ~ loadNode ~ node:', node)
   try {
     const res = await listDept({ parentId: node.data.id || '0' })
     resolve(res.data)

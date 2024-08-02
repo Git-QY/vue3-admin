@@ -18,12 +18,21 @@ router.post('/add', menuValidationRules(), async (req, res, next) => {
 
 // 菜单全部列表
 router.post('/list', async (req, res, next) => {
-  const { menuName = '' } = req.body
+  const { page = { page: 1, pageSize: 10, isAll: false }, ...data } = req.body
+  const query = { ...data, menuName: { $regex: data.menuName ?? '' } }
   try {
-    let list = await Menu.find({ ...req.body, menuName: { $regex: menuName } })
-    res.send({ code: 200, data: list, message: '菜单列表获取成功' })
+    if (page.isAll) {
+      const list = await Menu.find(query)
+      res.send({ code: 200, message: '获取成功', data: list })
+    } else {
+      const list = await Menu.find(query)
+        .skip((page.page - 1) * page.pageSize)
+        .limit(page.pageSize)
+      const total = await Menu.countDocuments(query)
+      res.send({ code: 200, message: '获取成功', data: list, page: { ...page, total } })
+    }
   } catch (error) {
-    return res.send({ code: 500, message: error })
+    res.send({ code: 500, message: error })
   }
 })
 
@@ -56,10 +65,17 @@ router.delete('/delete', async (req, res, next) => {
 
 // 菜单详情
 router.get('/detail', async (req, res, next) => {
-  const { id } = req.query
+  const { id, ids } = req.query
   try {
-    const detail = await Menu.findOne({ id })
-    res.send({ code: 200, data: detail, message: '菜单详情获取成功' })
+    let detail
+    if (id) {
+      detail = await Menu.findById(id)
+    } else if (ids) {
+      detail = await Menu.find({ id: { $in: ids } })
+    } else {
+      return res.send({ code: 400, message: '缺少查询参数' })
+    }
+    res.send({ code: 200, data: detail, message: '获取成功' })
   } catch (error) {
     res.send({ code: 500, message: error })
   }

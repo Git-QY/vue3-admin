@@ -8,10 +8,10 @@ import { useUserStore } from '@/store'
 import { loadScript } from '@/utils'
 const userStore = useUserStore()
 
-loadScript('http://localhost:3000/socket.io/socket.io.js')
+loadScript('http://localhost:30001/socket.io/socket.io.js')
   .then(res => {
     console.log(res)
-    const socket = io('http://localhost:3000', {
+    const socket = io('http://localhost:30001', {
       extraHeaders: {
         token: userStore.token,
       },
@@ -25,7 +25,7 @@ loadScript('http://localhost:3000/socket.io/socket.io.js')
   })
 
 // 创建socket实例
-// const socket = io('http://localhost:3000', {
+// const socket = io('http://localhost:30001', {
 //   extraHeaders: {
 //     token: userStore.token,
 //   },

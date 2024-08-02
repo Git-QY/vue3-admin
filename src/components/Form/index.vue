@@ -42,7 +42,6 @@ const addRules = (rules: any, item: any) => {
   if (!rules) return
   if (typeof rules === 'object') return rules // 如果是数组直接返回
   const [type, folg] = rules.split('-')
-  console.log('🚀 ~ addRules ~ type, folg:', type, folg)
   const validationRules: any = {
     must: {
       required: true,

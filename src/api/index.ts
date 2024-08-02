@@ -67,7 +67,7 @@ export const listMenu = (data?: Menu): Promise<response> => request({ url: '/men
 export const addMenu = (data?: Menu): Promise<response> => request({ url: '/menus/add', method: 'post', data })
 export const updateMenu = (data?: Menu): Promise<response> => request({ url: '/menus/update', method: 'put', data })
 export const deleteMenu = (id: string): Promise<response> => request({ url: '/menus/delete', method: 'delete', params: { id } })
-export const detailMenu = (data?: Menu): Promise<response> => request({ url: '/menus/detail', method: 'get', data })
+export const detailMenu = (params?: any): Promise<response> => request({ url: '/menus/detail', method: 'get', params })
 
 // 角色
 export interface Role {
@@ -90,9 +90,11 @@ export const addRole = (data?: Role): Promise<response> => request({ url: '/role
 export const updateRole = (data?: Role): Promise<response> => request({ url: '/roles/update', method: 'put', data })
 export const deleteRole = (params: any): Promise<response> => request({ url: '/roles/delete', method: 'delete', params })
 export const detailRole = (params?: any): Promise<response> => request({ url: '/roles/detail', method: 'get', params })
-export const updateRoleField = (data: { id: string; fieldName: string; fieldValue: any }): Promise<response> => request({ url: `/roles/update/field`, method: 'put', data })
+export const updateRoleField = (data: { id: string; fieldName: string; fieldValue: any }): Promise<response> =>
+  request({ url: `/roles/update/field`, method: 'put', data })
 // 根据角色ids获取菜单权限
-export const listMenuByRoleIds = (data: { ids: string[] }): Promise<response> => request({ url: '/roles/aggregate/permissions', method: 'post', data })
+export const listMenuByRoleIds = (data: { ids: string[] }): Promise<response> =>
+  request({ url: '/roles/aggregate/permissions', method: 'post', data })
 
 // 登录日志
 export interface Log {
@@ -173,5 +175,6 @@ export interface Interview {
 export const listInterview = (data?: any): Promise<response> => request({ url: '/interviews/list', method: 'post', data })
 export const addInterview = (data?: Interview): Promise<response> => request({ url: '/interviews/add', method: 'post', data })
 export const updateInterview = (data?: Interview): Promise<response> => request({ url: '/interviews/update', method: 'put', data })
-export const deleteInterview = (params: { id?: string; ids?: any }): Promise<response> => request({ url: '/interviews/delete', method: 'delete', params })
+export const deleteInterview = (params: { id?: string; ids?: any }): Promise<response> =>
+  request({ url: '/interviews/delete', method: 'delete', params })
 export const detailInterview = (params: any): Promise<response> => request({ url: '/interviews/detail', method: 'get', params })

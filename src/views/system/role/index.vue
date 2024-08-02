@@ -14,7 +14,7 @@
   </page-table>
   <!-- 添加弹窗 -->
   <roleDialog ref="roleDialogRef" :title="title" :confirm="refresh"></roleDialog>
-  <permissinTrees ref="permissinTreesRef"></permissinTrees>
+  <permissinTrees ref="permissinTreesRef" :confirm="refresh"></permissinTrees>
 </template>
 
 <script lang="ts" setup>
@@ -74,7 +74,6 @@ const onDelete = (id: string) => {
     })
 }
 const onDeleteBatch = () => {
-  console.log('🚀 ~ onDeleteBatch ~  tableRef.value?.selectData:', tableRef.value?.selectData)
   if (tableRef.value?.selectData.length === 0) {
     ElMessage.warning('请选择要删除的角色')
     return

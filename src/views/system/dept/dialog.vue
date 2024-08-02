@@ -47,23 +47,13 @@ const form = ref({
   status: '1',
   remark: '',
 })
-const nodeAdapter = (list: any) => {
-  console.log('🚀 ~ nodeAdapter ~ list:', list)
 
-  return list.map((item: any) => {
-    if (item.deptName == '前端') {
-      item.disabled = true
-    }
-    return item
-  })
-}
 const treeConfig = reactive({
   getList: listDept,
   getIdList: detailDept,
   options: { label: 'deptName', value: 'id', children: 'children' },
   multiple: false,
-  // 接管数据
-  nodeAdapter,
+  defaultTop: [{ id: '0', deptName: '顶级部门' }], // 是否默认顶级节点
 })
 
 const _form = toRaw(form.value) // 获取初始表单数据
@@ -71,6 +61,7 @@ const _form = toRaw(form.value) // 获取初始表单数据
 const dialogVisible = ref(false)
 const open = (row: any) => {
   if (row) {
+    console.log("🚀 ~ open ~ row:", row)
     form.value = { ...row }
   }
   dialogVisible.value = true

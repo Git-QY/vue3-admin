@@ -1,6 +1,6 @@
 <template>
   <header class="org-picker--search-bar">
-    <el-input v-model="search" clearable :placeholder="placeholder" @change="onSearch" @clear="onSearch" size="small">
+    <el-input v-model="search" clearable :placeholder="placeholder" @change="onSearch" @clear="onSearch">
       <template #prefix>
         <el-icon class="el-input__icon"><Search /> </el-icon>
       </template>

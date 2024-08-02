@@ -1,66 +1,57 @@
 <template>
-  <div>
-    <!-- 权限树组件包含目录菜单按钮 -->
-    <!-- 抽屉 -->
-    <el-drawer v-model="drawer" title="I am the title" :before-close="handleClose">
-      {{ selectIds }}
-      <el-tree style="max-width: 600px" :data="treeData" node-key="id" :props="props" show-checkbox :check-strictly="true" @check-change="handleCheckChange" ref="treeRef" />
-      <!-- 使用基础组件实现树组件  不需要半选状态 但需要实现全选 -->
-
-      <!-- 按钮 -->
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="close">取 消</el-button>
-          <el-button type="primary" @click="confirm" :loading="loading">确 定</el-button>
-        </span>
-      </template>
-    </el-drawer>
-  </div>
+  <Dialog v-model="visible" @cancel="cancel" @confirm="confirm" width="50%" title="角色权限" :confirmLoading="confirmLoading">
+    <template #content> <Panel v-bind="config" v-model:selected="selected"></Panel> </template>
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
-import { useUserStore } from '@/store'
-import { Role, listMenuByRoleIds, updateRoleField } from '@/api'
-import { ElMessage } from 'element-plus'
-const userStore = useUserStore()
-const handleClose = (done: any) => {
-  done()
+import { listMenu, detailMenu, updateRoleField } from '@/api'
+import Dialog from '@/components/Dialog/index.vue'
+import Panel from '@/views/module/business/pickTreeOrList/components/panel.vue'
+import { useElementUI } from '@/hooks/useMessage'
+const { showMessage } = useElementUI()
+const props = defineProps({
+  confirm: { type: Function, default: () => {} },
+})
+const visible = ref<boolean>(false)
+const selected = ref([])
+const curItem = ref<any>({})
+const confirmLoading = ref(false)
+const config = reactive({
+  getList: listMenu,
+  getIdList: detailMenu,
+  multiple: true,
+  mode: 'tree',
+  options: { label: 'menuName', value: 'id', children: 'children' },
+})
+const cancel = () => {
+  visible.value = false
 }
-const treeData = toRef(userStore.menusTree)
-const props = { label: 'menuName', children: 'children' }
-const drawer = ref(false)
-const treeRef = ref<HTMLFormElement | null>(null)
-const selectIds = ref<string[]>([])
-
-const handleCheckChange = () => {
-  selectIds.value = treeRef.value?.getCheckedNodes(false, true).map((item: any) => item.id)
-}
-const curItem = ref<Role>({} as Role)
-const open = async (row: Role) => {
-  curItem.value = row
-  treeRef.value?.setCheckedKeys([], false)
-  const res = await listMenuByRoleIds({ ids: [row.id as string] })
-  drawer.value = true
-  nextTick(() => {
-    treeRef.value?.setCheckedKeys(res.data.permissions, false)
-  })
-}
-const close = () => {
-  drawer.value = false
-}
-const loading = ref(false)
 const confirm = async () => {
   try {
-    loading.value = true
-    await updateRoleField({ id: curItem.value.id as string, fieldName: 'permissions', fieldValue: selectIds.value })
-    ElMessage({ message: '权限分配成功', type: 'success' })
-    close()
+    confirmLoading.value = true
+    const ids = selected.value.map((item: any) => item.id)
+    await updateRoleField({ id: curItem.value.id, fieldName: 'permissions', fieldValue: ids })
+    props.confirm()
+    showMessage('修改成功')
   } catch (error) {
+    showMessage('修改失败' + error, 'error')
   } finally {
-    loading.value = false
+    confirmLoading.value = false
+    cancel()
   }
 }
-defineExpose({ open, close })
+const open = async (row: any) => {
+  curItem.value = row
+  await getDetails(row.permissions)
+  visible.value = true
+}
+const getDetails = async (ids: string[]) => {
+  if (ids && !ids.length) return
+  const res = await config.getIdList({ ids })
+  selected.value = res.data
+}
+defineExpose({ open })
 </script>
 
-<stye lang="scss" scoped></stye>
+<style lang="scss" scoped></style>

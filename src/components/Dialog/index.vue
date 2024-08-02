@@ -30,8 +30,8 @@
 interface IDialogProps {
   title?: string
   modelValue?: boolean
-  width?: number
-  style: any
+  width?: string
+  style?: any
   confirmText?: string
   cancelText?: string
   destroyOnClose?: boolean
@@ -40,11 +40,12 @@ interface IDialogProps {
   footerHidden?: boolean // 是否隐藏确认和取消按钮部分
   overflow?: boolean
   closeOnClickModal?: boolean
+  confirmLoading?: boolean
 }
 const props = withDefaults(defineProps<IDialogProps>(), {
   title: '标题',
   height: 300,
-  width: 650,
+  width: '650px',
   style: {},
   modelValue: false,
   confirmText: '确定',
@@ -55,9 +56,9 @@ const props = withDefaults(defineProps<IDialogProps>(), {
   footerHidden: false,
   overflow: false,
   closeOnClickModal: true,
+  confirmLoading: false,
 })
 const { loading } = toRefs(props)
-const confirmLoading = ref(loading)
 const emits = defineEmits(['confirm', 'cancel']) // 当前组件获取父组件传递的事件方法
 const onConfirm = () => emits('confirm') // 弹框的确定事件
 const onCancel = () => emits('cancel') // 弹框的取消事件

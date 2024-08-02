@@ -17,7 +17,7 @@
       </span>
       <!-- 下拉菜单内容 -->
       <template #dropdown>
-        <PanelTree v-if="visible" v-bind="{ getList, options, multiple, nodeAdapter }" v-model:selected="selected"></PanelTree>
+        <PanelTree v-if="visible" v-bind="{ getList, options, multiple, nodeAdapter, defaultTop, mode }" v-model:selected="selected"></PanelTree>
       </template>
     </el-dropdown>
   </div>
@@ -34,13 +34,18 @@ const props = defineProps({
   getList: { type: Function, default: () => {} }, // 懒加载函数
   getIdList: { type: Function, default: () => {} }, // 获取选中详情
   options: { type: Object, default: () => ({}) }, // tree配置
-  nodeAdapter: { type: Function, default: () => {} }, // 树节点数据适配
+  nodeAdapter: { type: Function }, // 树节点数据适配
+  defaultTop: { type: Array, default: () => [] }, // 默认顶级节点
+  mode: { type: String, default: 'tree' }, // 默认展示模式
 })
+interface Item {
+  [key: string]: any
+}
 
 const dropdown = ref<DropdownInstance>()
 const input = ref('')
 const visible = ref(false)
-const selected = ref<any[]>([]) // 默认被选中的数据
+const selected = ref<Item[]>([]) // 默认被选中的数据
 const $emit = defineEmits(['update:modelValue'])
 
 // 切换下拉菜单显示状态
@@ -56,7 +61,7 @@ const toggleDropdown = async () => {
 // 更新输入框显示内容
 const updateInput = (data: any) => {
   if (props.multiple) {
-    input.value = data.map((item: any) => item[props.options.label]).join(',')
+    input.value = data.map((item: Item) => item[props.options.label]).join(',')
   } else {
     input.value = data instanceof Array ? data[0][props.options.label] : data[props.options.label]
   }
@@ -64,22 +69,33 @@ const updateInput = (data: any) => {
 
 // 获取选中详情数据
 const getDetails = async () => {
-  const ids = props.multiple ? props.modelValue : [props.modelValue]
+  const ids: any = props.multiple ? props.modelValue : [props.modelValue]
   const res = await props.getIdList({ ids })
   selected.value = res.data
+  // 处理默认顶级组织
+  if (props.defaultTop.length > 0 && !props.multiple) {
+    props.defaultTop.forEach((item: any) => {
+      if (ids.includes(item.id)) {
+        selected.value.push(item)
+      }
+    })
+  }
 }
-
 // 组件挂载时获取选中详情数据
 onMounted(async () => {
   await getDetails()
 })
-
+// 监听 modelValue 值变化，更新输入框内容和触发事件
+watch(
+  () => props.modelValue,
+  (newVal: any) => {},
+)
 // 监听 selected 值变化，更新输入框内容和触发事件
 watch(
   () => selected.value,
-  (newVal: any) => {
+  (newVal: Item[]) => {
     if (!newVal.length) return
-    const val = props.multiple ? newVal.map((item: any) => item.id) : newVal[0].id
+    const val = props.multiple ? newVal.map((item: Item) => item.id) : newVal[0].id
     updateInput(newVal)
     $emit('update:modelValue', val)
   },
