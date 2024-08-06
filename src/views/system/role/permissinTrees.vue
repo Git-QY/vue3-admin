@@ -7,7 +7,7 @@
 <script lang="ts" setup>
 import { listMenu, detailMenu, updateRoleField } from '@/api'
 import Dialog from '@/components/Dialog/index.vue'
-import Panel from '@/views/module/business/pickTreeOrList/components/panel.vue'
+import Panel from '@/components/FormItem/dropdownTree/panel.vue'
 import { useElementUI } from '@/hooks/useMessage'
 const { showMessage } = useElementUI()
 const props = defineProps({
@@ -21,7 +21,7 @@ const config = reactive({
   getList: listMenu,
   getIdList: detailMenu,
   multiple: true,
-  mode: 'tree',
+  mode: 'nodeTree',
   options: { label: 'menuName', value: 'id', children: 'children' },
 })
 const cancel = () => {

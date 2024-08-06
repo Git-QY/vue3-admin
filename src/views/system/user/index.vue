@@ -14,11 +14,20 @@
       </template>
       <template #status="{ item }">
         <el-table-column v-slot="{ row }" v-bind="item">
-          <el-switch v-model="row.status" active-text="启用" inactive-text="停用" active-value="1" inactive-value="0" :inline-prompt="true" @click="onChangeStatus(row)"> </el-switch>
+          <el-switch
+            v-model="row.status"
+            active-text="启用"
+            inactive-text="停用"
+            active-value="1"
+            inactive-value="0"
+            :inline-prompt="true"
+            @click="onChangeStatus(row)"
+          >
+          </el-switch>
         </el-table-column>
       </template>
     </page-table>
-    <RoleAssignmentDialog ref="roleAssignmentDialogRef" :refresh="getList" />
+    <RoleAssignmentDialog ref="roleAssignmentDialogRef" :confirm="getList" />
   </Page>
 </template>
 
@@ -34,7 +43,7 @@ const tableConfig = reactive({
   searchForm: {},
   // 可以通过pomise构建需要的格式
   api: (data: any) => {
-    return request.post('/users/list', { ...data, xx: 123 })
+    return request.post('/users/list', { ...data })
   },
   page: {
     pageSize: 5,

@@ -105,7 +105,16 @@ router.post('/login', async (req, res) => {
     const ip = await getIp()
     const query = new IP2Region()
     const address = query.search(ip)
-    await Log.create({ id: $generateUUID(), ip, address, url: '/users/login', method, createTime: new Date(), updateTime: new Date(), createById: id })
+    await Log.create({
+      id: $generateUUID(),
+      ip,
+      address,
+      url: '/users/login',
+      method,
+      createTime: new Date(),
+      updateTime: new Date(),
+      createById: id,
+    })
     // 新增维护token表
     user.deviceId = '123456'
     user.isDevice = true
@@ -295,8 +304,8 @@ router.put('/update', userValidationRules(), async (req, res) => {
 })
 // 查询用户列表
 router.post('/list', async (req, res) => {
-  const { username, email, page = { pageSize: 10, page: 1 } } = req.body
-  const query = { ...req.body }
+  const { username, email, page = { pageSize: 10, page: 1 }, ...data } = req.body
+  const query = { ...data }
   // 添加 username 模糊查询条件
   if (username) query.username = { $regex: username }
   if (email) query.email = { $regex: email }

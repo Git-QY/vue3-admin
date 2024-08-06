@@ -32,7 +32,7 @@ const tableConfig = ref({
   searchForm: {},
   // 可以通过pomise构建需要的格式
   api: (data: any) => {
-    return listMenu(data)
+    return listMenu({ ...data, page: { isAll: true } })
   },
   columns: [
     // 菜单名称

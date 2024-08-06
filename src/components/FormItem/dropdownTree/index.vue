@@ -38,6 +38,7 @@ const props = defineProps({
   defaultTop: { type: Array, default: () => [] }, // 默认顶级节点
   mode: { type: String, default: 'tree' }, // 默认展示模式
 })
+
 interface Item {
   [key: string]: any
 }

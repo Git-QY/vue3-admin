@@ -23,11 +23,19 @@ router.post('/list', async (req, res, next) => {
   try {
     if (page.isAll) {
       const list = await Menu.find(query)
+
+      for (const item of list) {
+        item.path = await buildPath(item.parentId, item.menuName)
+      }
+
       res.send({ code: 200, message: '获取成功', data: list })
     } else {
       const list = await Menu.find(query)
         .skip((page.page - 1) * page.pageSize)
         .limit(page.pageSize)
+      for (const item of list) {
+        item.path = await buildPath(item.parentId)
+      }
       const total = await Menu.countDocuments(query)
       res.send({ code: 200, message: '获取成功', data: list, page: { ...page, total } })
     }
@@ -35,6 +43,19 @@ router.post('/list', async (req, res, next) => {
     res.send({ code: 500, message: error })
   }
 })
+async function buildPath(pid, name) {
+  const pathItems = []
+  let currentId = pid
+
+  while (currentId) {
+    const menu = await Menu.findOne({ id: currentId })
+    if (!menu) break
+    pathItems.unshift(menu.menuName) // 将当前菜单项的名称插入到路径数组的开头
+    currentId = menu.parentId // 更新当前菜单项的父级ID为当前ID，继续向上查找
+  }
+  pathItems.push(name)
+  return pathItems.join('-') // 将路径数组连接成以 "-" 分隔的路径字符串
+}
 
 // 更新菜单
 router.put('/update', menuValidationRules(), async (req, res, next) => {
@@ -69,7 +90,7 @@ router.get('/detail', async (req, res, next) => {
   try {
     let detail
     if (id) {
-      detail = await Menu.findById(id)
+      detail = await Menu.findOne(id)
     } else if (ids) {
       detail = await Menu.find({ id: { $in: ids } })
     } else {

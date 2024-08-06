@@ -19,17 +19,25 @@ mongoose.Promise = global.Promise
 
 // 创建连接并导出
 const connectionObjects = {}
-connections.forEach(connection => {
-  connectionObjects[connection.name] = mongoose.createConnection(connection.url)
-  connectionObjects[connection.name].on('connected', function () {
-    console.log(`Mongoose 连接成功，连接到 ${connection.name}: ${connection.url}`)
+connections.forEach(connection => retryConnect(connection))
+// 重试机制函数 能重试次数
+function retryConnect(connection, retryCount = 3) {
+  const name = connection.name
+  connectionObjects[name] = mongoose.createConnection(connection.url)
+  connectionObjects[name].on('connected', function () {
+    console.log(`Mongoose 连接成功，连接到 ${name}: ${connection.url}`)
   })
-  connectionObjects[connection.name].on('error', function (err) {
-    console.log(`Mongoose 连接错误 ${connection.name}: ${err}`)
+  connectionObjects[name].on('error', function (err) {
+    console.log(`Mongoose 连接错误 ${name}: ${err}`)
+    if (retryCount > 0) {
+      console.log('🚀 ~ retryCount:', retryCount)
+      console.log(`Mongoose 正在重试连接 ${name}...`)
+      setTimeout(() => retryConnect(connection, retryCount - 1), 5000)
+    } else {
+      console.log(`Mongoose 连接失败 ${name}`)
+      // process.exit(1)
+    }
   })
-  connectionObjects[connection.name].on('disconnected', function () {
-    console.log(`Mongoose 连接断开 ${connection.name}`)
-  })
-})
+}
 
 module.exports = connectionObjects

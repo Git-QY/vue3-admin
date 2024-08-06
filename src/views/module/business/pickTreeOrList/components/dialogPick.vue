@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import Panel from './panel.vue'
+import Panel from '@/components/FormItem/dropdownTree/panel.vue'
 import Dialog from '@/components/Dialog/index.vue'
 const props = defineProps({
   modelValue: { type: [String, Array] },
