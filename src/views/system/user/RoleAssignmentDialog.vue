@@ -8,7 +8,7 @@
 import { listRole, detailRole, Role } from '@/api'
 import api from '@/api/user'
 import Dialog from '@/components/Dialog/index.vue'
-import Panel from '@/components/FormItem/dropdownTree/panel.vue'
+import Panel from '@/components/FormItem/panel/index.vue'
 import { useElementUI } from '@/hooks/useMessage'
 const { showMessage } = useElementUI()
 const props = defineProps({

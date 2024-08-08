@@ -23,11 +23,9 @@ router.post('/list', async (req, res, next) => {
   try {
     if (page.isAll) {
       const list = await Menu.find(query)
-
-      for (const item of list) {
-        item.path = await buildPath(item.parentId, item.menuName)
-      }
-
+      // for (const item of list) {
+      //   item.path = await buildPath(item.parentId, item.menuName)
+      // }
       res.send({ code: 200, message: '获取成功', data: list })
     } else {
       const list = await Menu.find(query)

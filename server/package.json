@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
+    "start": "set NODE_ENV=dev&&nodemon ./bin/www",
+    "test": "set NODE_ENV=test&&nodemon ./bin/www",
+    "prod": "set NODE_ENV=prod&&nodemon ./bin/www",
     "apidoc": "apidoc -i routes/ apidoc/ -o public/apidoc/"
   },
   "dependencies": {
@@ -13,6 +15,7 @@
     "cookie-parser": "~1.4.4",
     "crypto": "^1.0.1",
     "debug": "~2.6.9",
+    "dotenv": "^16.4.5",
     "express": "~4.16.1",
     "express-validator": "^7.0.1",
     "fs-extra": "^11.2.0",

@@ -2,11 +2,13 @@ import { App } from 'vue'
 import auth from './modules/auth'
 import copy from './modules/copy'
 import expandText from './modules/expand-text'
+import vue3Loading from './modules/loading'
 
 const directivesList: any = {
   auth,
   copy,
   expandText,
+  vue3Loading,
 }
 
 const directives = {

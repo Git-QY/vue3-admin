@@ -1,6 +1,6 @@
 <template>
   <div class="panel">
-    <div v-loading="loading" class="panel-content">
+    <div class="panel-content">
       <div class="panel-content-left">
         <SearchBar class="panel-content-head" :placeholder="placeholder" @search="onSearch" />
         <div class="panel-content-left--body panel-content-body" v-loading="loading">
@@ -8,7 +8,7 @@
           <component
             ref="componentRef"
             :is="pane"
-            v-bind="{ ...props, searchResult }"
+            v-bind="{ ...props, searchResult, searchInput }"
             v-model:loading="loading"
             @check-node-click="checkNodeClick"
             style="height: 400px"
@@ -20,6 +20,7 @@
         <RightPanel style="height: 400px" :selected="selected" :name="name" @delete="onDelete"></RightPanel>
       </div>
     </div>
+    <div class="panel-footer"></div>
   </div>
 </template>
 
@@ -36,7 +37,7 @@ const props = defineProps({
       label: 'name',
       value: 'id',
       children: 'children',
-      page: { page: 1, pageSize: 10 }, // 分页配置
+      page: { page: 1, pageSize: 10, total: 0 }, // 分页配置
     }),
   }, // 组件配置
   multiple: { type: Boolean, default: false }, // 是否多选
@@ -50,6 +51,7 @@ const props = defineProps({
 const name = props.options.label || 'name'
 const $emits = defineEmits(['onchange', 'update:selected'])
 const selectData = ref<Item[]>(props.selected)
+const searchInput = ref('')
 const checkNodeClick = (data: Item) => {
   selectData.value = deepClone(data)
   $emits('update:selected', data)
@@ -58,18 +60,23 @@ const searchResult = ref<Item[]>([]) // 搜索结果
 const MODE = ref<string>(props.mode) // 默认展示树或者list
 const loading = ref(false)
 const componentRef = ref(null as any)
-const onSearch = async (searchInput: string) => {
-  isMODE(searchInput)
-  componentRef.value?.getNodeList(1, searchInput)
+const onSearch = async (text: string) => {
+  searchInput.value = text
+  isMODE(text)
+  // 如果第一次nodeTree模式搜索的时候展示nodeList 会检索2次 一次是初始化onMounted 一次是搜索onSearch 这个是有问题的
+  // 等待1s 等待组件渲染完成 
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+  await nextTick(() => {
+    if (MODE.value == 'nodeList') componentRef.value?.getNodeList(1)
+  })
 }
 const isMODE = (searchInput: string) => {
-  if (MODE.value === 'nodeTree' && searchInput === '') {
-    MODE.value = 'nodeList'
+  if (props.mode === 'nodeTree' && searchInput === '') {
+    MODE.value = 'nodeTree'
   } else {
-    MODE.value = MODE.value == 'nodeTree' ? 'nodeList' : MODE.value
+    MODE.value = props.mode == 'nodeTree' ? 'nodeList' : MODE.value
   }
 }
-
 const onDelete = (data: Item) => {
   selectData.value = selectData.value.filter((item: Item) => item.id !== data.id)
   $emits('update:selected', selectData.value)
@@ -104,8 +111,8 @@ const pane = computed(() => {
         overflow: auto;
         .item {
           padding: 0 10px;
-          height: 26px;
-          line-height: 26px;
+          height: 32px;
+          line-height: 32px;
           display: flex;
           justify-content: space-between;
         }
@@ -119,9 +126,5 @@ const pane = computed(() => {
   &-search {
     margin-bottom: 20px;
   }
-  // .pagination {
-  //   margin-top: 20px;
-  //   float: right;
-  // }
 }
 </style>

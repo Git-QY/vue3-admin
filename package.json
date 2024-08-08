@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite --mode dev\" \"npm start --prefix server\"",
-    "test": "concurrently \"vite --mode test\" \"npm start --prefix server\"",
+    "test": "concurrently \"vite --mode test\" \"npm test --prefix server\"",
     "prod": "vite --mode prod",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",

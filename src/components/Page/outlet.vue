@@ -66,12 +66,12 @@ const onFinish = () => {
         display: block;
         width: 1px;
         height: 15px;
-        background: #dddddd;
+        // background: #dddddd;
       }
     }
   }
   &-inners {
-    background: #fff;
+    // background: #fff;
     flex: 1;
     // padding: 20px;
     padding-top: 40px;
@@ -84,7 +84,7 @@ const onFinish = () => {
     z-index: 10;
     padding: 13px 0;
     border-top: 1px solid #eaeaea;
-    background: #fff;
+    // background: #fff;
     text-align: center;
     .el-button {
       min-width: 80px;

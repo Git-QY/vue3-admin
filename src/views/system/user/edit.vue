@@ -9,23 +9,23 @@
       </template>
     </Form>
     <RoleDialog ref="roleDialogRef" :multiple="true" @confirm="onRoleConfirm"></RoleDialog>
-    <DeptDialog ref="deptDialogRef" :multiple="false" @confirm="onDeptConfirm"></DeptDialog>
+    <DeptDialog ref="deptDialogRef" @confirm="onDeptConfirm"></DeptDialog>
   </Outlet>
 </template>
 
 <script lang="ts" setup>
 import api, { User } from '@/api/user'
-import { detailRole, detailDept } from '@/api'
+import { detailRole, detailDept, Dept } from '@/api'
 import { ElMessage } from 'element-plus'
 
-import RoleDialog from '@/components/Dialog/components/role-dialog.vue'
-import DeptDialog from '@/components/Dialog/components/dept-dialog.vue'
+import RoleDialog from '@/components/DusinessDialog/role-dialog.vue'
+import DeptDialog from '@/components/DusinessDialog/dept-dialog.vue'
 
 const router = useRouter()
 const route = useRoute()
 const columns = reactive([
   { label: '用户名', prop: 'username', rules: 'must' },
-  { label: '头像', prop: 'avatar', type: 'upload', rules: 'must' },
+  { label: '头像', prop: 'avatar', type: 'upload', rules: 'must', props: { limit: 1 } },
   { label: '邮箱', prop: 'email', rules: 'must' },
   { label: '性别', prop: 'sex', type: 'select', dict: 'user_sex', span: 12 },
   { label: '状态', prop: 'status', type: 'select', dict: 'user_status', span: 12 },
@@ -52,10 +52,10 @@ const onAdd = async () => {
   try {
     loading.value = true
     if (route.query.id) {
-      await api.updateUser({ ...form.value, avatar: form.value.avatar[0] || '' })
+      await api.updateUser({ ...form.value, avatar: form.value.avatar[0].url })
       ElMessage.success('修改成功')
     } else {
-      await api.addUser({ ...form.value, avatar: form.value.avatar[0] || '' })
+      await api.addUser({ ...form.value, avatar: form.value.avatar[0].url })
       ElMessage.success('添加成功')
     }
     onBack()
@@ -74,8 +74,9 @@ const getDetail = async () => {
   if (!id) return
   try {
     const res = await api.detailUser(id)
-    form.value = { ...res.data, avatar: res.data.avatar ? [res.data.avatar] : [] }
+    form.value = { ...res.data, avatar: [{ url: res.data.avatar }] }
   } catch (error: any) {
+    console.log('🚀 ~ getDetail ~ error:', error)
     ElMessage.error(error)
   }
 }
@@ -126,7 +127,7 @@ const getDepList = async () => {
 const openDeptDialog = async () => {
   deptDialogRef.value?.open(deptList.value)
 }
-const onDeptConfirm = async (list: any[]) => {
+const onDeptConfirm = async (list: Dept[]) => {
   deptList.value = list
   form.value.deptId = list.map((item: any) => item.id).join(',')
 }

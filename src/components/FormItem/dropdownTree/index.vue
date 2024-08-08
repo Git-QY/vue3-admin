@@ -17,7 +17,7 @@
       </span>
       <!-- 下拉菜单内容 -->
       <template #dropdown>
-        <PanelTree v-if="visible" v-bind="{ getList, options, multiple, nodeAdapter, defaultTop, mode }" v-model:selected="selected"></PanelTree>
+        <panel v-if="visible" v-bind="{ getList, options, multiple, nodeAdapter, defaultTop, mode }" v-model:selected="selected"></panel>
       </template>
     </el-dropdown>
   </div>
@@ -26,7 +26,7 @@
 <script lang="ts" setup>
 import { ref, defineProps, defineEmits, onMounted, watch } from 'vue'
 import type { DropdownInstance } from 'element-plus'
-import PanelTree from './panel-tree.vue'
+import panel from '../panel/index.vue'
 
 const props = defineProps({
   modelValue: { type: [String, Array] },
@@ -36,7 +36,7 @@ const props = defineProps({
   options: { type: Object, default: () => ({}) }, // tree配置
   nodeAdapter: { type: Function }, // 树节点数据适配
   defaultTop: { type: Array, default: () => [] }, // 默认顶级节点
-  mode: { type: String, default: 'tree' }, // 默认展示模式
+  mode: { type: String, default: 'nodeTree' }, // 默认展示模式
 })
 
 interface Item {

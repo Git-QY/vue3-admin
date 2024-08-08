@@ -12,7 +12,7 @@ var mongoose = require('mongoose')
 
 const connections = [
   { name: 'db1Connection', url: 'mongodb+srv://qinyu:13512319102.@qycluster.xsk1hfo.mongodb.net/vue3admin' },
-  { name: 'db2Connection', url: 'mongodb+srv://qy:13512319102.@cluster0.xv6lm6l.mongodb.net/' },
+  { name: 'db2Connection', url: 'mongodb+srv://qy:13512319102.@qycluster.bhqqa.mongodb.net/vue3admin' },
 ]
 
 mongoose.Promise = global.Promise
