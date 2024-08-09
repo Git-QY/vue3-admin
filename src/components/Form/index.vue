@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import FormItem from '../FormItem/index.vue'
 import type { FormInstance } from 'element-plus'
-
+import { evaluateConditions } from '../index'
 interface Props {
   modelValue: any
   columns: any[]
@@ -23,11 +23,10 @@ interface Props {
 }
 const props = defineProps<Props>()
 const emits = defineEmits(['update:modelValue'])
-
 import { useDictStore } from '@/store'
 const dictStore = useDictStore()
 const editColumns = computed(() => {
-  return props.columns.map(item => {
+  return formColumns.value.map(item => {
     item.rules = typeof item.rules === 'string' ? addRules(item.rules, item) : item.rules
     if (item.dict) {
       item.options = dictStore.dictDataGetter[item.dict]
@@ -35,8 +34,7 @@ const editColumns = computed(() => {
     return item
   })
 })
-
-// addRules
+const formColumns = ref(props.columns || [])
 // addRules
 const addRules = (rules: any, item: any) => {
   if (!rules) return
@@ -83,7 +81,6 @@ const addRules = (rules: any, item: any) => {
   }
   return validationRules[type]
 }
-
 // 检验规则
 const checkRule = (item: any, folg: string, validator: any) => {
   return folg == '1'
@@ -93,7 +90,6 @@ const checkRule = (item: any, folg: string, validator: any) => {
       ]
     : { validator, trigger: ['blur', 'change'] }
 }
-
 const formRef = ref<FormInstance | undefined>()
 // 校验数据
 const validateForm = async () => {
@@ -106,8 +102,23 @@ const resetForm = () => {
 }
 defineExpose({ formRef, resetForm, validateForm })
 
+// 处理表单根据数据联动
+watch(
+  () => props.modelValue,
+  val => {
+    formColumns.value = props.columns
+      .map(item => {
+        if (item.mate) {
+          return evaluateConditions(item.mate, val) ? item : null
+        }
+        return item
+      })
+      .filter(item => item !== null)
+  },
+  { deep: true, immediate: true },
+)
+// 统一处理dict
 onMounted(async () => {
-  // 统一处理dict
   const dicts = props.columns.filter(item => item.dict).map(item => item.dict)
   await dictStore.getDicts(dicts)
 })

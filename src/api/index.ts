@@ -63,7 +63,7 @@ export interface Menu {
   children?: Menu[]
   [key: string]: any
 }
-export const listMenu = (data?: Menu): Promise<response> => request({ url: '/menus/list', method: 'post', data })
+export const listMenu = (data?: any): Promise<response> => request({ url: '/menus/list', method: 'post', data })
 export const addMenu = (data?: Menu): Promise<response> => request({ url: '/menus/add', method: 'post', data })
 export const updateMenu = (data?: Menu): Promise<response> => request({ url: '/menus/update', method: 'put', data })
 export const deleteMenu = (id: string): Promise<response> => request({ url: '/menus/delete', method: 'delete', params: { id } })
@@ -111,6 +111,7 @@ export interface Log {
 }
 export const listLog = (data?: Log): Promise<response> => request({ url: '/logs/list', method: 'post', data })
 export const deleteLog = (id: string): Promise<response> => request({ url: '/logs/delete', method: 'delete', params: { id } })
+export const monthCountLog = (data?: any): Promise<response> => request({ url: '/logs/month/count', method: 'post', data })
 
 // 字典
 export interface Dict {

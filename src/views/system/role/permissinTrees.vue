@@ -3,11 +3,10 @@
     <template #content> <Panel v-bind="config" v-model:selected="selected"></Panel> </template>
   </Dialog>
 </template>
-
 <script lang="ts" setup>
 import { listMenu, detailMenu, updateRoleField } from '@/api'
 import Dialog from '@/components/Dialog/index.vue'
-import Panel from '@/components/FormItem/dropdownTree/panel.vue'
+import Panel from '@/components/FormItem/panel/index.vue'
 import { useElementUI } from '@/hooks/useMessage'
 const { showMessage } = useElementUI()
 const props = defineProps({
@@ -53,5 +52,4 @@ const getDetails = async (ids: string[]) => {
 }
 defineExpose({ open })
 </script>
-
 <style lang="scss" scoped></style>

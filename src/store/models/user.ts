@@ -36,7 +36,7 @@ export const useUserStore = defineStore('user', {
     },
     async getMenus() {
       try {
-        const res = await listMenu()
+        const res = await listMenu({ page: { isAll: true } })
         this.menus = res.data
         this.menusTree = listToTree(this.menus.map((item: Menu) => ({ ...item, label: item.menuName, value: item.id })))
         return this.menus

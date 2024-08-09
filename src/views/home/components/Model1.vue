@@ -3,19 +3,17 @@
 </template>
 
 <script lang="ts" setup>
-const option = ref({})
-// 模拟请求数据
-onMounted(() => {
-  setTimeout(() => {
-    option.value = defaultOptions
-  }, 3000)
-})
-const defaultOptions = {
+import { monthCountLog } from '@/api'
+const option = ref<any>()
+const xdata = ref<string[]>([])
+const ydata = ref<number[]>([])
+const defaultOptions = reactive({
+  title: {
+    text: '登录日志',
+    left: 'center',
+  },
   tooltip: {
     trigger: 'axis',
-  },
-  legend: {
-    data: ['Email', 'Union Ads'],
   },
   grid: {
     left: '3%',
@@ -26,28 +24,26 @@ const defaultOptions = {
   xAxis: {
     type: 'category',
     boundaryGap: false,
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    data: xdata,
   },
   yAxis: {
     type: 'value',
   },
-  series: [
-    {
-      name: 'Email',
-      type: 'line',
-      smooth: true,
-      stack: 'Total',
-      data: [120, 132, 101, 134, 90, 230, 210],
-    },
-    {
-      name: 'Union Ads',
-      type: 'line',
-      smooth: true,
-      stack: 'Total',
-      data: [220, 182, 191, 234, 290, 330, 310],
-    },
-  ],
-}
+  series: {
+    name: '登录次数',
+    type: 'line',
+    smooth: true,
+    stack: 'Total',
+    data: ydata,
+  },
+})
+// 模拟请求数据
+onMounted(async () => {
+  const res = await monthCountLog()
+  xdata.value = res.data.map((item: any) => Object.keys(item)[0])
+  ydata.value = res.data.map((item: any) => Object.values(item)[0])
+  option.value = defaultOptions
+})
 </script>
 
 <style lang="scss" scoped></style>

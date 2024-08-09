@@ -31,9 +31,9 @@ router.post('/list', async (req, res, next) => {
       const list = await Menu.find(query)
         .skip((page.page - 1) * page.pageSize)
         .limit(page.pageSize)
-      for (const item of list) {
-        item.path = await buildPath(item.parentId)
-      }
+      // for (const item of list) {
+      //   item.path = await buildPath(item.parentId)
+      // }
       const total = await Menu.countDocuments(query)
       res.send({ code: 200, message: '获取成功', data: list, page: { ...page, total } })
     }

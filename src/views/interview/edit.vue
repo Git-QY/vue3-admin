@@ -50,7 +50,20 @@ const columns = reactive([
   { label: '知识点标签', prop: 'tags', type: 'select', dict: 'interview_tags', props: { multiple: true }, rules: 'must' },
   { label: '题目难度', prop: 'level', type: 'rate', rules: 'int-1' },
   { label: '题目分值', prop: 'score', type: 'input-number' },
-  { label: '题目选项', prop: 'options', type: 'solt' },
+  {
+    label: '题目选项',
+    prop: 'options',
+    type: 'solt',
+    mate: [
+      {
+        prop: 'type',
+        conditions: [
+          { op: '==', value: 'single_choice', among: true },
+          { op: '==', value: 'multiple_choice' },
+        ],
+      },
+    ],
+  },
   { label: '正确答案', prop: 'answer', rules: 'must', type: 'slot' },
   { label: '答案解析', prop: 'analysis', type: 'rich-text' },
 ])
@@ -108,11 +121,9 @@ const sortType = () => {
 const onChange = (e: string) => {
   form.value.answer = e == 'multiple_choice' ? [] : ''
 }
-
 onMounted(() => {
   getDatail()
 })
-
 const getDatail = async () => {
   if (route.query.id) {
     const res = await detailInterview({ id: route.query.id })

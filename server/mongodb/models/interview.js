@@ -1,6 +1,6 @@
 // 面试题库
 const mongoose = require('mongoose')
-const { db2Connection } = require('../index')
+const { db1Connection, db2Connection } = require('../index')
 
 const { body, validationResult } = require('express-validator')
 const schemaRules = {
@@ -30,7 +30,12 @@ const schemaRules = {
 }
 // { checkFalsy: true } 忽略空值
 const interviewValidationRules = () => [
-  body('type').notEmpty().withMessage('题目类型不能为空').bail().isIn(['single_choice', 'multiple_choice', 'fill_in_the_blank', 'true_or_false', 'short_answer', 'essay']).withMessage('题目类型错误'),
+  body('type')
+    .notEmpty()
+    .withMessage('题目类型不能为空')
+    .bail()
+    .isIn(['single_choice', 'multiple_choice', 'fill_in_the_blank', 'true_or_false', 'short_answer', 'essay'])
+    .withMessage('题目类型错误'),
   body('stem').notEmpty().withMessage('题干描述不能为空'),
   body('tags').optional({ checkFalsy: true }).isArray().withMessage('知识点标签必须为数组'),
   body('level').notEmpty().withMessage('题目难度不能为空').bail().isIn([1, 2, 3, 4, 5]).withMessage('题目难度错误'),
