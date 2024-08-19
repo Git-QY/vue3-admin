@@ -8,16 +8,14 @@
           <template #suffix>
             <el-icon class="el-input__icon">
               <ArrowDown v-if="!visible" />
-              <!-- 下拉箭头 -->
               <ArrowUp v-else />
-              <!-- 上拉箭头 -->
             </el-icon>
           </template>
         </el-input>
       </span>
       <!-- 下拉菜单内容 -->
       <template #dropdown>
-        <panel v-if="visible" v-bind="{ getList, options, multiple, nodeAdapter, defaultTop, mode }" v-model:selected="selected"></panel>
+        <panel v-bind="{ getList, options, multiple, nodeAdapter, defaultTop, mode }" v-model:selected="selected"></panel>
       </template>
     </el-dropdown>
   </div>
@@ -42,21 +40,14 @@ const props = defineProps({
 interface Item {
   [key: string]: any
 }
-
 const dropdown = ref<DropdownInstance>()
 const input = ref('')
 const visible = ref(false)
 const selected = ref<Item[]>([]) // 默认被选中的数据
 const $emit = defineEmits(['update:modelValue'])
-
 // 切换下拉菜单显示状态
 const toggleDropdown = async () => {
   visible.value = !visible.value
-  if (visible.value) {
-    dropdown.value?.handleOpen()
-  } else {
-    dropdown.value?.handleClose()
-  }
 }
 
 // 更新输入框显示内容
@@ -82,14 +73,27 @@ const getDetails = async () => {
     })
   }
 }
-// 组件挂载时获取选中详情数据
-onMounted(async () => {
-  await getDetails()
+onMounted(() => {
+  console.log('123456')
 })
+// 监听visible
+watch(
+  () => visible.value,
+  (newVal: boolean) => {
+    if (newVal) {
+      dropdown.value?.handleOpen()
+    } else {
+      dropdown.value?.handleClose()
+    }
+  },
+)
 // 监听 modelValue 值变化，更新输入框内容和触发事件
 watch(
   () => props.modelValue,
-  (newVal: any) => {},
+  () => {
+    getDetails()
+  },
+  { immediate: true },
 )
 // 监听 selected 值变化，更新输入框内容和触发事件
 watch(

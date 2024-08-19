@@ -1,7 +1,7 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // 获取assets静态图片
-export const getAssetsImge = (url: string) => {
+export const getAssetsImage = (url: string) => {
   return new URL(`../assets/${url}`, import.meta.url).href
 }
 // 深拷贝

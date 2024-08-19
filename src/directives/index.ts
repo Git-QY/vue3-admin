@@ -3,12 +3,14 @@ import auth from './modules/auth'
 import copy from './modules/copy'
 import expandText from './modules/expand-text'
 import vue3Loading from './modules/loading'
+import readonly from './modules/readonly'
 
 const directivesList: any = {
   auth,
   copy,
   expandText,
   vue3Loading,
+  readonly
 }
 
 const directives = {

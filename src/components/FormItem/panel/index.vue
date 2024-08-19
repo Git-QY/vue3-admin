@@ -63,12 +63,7 @@ const componentRef = ref(null as any)
 const onSearch = async (text: string) => {
   searchInput.value = text
   isMODE(text)
-  // 如果第一次nodeTree模式搜索的时候展示nodeList 会检索2次 一次是初始化onMounted 一次是搜索onSearch 这个是有问题的
-  // 等待1s 等待组件渲染完成 
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-  await nextTick(() => {
-    if (MODE.value == 'nodeList') componentRef.value?.getNodeList(1)
-  })
+  await nextTick(() => MODE.value == 'nodeList' && componentRef.value?.getNodeList(1))
 }
 const isMODE = (searchInput: string) => {
   if (props.mode === 'nodeTree' && searchInput === '') {
@@ -81,7 +76,9 @@ const onDelete = (data: Item) => {
   selectData.value = selectData.value.filter((item: Item) => item.id !== data.id)
   $emits('update:selected', selectData.value)
 }
-onMounted(() => {})
+onMounted(() => {
+  console.log('panel=>mounted')
+})
 import nodeTree from './nodeTree.vue'
 import nodeList from './nodeList.vue'
 const pane = computed(() => {

@@ -61,7 +61,6 @@ const _form = toRaw(form.value) // 获取初始表单数据
 const dialogVisible = ref(false)
 const open = (row: any) => {
   if (row) {
-    console.log("🚀 ~ open ~ row:", row)
     form.value = { ...row }
   }
   dialogVisible.value = true

@@ -45,7 +45,6 @@ const search = ref<string>('')
  * @param pageNumber 页码
  */
 const getNodeList = async (pageNumber?: number) => {
-  console.log("🚀 ~ getNodeList ~ pageNumber:", pageNumber)
   if (pageNumber == 1) isLoading.value = false
   try {
     $emit('update:loading', true)
@@ -69,26 +68,27 @@ const getNodeList = async (pageNumber?: number) => {
   } finally {
     $emit('update:loading', false)
   }
+  resizeObserver.value && resizeObserver.value.observe(contentRef.value as Element)
 }
 const containerRef = ref<HTMLFormElement | null>(null)
 const contentRef = ref<HTMLFormElement | null>(null)
+const resizeObserver = ref<ResizeObserver | null>(null)
 // 初始化时加载第一批数据
 onMounted(async () => {
-  const resizeObserver = new ResizeObserver(() => {
+  resizeObserver.value = new ResizeObserver(() => {
     if (!containerRef.value || !contentRef.value) return
     if (containerRef.value?.offsetHeight > contentRef.value?.offsetHeight && !isLoading.value) {
-      getNodeList()
+      getNodeList(0)
     }
   })
-  resizeObserver.observe(contentRef.value as Element)
+  getNodeList(1)
 })
 const handleScorll = (e: Event) => {
   // 向下滚动加载数据 距离底部=0时加载数据
   if (e.target instanceof Element && e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight <= 0) {
-    getNodeList(0, search.value)
+    getNodeList(0)
   }
 }
-
 // 导出事件
 defineExpose({
   getNodeList,

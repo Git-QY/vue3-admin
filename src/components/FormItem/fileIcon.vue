@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { getAssetsImge } from '@/utils'
+import { getAssetsImage } from '@/utils'
 // 引入图片资源
 // import PDF from '@/assets/image/fileType/pdf.png'
 // import TXT from '@/assets/image/fileType/txt.png'
@@ -30,23 +30,23 @@ const urls = computed(() => {
 })
 const getFileImage = (url: any): string => {
   if (url.endsWith('.pdf')) {
-    return getAssetsImge('images/fileType/pdf.png')
+    return getAssetsImage('images/fileType/pdf.png')
   } else if (url.endsWith('.doc') || url.endsWith('.docx')) {
-    return getAssetsImge('images/fileType/doc.png')
+    return getAssetsImage('images/fileType/doc.png')
   } else if (url.endsWith('.xls') || url.endsWith('.xlsx')) {
-    return getAssetsImge('images/fileType/xls.png')
+    return getAssetsImage('images/fileType/xls.png')
   } else if (url.endsWith('.txt')) {
-    return getAssetsImge('images/fileType/txt.png')
+    return getAssetsImage('images/fileType/txt.png')
   } else if (url.endsWith('.zip') || url.endsWith('.rar')) {
-    return getAssetsImge('images/fileType/zip.png')
+    return getAssetsImage('images/fileType/zip.png')
   } else if (url.endsWith('.mp3') || url.endsWith('.wav') || url.endsWith('.wma')) {
-    return getAssetsImge('images/fileType/music.png')
+    return getAssetsImage('images/fileType/music.png')
   } else if (url.endsWith('.mp4') || url.endsWith('.avi') || url.endsWith('.rmvb')) {
-    return getAssetsImge('images/fileType/video.png')
+    return getAssetsImage('images/fileType/video.png')
   } else if (url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.gif')) {
     return url
   } else {
-    return getAssetsImge('images/fileType/unknown.png')
+    return getAssetsImage('images/fileType/unknown.png')
   }
 }
 </script>

@@ -14,10 +14,10 @@ import Panel from '@/components/FormItem/panel/index.vue'
 defineProps({
   confirm: { type: Function, default: () => {} },
   multiple: { type: Boolean, default: false },
+  confirmLoading: { type: Boolean, default: false },
 })
 const visible = ref<boolean>(false)
 const selected = ref<Role[]>([])
-const confirmLoading = ref(false)
 const config = reactive({
   getList: listRole,
   getIdList: detailRole,
@@ -31,11 +31,21 @@ const confirm = async () => {
   $emits('confirm', selected.value)
   cancel()
 }
-const open = async (row: Role[]) => {
+const open = async (row: Role[] | string[] = []) => {
   visible.value = true
-  selected.value = [...row]
+  function isStringArray(row: any): row is string[] {
+    return Array.isArray(row) && row.every(item => typeof item === 'string')
+  }
+  if (isStringArray(row) && row.length) {
+    const res = await detailRole({ ids: row })
+    selected.value = [...res.data]
+  } else {
+    selected.value = [...row]
+  }
 }
-
+onMounted(() => {
+  console.log('role-dialog=>onMounted')
+})
 defineExpose({ open })
 </script>
 

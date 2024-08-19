@@ -27,7 +27,7 @@
         </el-table-column>
       </template>
     </page-table>
-    <RoleAssignmentDialog ref="roleAssignmentDialogRef" :confirm="getList" />
+    <roleDialog ref="roleAssignmentDialogRef" @confirm="confirm" :confirmLoading="confirmLoading" :multiple="true"></roleDialog>
   </Page>
 </template>
 
@@ -36,7 +36,9 @@ import pageTable from '@/components/Table/index.vue'
 import request from '@/utils/request'
 import api, { User } from '@/api/user'
 import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
-import RoleAssignmentDialog from './RoleAssignmentDialog.vue'
+import roleDialog from '@/components/DusinessDialog/role-dialog.vue'
+import { useElementUI } from '@/hooks/useMessage'
+const { showMessage } = useElementUI()
 const router = useRouter()
 const tableConfig = reactive({
   table: { rowKey: 'id' },
@@ -102,15 +104,31 @@ const onChangeStatus = async (row: any) => {
     ElMessage.error(error)
   }
 }
-// getList
-const getList = () => {
-  tableRef.value.refresh()
+const confirmLoading = ref(false)
+const userIds = ref([])
+const confirm = async (data: any) => {
+  const roleIds: any[] = data.map((item: Role) => item.id)
+  try {
+    confirmLoading.value = true
+    await api.assignRoles({ userIds: userIds.value, roleIds })
+    tableRef.value.refresh()
+    showMessage('分配权限成功')
+  } catch (error) {
+    showMessage('分配权限失败', 'error')
+  } finally {
+    confirmLoading.value = false
+  }
 }
 // 分配角色
 const roleAssignmentDialogRef = ref<HTMLFormElement | null>(null)
 const onAssignRole = () => {
   if (tableRef.value?.selectData.length == 0) return ElMessage.warning('请先选择用户')
-  roleAssignmentDialogRef.value?.open(tableRef.value?.selectData)
+  if (tableRef.value?.selectData.length == 1) {
+    roleAssignmentDialogRef.value?.open(tableRef.value?.selectData[0].roleIds)
+  } else {
+    roleAssignmentDialogRef.value?.open()
+  }
+  userIds.value = tableRef.value?.selectData.map((item: any) => item.id)
 }
 </script>
 
