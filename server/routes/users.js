@@ -87,8 +87,7 @@ router.post('/checkCode', async function (req, res) {
   }
 })
 // 用户登录
-// 过期时间
-const expiresIn = 60 * 60 * 24 * 7
+const expiresIn = 60 * 60 * 24 * 7 // 过期时间
 router.post('/login', async (req, res) => {
   console.log('开始登录')
   let { username, password } = req.body
@@ -194,7 +193,9 @@ router.post('/login/email', async (req, res) => {
 })
 // 第三方登录
 const axios = require('axios')
+const Constants = require('../constants')
 // 目前有个问题就是如果注册的邮箱和第三方登录的邮箱相同 怎么处理
+// 提示这个邮箱已经注册
 router.post('/login/third', async (req, res) => {
   const { type, code } = req.body
   if (!type || !code) return res.send({ code: 500, message: '缺少必填参数' })
@@ -202,43 +203,28 @@ router.post('/login/third', async (req, res) => {
     const response = await axios.post('https://gitee.com/oauth/token', {
       grant_type: 'authorization_code',
       code,
-      client_id: 'c2c0c137422ab80e3a13ee7e242ae230b4825f5cf8cde692ce72ae99cea32f78',
-      redirect_uri: 'http://localhost:5173/loginWithGitee.html',
-      client_secret: '9d5f56dc5b8fc1ac9dc88a96ba322b0368ec4e94c49d594a5649fe492f4c6d1e',
+      client_id: Constants.GITEE_AUTH_PARAMS.client_id,
+      redirect_uri: `${process.env.VITE_CLIENT_BASE_URL}/loginWithGitee.html`,
+      client_secret: Constants.GITEE_AUTH_PARAMS.client_secret,
     })
-    // const response = {
-    //   status: 200,
-    //   data: {
-    //     access_token: '8efd697cebcdc7e684f92d361b389432',
-    //     token_type: 'bearer',
-    //     expires_in: 86400,
-    //     refresh_token: '969efe7099e8208dbd761881f1ef474c892b9dc78b5db3612de0e528922c4869',
-    //     scope: 'user_info',
-    //     created_at: 1712910568,
-    //   },
-    // }
     if (response.status !== 200) return res.send({ code: 500, error })
-    const { access_token, token_type, refresh_token } = response.data
+    const { access_token } = response.data
     const userInfo = await axios.get(`https://gitee.com/api/v5/user?access_token=${access_token}`)
     if (userInfo.status !== 200) return res.send({ code: 500, error })
-    // 当前查询的第三方用户如果存在邮箱
-    const findEmailUser = await User.findOne({ email: userInfo.data.email })
-    // 提示邮箱已在当前系统中存在请使用邮箱登录
-    // ****
-    let thirdUser = null
-
-    thirdUser = await User.findOne({ username: userInfo.data.name })
-    if (!thirdUser) {
-      thirdUser = await User.create({
-        id: generateUUID(),
-        username: userInfo.data.name,
-        password: hashWithSalt(encryptHash('123456')),
-        avatar: userInfo.data.avatar_url,
-        status: 1,
-        createTime: new Date(),
-        updateTime: new Date(),
-      })
-    }
+    const { name, avatar_url, email } = userInfo.data || {}
+    // 当前查询的第三方用户如果存在邮箱 提示邮箱已在当前系统中存在请使用邮箱登录
+    if (!email) return res.send({ code: 500, message: '第三方账户邮箱不存在,不能直接创建账号' })
+    const findEmailUser = await User.findOne({ email })
+    if (findEmailUser) return res.send({ code: 500, message: '邮箱已存在' })
+    const findNameUser = await User.findOne({ username: name })
+    const thirdUser = await User.create({
+      id: generateUUID(),
+      username: findNameUser ? `${name}${$generateUUID()}` : name,
+      password: hashWithSalt(encryptHash('123456')),
+      avatar: avatar_url,
+      status: 1,
+      email,
+    })
     let token = createToken({ login: true, name: thirdUser.username, id: thirdUser.id })
     res.send({ code: 200, message: '登录成功', data: { token, userInfo: thirdUser } })
   } catch (error) {

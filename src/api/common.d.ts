@@ -4,7 +4,7 @@ interface response {
   data?: any
   message: string
 }
-interface resEorror {
+interface resError {
   code: number
   data?: any
   message: string

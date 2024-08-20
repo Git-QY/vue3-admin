@@ -10,7 +10,7 @@
 import { listDept, detailDept, Dept } from '@/api'
 import Dialog from '@/components/Dialog/index.vue'
 import Panel from '@/components/FormItem/panel/index.vue'
-defineProps({
+const props = defineProps({
   confirm: { type: Function },
   multiple: { type: Boolean, default: false },
 })

@@ -77,7 +77,6 @@ router.get('/detail', async (req, res) => {
     res.send({ code: 500, message: error })
   }
 })
-
 // 单独更新某一个字段
 const canUpdateField = ['status', 'permissions']
 router.put('/update/field', async (req, res) => {

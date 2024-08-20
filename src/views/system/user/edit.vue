@@ -76,7 +76,6 @@ const getDetail = async () => {
     const res = await api.detailUser(id)
     form.value = { ...res.data, avatar: [{ url: res.data.avatar }] }
   } catch (error: any) {
-    console.log('🚀 ~ getDetail ~ error:', error)
     ElMessage.error(error)
   }
 }

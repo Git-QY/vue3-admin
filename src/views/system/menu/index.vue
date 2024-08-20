@@ -88,8 +88,7 @@ const onDelete = (id: string) => {
         ElMessage.success('删除成功')
         getList()
       } catch (error) {
-        const err = error as resEorror
-        ElMessage.error(err)
+        ElMessage.error((error as resError).message)
       }
     })
     .catch(() => {

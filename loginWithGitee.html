@@ -4,13 +4,56 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      /* CSS for the loading spinner */
+      .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* CSS for the overlay */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000; /* Make sure it appears above other content */
+      }
+    </style>
     <script>
-      const params = (window.location.href).split('?')[1]
-      window.location.replace("http://localhost:9000/#/login?"+params)
+      async function redirectToLogin() {
+        // 延迟加载5s 跳转
+        const params = window.location.href.split('?')[1]
+        document.querySelector('.overlay').style.display = 'flex'
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        window.location.replace('http://localhost:9000/#/login?' + params)
+      }
+      window.onload = redirectToLogin
     </script>
   </head>
   <body>
-    <p>gitee登录回调页面</p>
+    <div class="overlay" style="display: none">
+      <div class="loader"></div>
+    </div>
+    <!-- <p>gitee登录回调页面</p> -->
     <!-- https://gitee.com/oauth/authorize?client_id=c2c0c137422ab80e3a13ee7e242ae230b4825f5cf8cde692ce72ae99cea32f78&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2FloginWithGitee.html&response_type=code -->
   </body>
 </html>

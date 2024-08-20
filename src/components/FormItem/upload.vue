@@ -5,9 +5,18 @@
       <div class="upload-card--item" v-for="(item, index) in showFlieList" :key="index">
         <fileIcon :data="item.url" :width="100" :height="100"></fileIcon>
         <div class="modal">
-          <el-icon @click="onDownload(item)"><Download /></el-icon>
-          <el-icon @click="onRemove(item)"><Delete /></el-icon>
+          <el-icon @click="operate['download'](item)"><Download /></el-icon>
+          <el-icon @click="operate['delect'](item)"><Delete /></el-icon>
+          <el-icon @click="operate['preview'](item)"><View /></el-icon>
         </div>
+        <!-- 当前正在上传的文件 -->
+        <el-progress
+          v-if="item.progress"
+          :percentage="item.progress"
+          :status="item.progress === 100 ? 'success' : ''"
+          :stroke-width="2"
+          :show-text="false"
+        ></el-progress>
       </div>
       <div class="upload-card--btn upload-btn" @click="onUpload">
         <input type="file" hidden @change="onChange" :multiple="multiple" ref="fileRef" />
@@ -24,14 +33,15 @@
         <li class="upload-list--item" :style="`--progress: ${item.progress}%`" v-for="(item, index) in showFlieList" :key="index">
           <div class="name" v-expandText="{ maxLines: 1, maxWidth: '200px' }">{{ item.name }}</div>
           <div class="tool">
-            <el-button type="primary" link>删除</el-button>
-            <el-button type="primary" link>下载</el-button>
-            <el-button type="primary" link>预览</el-button>
-            {{ item.progress }}
+            <el-button type="primary" link @click="operate['delect'](item)">删除</el-button>
+            <el-button type="primary" link @click="operate['download'](item)">下载</el-button>
+            <el-button type="primary" link @click="operate['preview'](item)">预览</el-button>
           </div>
         </li>
       </ul>
     </div>
+    <!-- 图片预览 -->
+    <el-image-viewer @close="operate['previewClose']" hide-on-click-modal v-if="showViewer" :url-list="previewList" />
   </div>
 </template>
 
@@ -45,18 +55,17 @@ interface File {
 }
 interface FileListItem {
   file: File | null
-  name: string
+  name?: string
   url: string
-  progress: number
-  isUpload: boolean
+  progress?: number
+  isUpload?: boolean
 }
 
 const props = defineProps({
-  modelValue: { type: Array }, // 绑定值
+  modelValue: { type: Array, default: () => [] }, // 绑定值
   multiple: { type: Boolean, default: false }, // 是否多选
   limit: { type: Number, default: 9 }, // 最大上传数量
   beforeUpload: { type: Function }, // 上传前的钩子
-  returnAttributes: { type: Array, default: () => ['url', 'name'] }, // 返回那几个属性
   mode: { type: String, default: 'card' }, // 显示模式 card | list
   chunkSize: { type: Number, default: 1024 * 1024 * 2 }, // 上传文件大于多少开启分片上传
 })
@@ -64,9 +73,9 @@ const emits = defineEmits(['update:modelValue'])
 
 const showFlieList = computed(() => {
   if (!fileList.value) return []
-  return fileList.value.filter(item => item.isUpload)
+  return fileList.value.filter(item => item.isUpload !== false)
 })
-const fileList = ref<FileListItem[]>([]) // 文件列表
+const fileList = ref<any[]>(props.modelValue)
 const fileRef = ref<any>(null)
 const onUpload = () => {
   fileRef.value.click()
@@ -88,9 +97,11 @@ const onChange = async (e: any) => {
       }
       const formData = new FormData()
       formData.append('file', file)
+      // 延迟 2s
+      // await new Promise(resolve => setTimeout(resolve, 2000))
       request
         .post('/utils/uploads', formData, {
-          onUploadProgress: function (progressEvent: ProgressEvent) {
+          onUploadProgress: async function (progressEvent: ProgressEvent) {
             curFile.value.progress = ((progressEvent.loaded / progressEvent.total) * 100) | 0
           },
         } as any)
@@ -108,22 +119,46 @@ const onChange = async (e: any) => {
     ElMessage.error(error)
   }
 }
-const onDownload = (item: File) => {}
-const onRemove = (item: File) => {
-  fileList.value = fileList.value.filter((row: File) => row.url != item.url)
-  updateModelValue()
+
+const showViewer = ref(false)
+const previewList = ref<string[]>([])
+const operate = {
+  delect: (item: File) => {
+    fileList.value = fileList.value.filter((row: File) => row.url != item.url)
+    updateModelValue()
+  },
+  download: (item: File) => {
+    let { url, name } = item
+    url = url + '?response-content-type=application/octet-stream'
+    window.URL.revokeObjectURL(url)
+    var a = document.createElement('a')
+    var filename = name || 'xx.jpg'
+    a.href = url
+    a.download = filename
+    a.click()
+  },
+  preview: (item: File) => {
+    showViewer.value = true
+    previewList.value = [item.url]
+  },
+  previewClose: () => {
+    showViewer.value = false
+  },
 }
 // 更新v-model值
 const updateModelValue = () => {
-  // returnAttributes =》 ['url', 'name']
-  const list = fileList.value.map((item: any) => {
-    return props.returnAttributes.reduce((obj: any, key: any) => {
-      obj[key] = item[key]
-      return obj
-    }, {})
-  })
-  emits('update:modelValue', list)
+  emits('update:modelValue', fileList.value)
 }
+// 监听v-model值 异步获取的值
+watch(
+  () => props.modelValue,
+  (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      fileList.value = newValue
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <style lang="scss" scoped>

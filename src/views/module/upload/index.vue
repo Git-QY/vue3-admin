@@ -38,7 +38,10 @@ const components = ref<ComponentItem[]>([
       multiple: true,
       limit: 9,
     },
-    fileList: [],
+    fileList: [
+      { url: 'https://img.yzcdn.cn/vant/leaf.jpg', name: 'leaf.jpg' },
+      { url: 'https://img.yzcdn.cn/vant/tree.jpg', name: 'tree.jpg' },
+    ],
   },
   { label: '大文件上传', component: markRaw(LargeUpload), props: {}, fileList: [] },
   // { label: 'SimpleUpload', component: markRaw(SimpleUpload), props: {}, fileList: [] },

@@ -9,7 +9,7 @@ const schemaRules = {
     required: true,
     unique: true,
     minlength: 2,
-    maxlength: 20,
+    maxlength: 50,
   }, // 用户名，必需且唯一
   password: { type: String, required: true }, // 密码，必需
   createTime: { type: Date, default: Date.now }, // 创建时间
@@ -59,9 +59,9 @@ const userValidationRules = () => [
       }
     })
     .bail()
-    .isLength({ min: 3, max: 20 })
+    .isLength({ min: 3, max: 50 })
     .bail()
-    .withMessage('用户名长度为 3 到 20 个字符'),
+    .withMessage('用户名长度为 3 到 50 个字符'),
   body('email').optional().isEmail().withMessage('邮箱格式不正确'),
   // 状态
   body('state').optional().isIn([0, 1]).withMessage('状态值不合法'),

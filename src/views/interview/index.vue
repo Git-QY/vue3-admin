@@ -52,8 +52,7 @@ const operate = {
       getList()
       showMessage('删除成功')
     } catch (error) {
-      const err = error as resEorror
-      showMessage(err.message, 'error')
+      showMessage((error as resError).message, 'error')
     }
   },
   edit: (id: any) => router.push(`/interview/add?id=${id}`),

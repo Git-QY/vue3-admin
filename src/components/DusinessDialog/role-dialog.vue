@@ -31,7 +31,7 @@ const confirm = async () => {
   $emits('confirm', selected.value)
   cancel()
 }
-const open = async (row: Role[] | string[] = []) => {
+const open = async (row: any[] | string[] = []) => {
   visible.value = true
   function isStringArray(row: any): row is string[] {
     return Array.isArray(row) && row.every(item => typeof item === 'string')

@@ -43,8 +43,8 @@ onMounted(async () => {
         userStore.userInfo = data.data.userInfo
         router.push('/')
       }
-    } catch (err: any) {
-      ElMessage.error(err.message)
+    } catch (error) {
+      ElMessage.error((error as resError).message)
       loading.value = false
     }
   }
