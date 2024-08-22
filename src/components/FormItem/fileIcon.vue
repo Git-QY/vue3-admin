@@ -1,5 +1,7 @@
 <template>
-  <img v-for="url in urls" :src="getFileImage(url)" alt="file image" :style="{ width: `${width}px`, height: `${height}px` }" />
+  <div :style="{ width: `${width}px`, height: `${height}px` }">
+    <img v-for="url in urls" :src="getFileImage(url)" alt="file image" class="img-item" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -50,3 +52,10 @@ const getFileImage = (url: any): string => {
   }
 }
 </script>
+<style lang="scss" scoped>
+.img-item {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>

@@ -39,7 +39,7 @@ const components = ref<ComponentItem[]>([
       limit: 9,
     },
     fileList: [
-      { url: 'https://img.yzcdn.cn/vant/leaf.jpg', name: 'leaf.jpg' },
+      { url: 'https://img.yzcdn.cn/vant/leaf.jpg', name: 'leaf.jpg', progress: 20 },
       { url: 'https://img.yzcdn.cn/vant/tree.jpg', name: 'tree.jpg' },
     ],
   },

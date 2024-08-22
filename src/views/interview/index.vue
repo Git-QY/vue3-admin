@@ -4,6 +4,9 @@
       <template #btnleft>
         <el-button type="primary" @click="operate['add']">新增</el-button>
       </template>
+      <!-- <template #tags="{ item }">
+        <el-table-column v-slot="{ row }" v-bind="item"> {{ row.tags }} </el-table-column>
+      </template> -->
       <template #operate="{ item }">
         <el-table-column v-slot="{ row }" v-bind="item">
           <el-button type="primary" link @click="operate['edit'](row.id)">编辑</el-button>
@@ -27,14 +30,13 @@ const tableConfig = reactive({
   },
   columns: [
     { prop: 'type', label: '类型', type: 'select', dict: 'interview_type', query: {} },
-    { prop: 'stem', label: '描述', 'show-overflow-tooltip': true, query: {} },
-    { prop: 'tags', label: '知识点标签' },
+    { prop: 'topic', label: '提目', 'show-overflow-tooltip': true, query: {} },
+    { prop: 'tags', label: '知识点标签', dict: 'interview_tags', type: 'select' },
     { prop: 'level', label: '难度' },
     { prop: 'score', label: '分值' },
-    // { prop: 'options', label: '题目选项' },
     { prop: 'createBy', label: '提交人' },
-    { prop: 'createTime', label: '创建时间', width: 200, formatter: (row: any) => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') },
-    { prop: 'updateTime', label: '更新时间', width: 200, formatter: (row: any) => dayjs(row.updateTime).format('YYYY-MM-DD HH:mm:ss') },
+    { prop: 'createTime', label: '创建时间', width: 200, type: 'time' },
+    { prop: 'updateTime', label: '更新时间', width: 200, type: 'time' },
     { prop: 'operate', label: '操作', type: 'slot', fixed: 'right', width: 200 },
   ],
 })

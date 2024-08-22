@@ -74,7 +74,7 @@ const getDetail = async () => {
   if (!id) return
   try {
     const res = await api.detailUser(id)
-    form.value = { ...res.data, avatar: [{ url: res.data.avatar }] }
+    form.value = { ...res.data, avatar: res.data.avatar ? [{ url: res.data.avatar }] : [] }
   } catch (error: any) {
     ElMessage.error(error)
   }

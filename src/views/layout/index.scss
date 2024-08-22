@@ -192,7 +192,7 @@ $header-height: 56px;
   &-main {
     height: calc(100vh - $header-height - $navTab-height);
     background-color: var(--current--main-background-color);
-    overflow: hidden;
+    overflow: auto;
   }
   // 布局样式
   &-vertical {

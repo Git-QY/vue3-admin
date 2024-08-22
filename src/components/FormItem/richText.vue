@@ -14,6 +14,7 @@ import { SlateElement } from '@wangeditor/editor'
 // 高度默认
 const props = defineProps({
   height: { type: String, default: '500px' },
+  maxLength: { type: Number, default: 1000 },
 })
 
 // type VideoElement = SlateElement & {
@@ -26,7 +27,7 @@ const editorConfig = {
   readOnly: false, // 是否只读 默认 false
   autoFocus: false, // 是否自动聚焦 默认 false
   scroll: true, // 是否开启滚动 默认 true  (配置编辑器是否支持滚动，默认为 true 。注意，此时不要固定 editor-container 的高度，设置一个 min-height 即可)
-  maxLength: 1000, // 限制输入字数 (onMaxLength 当达到 maxlength 限制时，触发该回调函数)
+  maxLength: 10000, // 限制输入字数 (onMaxLength 当达到 maxlength 限制时，触发该回调函数)
   MENU_CONF: {
     // 自定义图片上传
     uploadImage: {

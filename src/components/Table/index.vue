@@ -36,15 +36,9 @@
           <el-table-column v-else-if="item.type == 'tag'" v-bind="item" v-slot="{ row }">
             <el-tag :type="getLabel(item.options, row[item.prop], true).type">{{ getLabel(item.options, row[item.prop]) }}</el-tag>
           </el-table-column>
-          <el-table-column v-else v-bind="item" v-slot="{ row }">
-            <template v-if="item.options"> {{ getLabel(item.options, row[item.prop]) }} </template>
-          </el-table-column>
+          <el-table-column v-else v-bind="item"></el-table-column>
         </template>
-        <template #empty>
-          <slot name="empty">
-            <div>暂无数据</div>
-          </slot>
-        </template>
+        <template #empty> <slot name="empty"> 暂无数据 </slot> </template>
       </el-table>
     </div>
     <!-- 分页模块 -->
@@ -65,6 +59,7 @@ import { defaultConfig, deepMerge } from './config'
 import { deepClone, getLabel } from '@/utils'
 import { useTable } from './useTableHooks'
 import { useDictStore } from '@/store'
+import { dayjs } from 'element-plus'
 
 const prop = defineProps({
   type: { type: String },
@@ -77,7 +72,19 @@ const prop = defineProps({
   maxShow: { type: Number, default: 3 },
 }) as tableProps
 const props = reactive(deepMerge(deepClone(defaultConfig), prop))
-const { tableData, loading, selectData, changePage, changePageSize, handleSelectionChange, refresh, handleSearch, handleExportExcel, handlePrint, isPage } = useTable(props)
+const {
+  tableData,
+  loading,
+  selectData,
+  changePage,
+  changePageSize,
+  handleSelectionChange,
+  refresh,
+  handleSearch,
+  handleExportExcel,
+  handlePrint,
+  isPage,
+} = useTable(props)
 
 const dictStore = useDictStore()
 const tableColumns = computed(() => {
@@ -86,6 +93,19 @@ const tableColumns = computed(() => {
     .map((item: columnsProps) => {
       if (item.dict) {
         item.options = dictStore.dictDataGetter[item.dict]
+      }
+      switch (item.type) {
+        case 'time':
+          item.formatter = (row: any) => dayjs(row[item.prop]).format('YYYY-MM-DD HH:mm:ss')
+          break
+        case 'select':
+          item.formatter = (row: any) => {
+            const value = row[item.prop]
+            return Array.isArray(value) ? getLabel(item.options, value).join(',') : getLabel(item.options, value)
+          }
+          break
+        default:
+          break
       }
       return item
     })

@@ -1,67 +1,53 @@
 const express = require('express')
 const { User } = require('../mongodb/models/user')
 const router = express.Router()
-const { Interview, validationResult, interviewValidationRules } = require('../mongodb/models/interview')
-
+const { Interview, validationResult, interviewValidationRules, Answer, answerValidationRules } = require('../mongodb/models/interview')
+const { BaseService } = require('../utils')
+const InterviewService = new BaseService(Interview)
 router.post('/add', interviewValidationRules(), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
-  const { body, user } = req
-  try {
-    await Interview.create({ ...body, createById: user.id })
-    res.send({ code: 200, message: '创建成功' })
-  } catch (error) {
-    res.send({ code: 500, message: error })
-  }
+  InterviewService.add(req, res)
 })
 router.delete('/delete', async (req, res) => {
   const { id, ids } = req.query
-  try {
-    if (id) {
-      await Interview.deleteOne({ id })
-    } else if (ids) {
-      const idArray = ids.map(id => id.trim())
-      await Interview.deleteMany({ id: { $in: idArray } })
-    } else {
-      throw new Error('缺少必要的参数')
-    }
-    res.status(200).json({ code: 200, message: '删除成功' })
-  } catch (error) {
-    res.status(500).json({ code: 500, message: error.message })
-  }
+  InterviewService.delete(req, res)
 })
 router.put('/update', interviewValidationRules(), async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
-  const { body, user } = req
-  try {
-    await Interview.updateOne({ id: body.id }, { ...body, updateTime: new Date(), updateById: user.id })
-    res.send({ code: 200, message: '修改成功' })
-  } catch (error) {
-    res.send({ code: 500, message: error })
-  }
+  InterviewService.update(req, res)
 })
 router.get('/detail', async (req, res) => {
   const { id, ids } = req.query
   try {
     if (id) {
-      const dept = await Interview.findOne({ id })
-      if (!dept) throw new Error('未找到该资源')
-      res.status(200).json({ code: 200, data: dept })
+      if (!id.trim()) res.send({ code: 400, message: '无效的 id 参数' })
+      // const data = await Interview.findOne({ id })
+      // 连表查询 answerId
+      // const data = await Interview.findOne({ id }).populate('answerId', 'answer')
+      const data = await Interview.aggregate([
+        { $match: { id } },
+        { $lookup: { from: 'answers', localField: 'answerId', foreignField: 'id', as: 'answer' } },
+        { $unwind: '$answer' },
+      ])
+      if (data.length == 0) res.send({ code: 400, message: '未找到该资源' })
+      res.send({ code: 200, data: data[0], message: '获取成功' })
     } else if (ids) {
-      const idArray = ids.map(id => id.trim())
-      const depts = await Interview.find({ id: { $in: idArray } })
-      res.status(200).json({ code: 200, data: depts })
+      if (!Array.isArray(ids)) res.send({ code: 400, message: 'ids 参数必须是数组' })
+      const dataList = await Interview.find({ id: { $in: ids.map(id => id.trim()) } })
+      if (dataList.length == 0) res.send({ code: 400, message: '未找到该资源' })
+      res.send({ code: 200, data: dataList, message: '获取成功' })
     } else {
-      throw new Error('缺少必要的参数')
+      res.send({ code: 400, message: '缺少必要的参数' })
     }
   } catch (error) {
-    res.status(500).json({ code: 500, message: error.message })
+    res.send({ code: 500, message: error.message })
   }
 })
 router.post('/list', async (req, res) => {
   const { page = { pageSize: 10, page: 1 }, ...data } = req.body
-  const query = { ...data, stem: { $regex: data.stem ?? '' } }
+  const query = { ...data, topic: { $regex: data.topic ?? '' } }
 
   try {
     const list = await Interview.aggregate([
@@ -89,6 +75,23 @@ router.post('/list', async (req, res) => {
   } catch (error) {
     res.send({ code: 500, message: error })
   }
+})
+const AnswerService = new BaseService(Answer)
+router.post('/answer/add', answerValidationRules(), async (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
+  AnswerService.add(req, res)
+})
+router.delete('/answer/delete', async (req, res) => {
+  AnswerService.delete(req, res)
+})
+router.put('/answer/update', answerValidationRules(), async (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) return res.send({ code: 500, message: errors.array().map(item => item.msg) })
+  AnswerService.update(req, res)
+})
+router.get('/answer/detail', async (req, res) => {
+  AnswerService.detail(req, res)
 })
 
 module.exports = router

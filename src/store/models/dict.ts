@@ -22,7 +22,7 @@ export const useDictStore = defineStore('dict', {
       if (this.dictData[key]) {
         return this.dictData[key]
       } else {
-        const data = (await listDictItem({ dictType: key })).data
+        const data = (await listDictItem({ dictType: key, page: { pageSize: 1000, page: 1 } })).data
         const list = data.map((item: Record<string, any[]>) => ({ value: item.value, label: item.label }))
         this.setDict(key, list)
         return list

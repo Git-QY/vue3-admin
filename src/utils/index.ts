@@ -116,14 +116,21 @@ export function listToTree(data: any[]) {
   })
   return root
 }
-export function getLabel(data: { value: any; label: string }[], value: any, isItem = false): any {
+export function getLabel(data: { value: any; label: string }[], value: any | any[], isItem = false): any | any[] {
   try {
-    // 使用 Array.prototype.find() 方法在数组 data 中查找匹配 value 的对象，并返回该对象的 label 属性值
+    // 如果 value 是数组
+    if (Array.isArray(value)) {
+      return value.map(val => {
+        const item = data.find(item => item.value == val)
+        return isItem ? item : item?.label || val.toString()
+      })
+    }
+    // 如果 value 不是数组
     const item = data.find(item => item.value == value)
-    return isItem ? item : item!.label
+    return isItem ? item : item?.label || value.toString()
   } catch (error) {
-    // 如果出现错误（例如 data 为 null 或 undefined），则返回 value 的字符串表示
-    return value && value.toString()
+    // 处理可能出现的错误
+    return Array.isArray(value) ? value.map(val => val.toString()) : value.toString()
   }
 }
 

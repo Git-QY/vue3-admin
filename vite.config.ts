@@ -4,10 +4,13 @@ import path from 'path'
 
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
+
+import vueJsx from '@vitejs/plugin-vue-jsx'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    vueJsx(),
     AutoImport({
       imports: ['vue', 'vue-router'],
       dts: 'auto-imports.d.ts',

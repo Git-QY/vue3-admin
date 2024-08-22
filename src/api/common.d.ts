@@ -33,6 +33,7 @@ interface columnsProps {
   rules?: any // 校验规则
   props?: any // formItem 其他配置
   hide?: boolean
+  mate?: any
   [key: string]: any
 }
 interface pageProps {

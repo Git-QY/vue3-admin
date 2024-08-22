@@ -16,6 +16,7 @@
           :status="item.progress === 100 ? 'success' : ''"
           :stroke-width="2"
           :show-text="false"
+          style="margin-top: 5px"
         ></el-progress>
       </div>
       <div class="upload-card--btn upload-btn" @click="onUpload">
@@ -60,7 +61,6 @@ interface FileListItem {
   progress?: number
   isUpload?: boolean
 }
-
 const props = defineProps({
   modelValue: { type: Array, default: () => [] }, // 绑定值
   multiple: { type: Boolean, default: false }, // 是否多选
@@ -70,12 +70,11 @@ const props = defineProps({
   chunkSize: { type: Number, default: 1024 * 1024 * 2 }, // 上传文件大于多少开启分片上传
 })
 const emits = defineEmits(['update:modelValue'])
-
 const showFlieList = computed(() => {
   if (!fileList.value) return []
   return fileList.value.filter(item => item.isUpload !== false)
 })
-const fileList = ref<any[]>(props.modelValue)
+const fileList = ref<any[]>([])
 const fileRef = ref<any>(null)
 const onUpload = () => {
   fileRef.value.click()
@@ -83,49 +82,46 @@ const onUpload = () => {
 }
 // 在组件中定义 curFile
 const curFile = ref<FileListItem>({ file: null, isUpload: true, url: '', progress: 0, name: '' })
-const onChange = async (e: any) => {
-  let files = e.target.files
-  if (props.limit <= showFlieList.value.length) return ElMessage.warning('超出最大上传数量')
-  if (props.beforeUpload && !props.beforeUpload(files)) return // 上传前的钩子
+// 上传文件
+const uploadFile = async (file: any) => {
+  const formData = new FormData()
+  formData.append('file', file)
   try {
-    for (const file of files) {
-      curFile.value = { file, isUpload: true, url: '', progress: 0, name: file.name }
-      if (props.limit > 1) {
-        fileList.value.push(curFile.value)
-      } else {
-        fileList.value = [curFile.value]
-      }
-      const formData = new FormData()
-      formData.append('file', file)
-      // 延迟 2s
-      // await new Promise(resolve => setTimeout(resolve, 2000))
-      request
-        .post('/utils/uploads', formData, {
-          onUploadProgress: async function (progressEvent: ProgressEvent) {
-            curFile.value.progress = ((progressEvent.loaded / progressEvent.total) * 100) | 0
-          },
-        } as any)
-        .then(res => {
-          curFile.value.isUpload = true
-          curFile.value.url = res.data.url
-          updateModelValue()
-          ElMessage.success('上传成功')
-        })
-        .catch(() => {
-          curFile.value.isUpload = false
-        })
-    }
-  } catch (error: any) {
-    ElMessage.error(error)
+    const res = await request.post('/utils/uploads', formData, {
+      onUploadProgress: async function (progressEvent: ProgressEvent) {
+        curFile.value.progress = ((progressEvent.loaded / progressEvent.total) * 100) | 0
+      },
+    } as any)
+    curFile.value.url = res.data.url
+    curFile.value.isUpload = true
+    operate.updateModelValue()
+  } catch (error) {
+    curFile.value.isUpload = false
+    ElMessage.error(error as resError)
   }
 }
-
+// 选择文件
+const onChange = async (e: any) => {
+  let files = e.target.files
+  if (props.limit < showFlieList.value.length + files.length) return ElMessage.warning('超出最大上传数量')
+  if (props.beforeUpload && !props.beforeUpload(files)) return // 上传前的钩子
+  for (const file of files) {
+    curFile.value = { file, isUpload: true, url: '', progress: 0, name: file.name }
+    if (props.limit > 1) {
+      fileList.value.push(curFile.value)
+    } else {
+      fileList.value = [curFile.value]
+    }
+    await uploadFile(file)
+  }
+  ElMessage.success('上传成功')
+}
 const showViewer = ref(false)
 const previewList = ref<string[]>([])
 const operate = {
   delect: (item: File) => {
     fileList.value = fileList.value.filter((row: File) => row.url != item.url)
-    updateModelValue()
+    operate.updateModelValue()
   },
   download: (item: File) => {
     let { url, name } = item
@@ -144,23 +140,21 @@ const operate = {
   previewClose: () => {
     showViewer.value = false
   },
-}
-// 更新v-model值
-const updateModelValue = () => {
-  emits('update:modelValue', fileList.value)
+  updateModelValue: () => {
+    emits('update:modelValue', fileList.value)
+  },
 }
 // 监听v-model值 异步获取的值
 watch(
   () => props.modelValue,
   (newValue, oldValue) => {
     if (newValue !== oldValue) {
-      fileList.value = newValue
+      fileList.value = [...newValue]
     }
   },
   { immediate: true },
 )
 </script>
-
 <style lang="scss" scoped>
 .upload {
   &-btn {

@@ -164,14 +164,15 @@ export const detailDept = (params: any): Promise<response> => request({ url: '/d
 export interface Interview {
   id?: string
   type: string
-  stem: string
+  topic: string
   tags?: string[]
   level: number
   score?: number
   options?: { type: string; value: string }[]
-  answer: any
+  answer?: any
   analysis?: string
   source?: string
+  answerId?: string
 }
 export const listInterview = (data?: any): Promise<response> => request({ url: '/interviews/list', method: 'post', data })
 export const addInterview = (data?: Interview): Promise<response> => request({ url: '/interviews/add', method: 'post', data })
@@ -179,3 +180,24 @@ export const updateInterview = (data?: Interview): Promise<response> => request(
 export const deleteInterview = (params: { id?: string; ids?: any }): Promise<response> =>
   request({ url: '/interviews/delete', method: 'delete', params })
 export const detailInterview = (params: any): Promise<response> => request({ url: '/interviews/detail', method: 'get', params })
+
+// id: { type: String, default: () => $generateUUID() }, // uuid
+// questionId: { type: String, ref: 'Interview' }, // 所属题目 ID
+// answer: { type: mongoose.Schema.Types.Mixed, required: true }, // 用户答案，对于填空题目可以使用正则表达式匹配候选答案
+// analysis: { type: String }, // 答案解析，给出答案的详细说明，可能包括具体计算过程、答案原理、思考路径等内容
+// createById: { type: String, ref: 'User' }, // 记录该答案的创建者 ID
+// updateById: { type: String, ref: 'User' },
+// createTime: { type: Date, default: Date.now }, // 记录该答案的创建时间
+// updateTime: { type: Date, default: Date.now }, // 记录该题目的最近一次修改时间
+export interface InterviewAnswer {
+  id?: string
+  questionId?: string
+  answer: any
+  analysis?: string
+  [key: string]: any
+}
+export const addInterviewAnswer = (data?: InterviewAnswer): Promise<response> => request({ url: '/interviews/answer/add', method: 'post', data })
+export const listInterviewAnswer = (data?: any): Promise<response> => request({ url: '/interviews/answer/list', method: 'post', data })
+export const updateInterviewAnswer = (data?: InterviewAnswer): Promise<response> => request({ url: '/interviews/answer/update', method: 'put', data })
+export const detailInterviewAnswer = (params: any): Promise<response> => request({ url: '/interviews/answer/detail', method: 'get', params })
+export const deleteInterviewAnswer = (params: any): Promise<response> => request({ url: '/interviews/answer/delete', method: 'delete', params })

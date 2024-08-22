@@ -15,7 +15,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve",
+    "jsx": "preserve", // 在.tsx文件里支持JSX
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

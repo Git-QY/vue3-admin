@@ -34,19 +34,20 @@
           <el-checkbox v-for="item in form.options" :label="item.type" :value="item.type" />
         </el-checkbox-group>
         <!-- 简答题 1简答 2填空 -->
-        <RichText v-else v-model="form.answer"></RichText>
+        <RichText v-else v-model="form.answer" :maxLength="10000"></RichText>
       </template>
     </Form>
   </Outlet>
 </template>
 
 <script lang="ts" setup>
-import { addInterview, updateInterview, Interview, detailInterview } from '@/api'
+import { addInterview, updateInterview, Interview, detailInterview, addInterviewAnswer, updateInterviewAnswer } from '@/api'
 import { useElementUI } from '@/hooks/useMessage'
 const { showMessage } = useElementUI()
 const columns = reactive([
   { label: '题目类型', prop: 'type', type: 'solt', dict: 'interview_type', rules: 'must' },
-  { label: '题目描述', prop: 'stem', rules: 'must' },
+  { label: '题目', prop: 'topic', rules: 'must' },
+  { label: '题目描述', prop: 'description', type: 'rich-text', props: { height: '200px' } },
   { label: '知识点标签', prop: 'tags', type: 'select', dict: 'interview_tags', props: { multiple: true }, rules: 'must' },
   { label: '题目难度', prop: 'level', type: 'rate', rules: 'int-1' },
   { label: '题目分值', prop: 'score', type: 'input-number' },
@@ -69,12 +70,11 @@ const columns = reactive([
 ])
 const form = ref<Interview>({
   type: '',
-  stem: '',
+  topic: '',
   tags: [],
   level: 0,
   score: 0,
   options: [{ type: 'A', value: '' }],
-  answer: '',
 })
 const formRef = ref(null as any)
 const loading = ref(false)
@@ -91,9 +91,11 @@ const outlet = reactive({
     try {
       loading.value = true
       if (route.query.id) {
+        await updateInterviewAnswer({ answer: form.value.answer, analysis: form.value.analysis, id: form.value.answerId })
         await updateInterview({ ...form.value })
       } else {
-        await addInterview({ ...form.value })
+        const res = await addInterviewAnswer({ answer: form.value.answer, analysis: form.value.analysis })
+        await addInterview({ ...form.value, answerId: res.data.id })
       }
       showMessage('操作成功')
       onBack()
@@ -127,7 +129,11 @@ onMounted(() => {
 const getDatail = async () => {
   if (route.query.id) {
     const res = await detailInterview({ id: route.query.id })
-    form.value = res.data
+    form.value = {
+      ...res.data,
+      answer: res.data.answer.answer,
+      analysis: res.data.answer.analysis,
+    }
     if (form.value.type == 'multiple_choice') {
       form.value.answer = form.value.answer.split(',')
     }
