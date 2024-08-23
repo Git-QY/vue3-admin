@@ -19,7 +19,6 @@
 <script lang="ts" setup>
 import { listInterview, deleteInterview } from '@/api'
 import { useElementUI } from '@/hooks/useMessage'
-import { dayjs } from 'element-plus'
 const { showMessage, showMessageBox } = useElementUI()
 const router = useRouter()
 const tableConfig = reactive({

@@ -201,3 +201,26 @@ export const listInterviewAnswer = (data?: any): Promise<response> => request({ 
 export const updateInterviewAnswer = (data?: InterviewAnswer): Promise<response> => request({ url: '/interviews/answer/update', method: 'put', data })
 export const detailInterviewAnswer = (params: any): Promise<response> => request({ url: '/interviews/answer/detail', method: 'get', params })
 export const deleteInterviewAnswer = (params: any): Promise<response> => request({ url: '/interviews/answer/delete', method: 'delete', params })
+
+// aiRoom
+export interface AiRoom {
+  id?: string
+  name: string
+  messageId?: string
+  [key: string]: any
+}
+export const addAiRoom = (data?: AiRoom): Promise<response> => request({ url: '/chats/aiRoom/add', method: 'post', data })
+export const listAiRoom = (data?: any): Promise<response> => request({ url: '/chats/aiRoom/list', method: 'post', data })
+export const updateAiRoom = (data?: AiRoom): Promise<response> => request({ url: '/chats/aiRoom/update', method: 'put', data })
+export const deleteAiRoom = (params: any): Promise<response> => request({ url: '/chats/aiRoom/delete', method: 'delete', params })
+export const detailAiRoom = (params: any): Promise<response> => request({ url: '/chats/aiRoom/detail', method: 'get', params })
+
+export interface AiRoomMessage {
+  id?: string
+  roomId: string
+  contant: any
+  [key: string]: any
+}
+export const addAiRoomMessage = (data?: AiRoomMessage): Promise<response> => request({ url: '/chats/aiRoomMessage/add', method: 'post', data })
+export const listAiRoomMessage = (data?: any): Promise<response> => request({ url: '/chats/aiRoomMessage/list', method: 'post', data })
+export const updateAiRoomMessage = (data?: AiRoomMessage): Promise<response> => request({ url: '/chats/aiRoomMessage/update', method: 'put', data })
