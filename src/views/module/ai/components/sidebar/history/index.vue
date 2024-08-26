@@ -38,12 +38,13 @@
         <div>暂无数据</div>
       </div>
     </div>
+    <!-- 重命名 -->
   </div>
 </template>
 
 <script lang="ts" setup>
 import { HistoryItem } from '@/types' // 假设你有一个类型定义文件
-import { deleteAiRoom } from '@/api'
+import { deleteAiRoom, updateAiRoom } from '@/api'
 import { useElementUI } from '@/hooks/useMessage'
 const { showMessage, showMessageBox } = useElementUI()
 // iamges
@@ -72,6 +73,7 @@ const operate = {
   // 重命名
   rename: (item: HistoryItem) => {
     console.log('重命名')
+    // await updateAiRoom({ id: item.id, name: searchText.value })
   },
   // 分享
   share: (item: HistoryItem) => {

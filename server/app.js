@@ -6,6 +6,7 @@ var logger = require('morgan') // 引入日志记录模块
 var { checkToken } = require('./utils/token')
 
 require('./mongodb') // 链接mongodb
+require('./utils/init') // 初始化
 
 var app = express() // 创建Express应用程序实例
 

@@ -1,30 +1,23 @@
 <template>
   <!-- 对话列表 -->
-  {{ currentQA }}
   <div class="chat-message-list">
     <div class="chat-message-item" v-for="(item, index) in messageList" :key="index">
-      {{ item }}
-      <!-- <Question v-if="item.type === 'question'" v-bind="item" :isLast="isLast(index, 'question')" />
-      <Answer v-if="item.type === 'answer'" v-bind="item" :isLast="isLast(index, 'answer')" /> -->
+      <Question v-if="item.type === 'question'" v-bind="item" :isLast="isLast(index)" />
+      <Answer v-if="item.type === 'answer'" v-bind="item" :isLast="isLast(index)" />
     </div>
     <!-- 当前回答 -->
-    <!-- <Answer v-bind="currentQA" v-if="showCurrentQA" /> -->
+    <Answer v-bind="currentQA" v-if="showCurrentQA" />
     <!-- 推荐问题 -->
     <!-- <suggestedVue /> -->
   </div>
 </template>
 
 <script lang="ts" setup>
-// import Question from './question.vue'
-// import Answer from './answer.vue'
+import Question from './question.vue'
+import Answer from './answer.vue'
 // import suggestedVue from './suggested.vue'
-
-// 注入的属性
 const getCurrentQA = inject('getCurrentQA') as () => { isThinking: boolean; isResponing: boolean }
 const getCurrentChat = inject('getCurrentChat') as () => { messageList: any[] }
-const getCurrentId = inject('getCurrentId')
-
-// 计算属性
 const messageList = computed(() => getCurrentChat()?.messageList || [])
 const currentQA = computed(() => getCurrentQA())
 const showCurrentQA = computed(() => {
@@ -33,14 +26,8 @@ const showCurrentQA = computed(() => {
 })
 
 // 方法
-const isLast = (index: number, type: string) => {
-  return (
-    index ===
-    messageList.value
-      .slice()
-      .reverse()
-      .findIndex(item => item.type === type)
-  )
+const isLast = (index: number) => {
+  return index === messageList.value.length - 1
 }
 </script>
 

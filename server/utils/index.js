@@ -94,15 +94,20 @@ class BaseService {
   // 查询
   async list(query, page, res, moreQuery = []) {
     try {
-      const list = await this.model.aggregate([
-        { $match: query }, // 匹配查询条件
-        { $sort: { createTime: -1 } }, // 按照创建时间升序排序
-        { $skip: (page.page - 1) * page.pageSize }, // 跳过指定数量的文档
-        { $limit: page.pageSize }, // 限制返回的文档数量
-        ...moreQuery,
-      ])
-      const total = await this.model.countDocuments(query)
-      res.send({ code: 200, data: list, page: { ...page, total }, message: '获取成功' })
+      if (page.isAll) {
+        const list = await this.model.aggregate([{ $match: query }, ...moreQuery])
+        res.send({ code: 200, data: list, message: '获取成功' })
+      } else {
+        const list = await this.model.aggregate([
+          { $match: query }, // 匹配查询条件
+          { $sort: { createTime: -1 } }, // 按照创建时间升序排序
+          { $skip: (page.page - 1) * page.pageSize }, // 跳过指定数量的文档
+          { $limit: page.pageSize }, // 限制返回的文档数量
+          ...moreQuery,
+        ])
+        const total = await this.model.countDocuments(query)
+        res.send({ code: 200, data: list, page: { ...page, total }, message: '获取成功' })
+      }
     } catch (error) {
       res.send({ code: 500, message: error.message || '服务器内部错误' })
     }

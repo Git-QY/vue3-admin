@@ -1,11 +1,12 @@
 <template>
   <div class="chat-message-answer">
     <div class="chat-message-answer-icon">
-      <img :src="isResponing || isThinking ? require('@/images/robot.gif') : require('@/images/robot.png')" width="40px" height="40px" />
+      <img :src="robot" width="40px" height="40px" />
     </div>
     <div class="chat-message-answer-content">
       <el-skeleton :rows="3" animated :loading="isThinking">
-        <markdownVue :content="$attrs.val" :isResponing="isResponing"></markdownVue>
+        <!-- {{ $attrs }} -->
+        <div v-html="val"></div>
       </el-skeleton>
     </div>
   </div>
@@ -13,13 +14,13 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue'
-import markdownVue from '@/components/markdown.vue'
-
-// 定义组件的 props
-const props = defineProps<{
-  isCurrent?: boolean
-  isThinking: boolean
-  isResponing: boolean
+import robot from '@/views/module/ai/images/robot.png'
+defineProps<{
+  isLast?: boolean
+  val?: string
+  files?: any[]
+  isThinking?: boolean
+  isResponing?: boolean
 }>()
 </script>
 

@@ -2,7 +2,7 @@
   <!-- TODO：最后的一条提问，是可以编辑的 -->
   <div class="chat-message-question" :isLast="isLast">
     <div class="chat-message-question-icon">
-      <img :src="require('@/images/avatar.png')" width="40px" height="40px" />
+      <img :src="avatar" width="40px" height="40px" />
     </div>
     <div class="chat-message-question-editor" v-if="isEdit">
       <textarea class="chat-message-question-editor-body" v-model="editVal" ref="textarea" @keydown.enter.prevent="again"></textarea>
@@ -12,14 +12,12 @@
       </div>
     </div>
     <template v-else>
-      <div class="chat-message-question-content">
-        {{ val }}
-      </div>
+      <div class="chat-message-question-content">{{ val }}</div>
       <div class="chat-message-question-edit" v-if="enableEdit">
         <el-popover placement="top" width="85px" trigger="hover" popper-class="chat-msg-popover" content="重新编辑">
           <span slot="reference" @click="openEditor">
-            <img :src="require('@/images/edit.png')" class="chat-message-question-edit-icon1" />
-            <img :src="require('@/images/edit_active.png')" class="chat-message-question-edit-icon2" />
+            <img :src="edit" class="chat-message-question-edit-icon1" />
+            <img :src="edit_active" class="chat-message-question-edit-icon2" />
           </span>
         </el-popover>
       </div>
@@ -28,8 +26,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, nextTick, defineProps, defineEmits, inject } from 'vue'
-
+import avatar from '@/views/module/ai/images/avatar.png'
+import edit from '@/views/module/ai/images/edit.png'
+import edit_active from '@/views/module/ai/images/edit_active.png'
 // 组件注册
 const props = defineProps<{
   isLast: boolean

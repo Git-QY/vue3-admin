@@ -11,39 +11,7 @@
 import Sidebar from './components/sidebar/index.vue'
 import Playground from './components/playground/index.vue'
 
-import { addAiRoom, listAiRoom, deleteAiRoom, addAiRoomMessage, updateAiRoom } from '@/api'
-const mock = {
-  // 获取机器人配置信息
-  getChatConfig() {},
-  // 获取推荐问题
-  async getSuggested() {
-    return Math.random() > 0.2 ? ['问题1', '问题2', '问题3'] : []
-  },
-  // 获取对话列表
-  getHistory() {},
-  // 发送问题
-  sendQuestion(data: any, options: any) {
-    let timer = null as any
-    let count = 0
-    let abort = () => {
-      clearInterval(timer)
-    }
-    // 模拟一个三秒的返回信息
-    setTimeout(() => {
-      timer = setInterval(() => {
-        count += 1
-        if (count >= 50) {
-          abort()
-          options.onEnd()
-        } else {
-          options.onData({ val: 'word' }, abort)
-        }
-      }, 50)
-    }, 500)
-  },
-}
-
-// import { localCache } from '@/utils/cache'
+import { addAiRoom, listAiRoom, addAiRoomMessage, chatGpt, listAiRoomMessage } from '@/api'
 
 const currentId = ref<string>('') // 当前会话 ID
 const historyList = ref<Array<{ name: string; id: string }>>([]) // 会话历史列表
@@ -52,7 +20,7 @@ const currentQA = ref({
   isResponing: false, // 是否正在回应中
   val: '', // 当前回答内容
 })
-const currentChat = ref<{ id: string; messageList: Array<{ type: string; val: string }> } | null>(null) // 当前会话对象
+const currentChat = ref<{ id: string; messageList: Array<{ type: string; val: string }> }>({ id: '', messageList: [] }) // 当前会话对象
 const suggestedList = ref<Array<string>>([]) // 推荐问题列表
 // 创建新会话
 const createNewChat = async () => {
@@ -62,6 +30,10 @@ const createNewChat = async () => {
   // 重置对话id
   currentId.value = ''
   // 自动聚焦输入框
+  focusInput()
+}
+// 获取focus
+const focusInput = () => {
   const Input = document.querySelector('#chat-msg-input') as HTMLInputElement
   Input.focus()
 }
@@ -79,12 +51,16 @@ const loadHistory = async () => {
   }
 }
 // 切换会话
-const switchChat = (chat: { id: string }) => {
+const switchChat = async (chat: { id: string }) => {
   if (currentId.value === chat.id && currentId.value) return
+  stopResponse()
   // 根据需要加载会话逻辑
   currentId.value = chat.id
-  const Input = document.querySelector('#chat-msg-input') as HTMLInputElement
-  Input.focus()
+  focusInput()
+  // 加载历史对话
+  const res = await listAiRoomMessage({ roomId: chat.id })
+  const messageList = res.data.map((item: any) => item.contant)
+  currentChat.value = { id: chat.id, messageList }
 }
 // 重新发送问题
 const sendQuestionAgain = (data: { text: string }) => {
@@ -96,6 +72,8 @@ const sendQuestionAgain = (data: { text: string }) => {
 }
 // 发送问题
 const sendQuestion = async (data: { text: string }) => {
+  // 更新当前问答状态
+  updateCurrentQA({ isThinking: true, isResponing: false, val: '' })
   try {
     suggestedList.value = []
     if (!currentId.value) {
@@ -109,10 +87,32 @@ const sendQuestion = async (data: { text: string }) => {
       currentChat.value && currentChat.value.messageList.push({ type: 'question', val: data.text })
     }
     await addAiRoomMessage({ roomId: currentId.value, contant: { type: 'question', val: data.text } })
-    updateCurrentQA({ isThinking: true, isResponing: false, val: '' })
-    mock.sendQuestion(data, { onData, onError, onEnd })
+    // 拼接数据
+    const messageList = currentChat.value.messageList.map((item: any) => {
+      return { role: item.type === 'question' ? 'user' : 'assistant', content: item.val }
+    })
+    const res = await chatGpt(messageList)
+    const answerList = res.data
+    let timer = null as any
+    let count = 0
+    let abort = () => {
+      clearInterval(timer)
+    }
+    timer = setInterval(() => {
+      if (count >= answerList.length) {
+        abort()
+        onEnd()
+      } else {
+        if (answerList[count].code == '0') {
+          onData({ val: answerList[count].choices[0].delta.content }, abort)
+        } else {
+          onData({ val: answerList[count].message }, abort)
+        }
+        count += 1
+      }
+    }, 50)
   } catch (error) {
-    console.error(error)
+    onError(error)
   }
 }
 // 更新当前问答状态
@@ -140,18 +140,19 @@ const onData = async (data: { val: string }, abortFn: () => void) => {
 // 错误回调
 const onError = (err: any) => {
   console.error(err)
+  updateCurrentQA({ isThinking: false, isResponing: false, val: '' })
+  scrollBottom()
 }
-
 // 结束回调
 const onEnd = async () => {
   stopResponse()
-  suggestedList.value = await mock.getSuggested()
+  // suggestedList.value = await mock.getSuggested()
   scrollBottom()
 }
 // 滚动到底部
 const scrollBottom = async () => {
   await nextTick()
-  const Input = document.querySelector('#chat-msg-input') as HTMLInputElement
+  const Input = document.querySelector('#chat-playground--body') as HTMLInputElement
   Input.scrollTop = 9999999999
 }
 // 提供依赖

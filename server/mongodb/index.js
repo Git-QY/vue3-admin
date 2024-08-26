@@ -11,8 +11,9 @@
 var mongoose = require('mongoose')
 
 const connections = [
-  { name: 'db1Connection', url: 'mongodb+srv://qinyu:13512319102.@qycluster.xsk1hfo.mongodb.net/vue3admin' },
+  // { name: 'db1Connection', url: 'mongodb+srv://qinyu:13512319102.@qycluster.xsk1hfo.mongodb.net/vue3admin' },
   // { name: 'db2Connection', url: 'mongodb+srv://yuqin:13512319102.@cluster0.eb5ss.mongodb.net/vue3admin' },
+  { name: 'db1Connection', url: 'mongodb://127.0.0.1:27017' }, // 本地
   { name: 'db2Connection', url: 'mongodb://127.0.0.1:27017' }, // 本地
 ]
 

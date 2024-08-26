@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const { AiRoom, aiRoomValidationRules, validationResult, AiRoomMessage } = require('../mongodb/models/chat')
 const { BaseService } = require('../utils')
+const Constants = require('../constants')
+const axios = require('axios')
 
 const AiRoomService = new BaseService(AiRoom)
 const AiRoomMessageService = new BaseService(AiRoomMessage)
@@ -39,6 +41,46 @@ router.post('/aiRoomMessage/add', async (req, res) => {
 })
 router.put('/aiRoomMessage/update', async (req, res) => {
   AiRoomMessageService.update(req, res)
+})
+router.post('/aiRoomMessage/list', async (req, res) => {
+  const { page = { pageSize: 10, page: 1, isAll: true }, ...data } = req.body
+  const query = { ...data }
+  AiRoomMessageService.list(query, page, res)
+})
+
+router.post('/chatGpt', async (req, res) => {
+  const { body } = req
+  console.log('🚀 ~ router.post ~ body:', body)
+  try {
+    const response = await axios({
+      method: 'post',
+      url: 'https://spark-api-open.xf-yun.com/v1/chat/completions',
+      data: body,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Constants.XINGHUO.API_PASSWORD}`,
+      },
+    })
+    const result = response.data
+      .split('\n\n')
+      .filter(part => part.trim() !== 'data: [DONE]' && part.trim())
+      .map(part => JSON.parse(part.replace(/^data: /, '')))
+    // result 怎么才能让客户端使用EventStream接收
+    // res.setHeader('Content-Type', 'text/event-stream')
+    // res.setHeader('Cache-Control', 'no-cache')
+    // res.setHeader('Connection', 'keep-alive')
+
+    // const sendEvent = data => {
+    //   res.write(`${data}\n\n`)
+    // }
+
+    // result.forEach(item => sendEvent(item))
+    // res.end()
+
+    res.send({ code: 200, data: result })
+  } catch (error) {
+    res.send({ code: 500, message: error.message })
+  }
 })
 
 module.exports = router

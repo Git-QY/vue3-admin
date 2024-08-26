@@ -224,3 +224,14 @@ export interface AiRoomMessage {
 export const addAiRoomMessage = (data?: AiRoomMessage): Promise<response> => request({ url: '/chats/aiRoomMessage/add', method: 'post', data })
 export const listAiRoomMessage = (data?: any): Promise<response> => request({ url: '/chats/aiRoomMessage/list', method: 'post', data })
 export const updateAiRoomMessage = (data?: AiRoomMessage): Promise<response> => request({ url: '/chats/aiRoomMessage/update', method: 'put', data })
+
+export const chatGpt = (messages: any[]): Promise<response> =>
+  request({
+    url: '/chats/chatGpt',
+    method: 'post',
+    data: {
+      model: 'general',
+      stream: true,
+      messages,
+    },
+  })
