@@ -6,7 +6,8 @@
     <div class="chat-message-answer-content">
       <el-skeleton :rows="3" animated :loading="isThinking">
         <!-- {{ $attrs }} -->
-        <div v-html="val"></div>
+        <!-- <div v-html="val"></div> -->
+        <MarkdownVue :content="val"></MarkdownVue>
       </el-skeleton>
     </div>
   </div>
@@ -15,6 +16,7 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue'
 import robot from '@/views/module/ai/images/robot.png'
+import MarkdownVue from '@/components/FormItem/markdownVue.vue'
 defineProps<{
   isLast?: boolean
   val?: string

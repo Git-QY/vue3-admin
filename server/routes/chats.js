@@ -50,7 +50,6 @@ router.post('/aiRoomMessage/list', async (req, res) => {
 
 router.post('/chatGpt', async (req, res) => {
   const { body } = req
-  console.log('🚀 ~ router.post ~ body:', body)
   try {
     const response = await axios({
       method: 'post',
@@ -60,24 +59,25 @@ router.post('/chatGpt', async (req, res) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${Constants.XINGHUO.API_PASSWORD}`,
       },
+      responseType: 'stream',
     })
-    const result = response.data
-      .split('\n\n')
-      .filter(part => part.trim() !== 'data: [DONE]' && part.trim())
-      .map(part => JSON.parse(part.replace(/^data: /, '')))
-    // result 怎么才能让客户端使用EventStream接收
-    // res.setHeader('Content-Type', 'text/event-stream')
-    // res.setHeader('Cache-Control', 'no-cache')
-    // res.setHeader('Connection', 'keep-alive')
 
-    // const sendEvent = data => {
-    //   res.write(`${data}\n\n`)
-    // }
+    res.setHeader('Content-Type', 'text/event-stream')
+    res.setHeader('Cache-Control', 'no-cache')
+    res.setHeader('Connection', 'keep-alive')
 
-    // result.forEach(item => sendEvent(item))
-    // res.end()
+    response.data.on('data', chunk => {
+      const data = chunk.toString()
+      data.split('\n').forEach(async line => {
+        line.trim() && res.write(`${line}\n\n`)
+      })
+    })
+    response.data.on('end', () => res.end())
 
-    res.send({ code: 200, data: result })
+    response.data.on('error', err => {
+      console.error('Stream error:', err)
+      res.send({ code: 500, message: err.message })
+    })
   } catch (error) {
     res.send({ code: 500, message: error.message })
   }

@@ -8,4 +8,7 @@ export default {
   menus: {
     home: '首页',
   },
+  chat: {
+    copyCode: '复制代码',
+  },
 }

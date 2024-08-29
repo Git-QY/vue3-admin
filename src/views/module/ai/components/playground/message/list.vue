@@ -15,6 +15,8 @@
 <script lang="ts" setup>
 import Question from './question.vue'
 import Answer from './answer.vue'
+import { useCopyCode } from './useCopyCode'
+useCopyCode() // 复制代码
 // import suggestedVue from './suggested.vue'
 const getCurrentQA = inject('getCurrentQA') as () => { isThinking: boolean; isResponing: boolean }
 const getCurrentChat = inject('getCurrentChat') as () => { messageList: any[] }

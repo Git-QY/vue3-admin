@@ -8,4 +8,7 @@ export default {
   menus: {
     home: 'homePage',
   },
+  chat: {
+    copyCode: 'copyCode',
+  },
 }

@@ -3,4 +3,7 @@ export default {
   menus: {
     home: 'トップページ',
   },
+  chat: {
+    copyCode: 'コードをコピー',
+  },
 }

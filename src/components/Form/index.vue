@@ -16,6 +16,8 @@
 import FormItem from '../FormItem/index.vue'
 import type { FormInstance } from 'element-plus'
 import { evaluateConditions } from '../index'
+import { getValidationRules } from '@/utils/validator'
+
 interface Props {
   modelValue: any
   columns: any[]
@@ -40,64 +42,18 @@ const addRules = (rules: any, item: any) => {
   if (!rules) return
   if (typeof rules === 'object') return rules // 如果是数组直接返回
   const [type, folg] = rules.split('-')
-  const validationRules: any = {
-    must: {
-      required: true,
-      message: `${item.label}不能为空`,
-      trigger: ['blur', 'change'],
-    },
-    // 正整数
-    int: checkRule(item, folg, (rule: any, value: any, callback: any) => {
-      if (!/^[1-9]\d*$/.test(value) && value) {
-        callback(new Error(`${item.label}必须为正整数`))
-      } else {
-        callback()
-      }
-    }),
-    // 移动手机
-    phone: checkRule(item, folg, (rule: any, value: any, callback: any) => {
-      if (!/^1[3-9]\d{9}$/.test(value) && value) {
-        callback(new Error(`${item.label}格式不正确`))
-      } else {
-        callback()
-      }
-    }),
-    // 邮箱
-    email: checkRule(item, folg, (rule: any, value: any, callback: any) => {
-      if (!/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value) && value) {
-        callback(new Error(`${item.label}格式不正确`))
-      } else {
-        callback()
-      }
-    }),
-    // 小数
-    decimal2: checkRule(item, folg, (rule: any, value: any, callback: any) => {
-      if (!/^(0|[1-9][0-9]*)(\.[0-9]{1,2})?$/.test(value) && value) {
-        callback(new Error(`${item.label}保留2位小数`))
-      } else {
-        callback()
-      }
-    }),
-  }
+  const validationRules = getValidationRules(item, folg)
   return validationRules[type]
-}
-// 检验规则
-const checkRule = (item: any, folg: string, validator: any) => {
-  return folg == '1'
-    ? [
-        { required: true, message: `${item.label}不能为空`, trigger: ['blur', 'change'] },
-        { validator, trigger: ['blur', 'change'] },
-      ]
-    : { validator, trigger: ['blur', 'change'] }
 }
 const formRef = ref<FormInstance | undefined>()
 // 校验数据
 const validateForm = async () => {
+  if (!formRef.value) return console.log('formRef is null')
   return await formRef.value?.validate(valid => valid)
 }
 // 重置校验
 const resetForm = () => {
-  if (!formRef.value) return
+  if (!formRef.value) return console.log('formRef is null')
   formRef.value?.resetFields()
 }
 defineExpose({ formRef, resetForm, validateForm })

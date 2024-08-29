@@ -11,7 +11,7 @@
 import Sidebar from './components/sidebar/index.vue'
 import Playground from './components/playground/index.vue'
 
-import { addAiRoom, listAiRoom, addAiRoomMessage, chatGpt, listAiRoomMessage } from '@/api'
+import { addAiRoom, listAiRoom, addAiRoomMessage, chatGpt, chatGptStream, listAiRoomMessage } from '@/api'
 
 const currentId = ref<string>('') // 当前会话 ID
 const historyList = ref<Array<{ name: string; id: string }>>([]) // 会话历史列表
@@ -61,6 +61,7 @@ const switchChat = async (chat: { id: string }) => {
   const res = await listAiRoomMessage({ roomId: chat.id })
   const messageList = res.data.map((item: any) => item.contant)
   currentChat.value = { id: chat.id, messageList }
+  scrollBottom()
 }
 // 重新发送问题
 const sendQuestionAgain = (data: { text: string }) => {
@@ -86,31 +87,59 @@ const sendQuestion = async (data: { text: string }) => {
     } else {
       currentChat.value && currentChat.value.messageList.push({ type: 'question', val: data.text })
     }
+    scrollBottom()
     await addAiRoomMessage({ roomId: currentId.value, contant: { type: 'question', val: data.text } })
     // 拼接数据
     const messageList = currentChat.value.messageList.map((item: any) => {
       return { role: item.type === 'question' ? 'user' : 'assistant', content: item.val }
     })
-    const res = await chatGpt(messageList)
-    const answerList = res.data
-    let timer = null as any
-    let count = 0
-    let abort = () => {
-      clearInterval(timer)
+    // 接收ai流数据
+    abort.value = () => {
+      console.log('abort', '停止回应 == null')
     }
-    timer = setInterval(() => {
-      if (count >= answerList.length) {
-        abort()
+    const response: any = await chatGptStream(messageList)
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder('utf-8')
+    // 接收流数据
+    while (abort.value) {
+      const { value, done } = await reader.read()
+      // 流结束
+      if (done) {
         onEnd()
-      } else {
-        if (answerList[count].code == '0') {
-          onData({ val: answerList[count].choices[0].delta.content }, abort)
-        } else {
-          onData({ val: answerList[count].message }, abort)
-        }
-        count += 1
+        break
       }
-    }, 50)
+      try {
+        let buffer = decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        // 模拟打字
+        for (const item of lines) {
+          if (!item.trim() || item === 'data: [DONE]') continue
+
+          const bufferObj = JSON.parse(item.substring(6)) as { choices: [{ delta: { content: string } }] }
+          // const text = JSON.stringify(bufferObj.choices[0].delta.content).split('')
+          const text = bufferObj.choices[0].delta.content.split('')
+          if (!text.length) continue
+
+          let timer: NodeJS.Timeout | null = null
+          const chunk = () => text.splice(0, Math.random() > 0.5 ? 3 : 5).join('')
+          onData({ val: chunk() }, abort.value)
+
+          await new Promise<void>(resolve => {
+            timer = setInterval(() => {
+              if (!text.length || !abort.value) {
+                if (timer) clearInterval(timer)
+                resolve()
+              } else {
+                onData({ val: chunk() }, abort.value)
+              }
+            }, 100)
+          })
+        }
+      } catch (error) {
+        console.error(error)
+        onError(error)
+      }
+    }
   } catch (error) {
     onError(error)
   }
@@ -121,18 +150,19 @@ const updateCurrentQA = (data: Partial<typeof currentQA.value>) => {
 }
 // 停止回应
 const stopResponse = async () => {
-  abort?.()
-  abort = null
+  abort.value?.()
+  abort.value = null
   updateCurrentQA({ isResponing: false })
   if (currentChat.value) {
     currentChat.value.messageList.push({ type: 'answer', val: currentQA.value.val })
     await addAiRoomMessage({ roomId: currentId.value, contant: { type: 'answer', val: currentQA.value.val } })
+    focusInput()
   }
 }
-let abort: (() => void) | null = null
+const abort: Ref<(() => void) | null> = ref(null)
 // 接收数据的回调
 const onData = async (data: { val: string }, abortFn: () => void) => {
-  abort = abortFn
+  abort.value = abortFn
   await nextTick()
   updateCurrentQA({ isThinking: false, isResponing: true, val: currentQA.value.val + data.val })
   scrollBottom()
