@@ -10,6 +10,7 @@ interface globalState {
   isCollapse: Boolean
   reloadFlag: Boolean
   isDarkSidebar: Boolean
+  isGray: Boolean
   iconfontUrl: string
 }
 export const useGlobalStore = defineStore('global', {
@@ -23,7 +24,8 @@ export const useGlobalStore = defineStore('global', {
       isCollapse: false, // 是否折叠
       reloadFlag: true, // 是否刷新页面
       isDarkSidebar: true, // 是否暗黑侧边栏
-      iconfontUrl: '//at.alicdn.com/t/c/font_4388344_sa7vziun9rj.js', // 图标库
+      isGray: false, // 是否灰色
+      iconfontUrl: '//at.alicdn.com/t/c/font_4388344_tgnkvs5tce.js', // 图标库
     }
   },
   getters: {},

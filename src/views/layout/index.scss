@@ -1,6 +1,10 @@
 $dark: #001529;
 $navTab-height: 42px;
 $header-height: 56px;
+$aside-width: 220px;
+$aside-collapse-width: 64px;
+$logo-width: 200px;
+$logo-height: 56px;
 .layout {
   .el-aside {
     padding: 0;
@@ -9,6 +13,53 @@ $header-height: 56px;
     box-shadow: 2px 0 12px #1d23290d;
     overflow: hidden;
     border-right: 1px solid var(--el-border-color-lighter);
+    // 深色侧边栏
+    &.dark {
+      background-color: $dark;
+      .layout-aside {
+        &--collapse {
+        }
+        .el-menu {
+          background-color: $dark;
+          .el-menu-item {
+            color: #bbb;
+            &:hover {
+              color: #fff;
+              .use-icon {
+                fill: #fff;
+              }
+            }
+            &.is-active {
+              background-color: var(--primary);
+              color: #fff;
+              .use-icon {
+                fill: #fff;
+              }
+            }
+          }
+          .el-sub-menu {
+            &__title {
+              color: #bbb;
+              &:hover {
+                color: #fff;
+                background-color: transparent;
+                .use-icon {
+                  fill: #fff;
+                }
+              }
+            }
+            &.is-active {
+              > .el-sub-menu__title {
+                color: #fff;
+                .use-icon {
+                  fill: #fff;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
   .el-header {
     padding: 0;
@@ -120,11 +171,23 @@ $header-height: 56px;
   &-aside {
     height: calc(100vh - $header-height);
     box-sizing: border-box;
-    width: 200px;
+    width: $aside-width;
     transition: width 0.3s;
     overflow: auto;
     &--collapse {
-      width: 64px;
+      width: $aside-collapse-width;
+      .el-menu {
+        width: $aside-collapse-width;
+        .el-menu-item .el-menu-tooltip__trigger {
+          left: -6px;
+        }
+        .el-sub-menu {
+          .el-icon {
+            position: absolute;
+            left: 14px;
+          }
+        }
+      }
     }
     .el-menu {
       border: none;
@@ -147,16 +210,7 @@ $header-height: 56px;
         }
       }
       .el-sub-menu {
-        &.is-active {
-          >.el-sub-menu__title {
-            color: var(--primary);
-            > .el-icon > .svg-icon > .use-icon {
-              fill: var(--primary);
-            }
-          }
-        }
-
-        .el-sub-menu__title {
+        &__title {
           height: 42px;
           margin: 0 8px;
           margin-top: 6px;
@@ -165,18 +219,23 @@ $header-height: 56px;
             background-color: var(--el-fill-color);
           }
         }
+        &.is-active {
+          > .el-sub-menu__title {
+            color: var(--primary);
+            > .el-icon > .svg-icon > .use-icon {
+              fill: var(--primary);
+            }
+          }
+        }
       }
     }
     .el-menu--horizontal {
       height: 56px;
     }
-    &--dark {
-      background-color: $dark;
-    }
   }
   &-logo {
-    height: 56px;
-    width: 200px;
+    height: $logo-height;
+    width: $logo-width;
     transition: width 0.3s;
     display: flex;
     align-items: center;
@@ -207,6 +266,7 @@ $header-height: 56px;
       flex: 1;
     }
   }
+  // 顶部布局
   &-horizontal {
     .el-header {
       display: flex;
@@ -220,6 +280,7 @@ $header-height: 56px;
       border-bottom: 0;
     }
   }
+  // 列式布局
   &-columns {
     display: flex;
     .layout-column {

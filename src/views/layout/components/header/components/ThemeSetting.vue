@@ -7,11 +7,12 @@
   <el-drawer v-model="drawer" title="主题配置" :size="400">
     <template #default>
       <el-divider> 主题模式 </el-divider>
-      <!-- 主题色 -->
-      <ThemeColor />
-      <SelectColor title="头部背景色(测试)" type="header-bg" />
-      <SelectColor title="侧边栏背景色(测试)" type="aside-bg" />
-
+      <el-space size="large" direction="vertical" fill style="width: 100%">
+        <!-- 主题色 -->
+        <ThemeColor />
+        <SwitchSetting v-model="isDarkSidebar" size="large" />
+        <SwitchSetting v-model="isGray" size="large" title="灰度模式" />
+      </el-space>
       <el-divider> 布局模式 </el-divider>
       <LayoutSelect />
     </template>
@@ -22,12 +23,29 @@
 <script setup lang="ts">
 import LayoutSelect from './LayoutSelect.vue'
 import ThemeColor from './ThemeColor.vue'
-import SelectColor from './SelectColor.vue'
+import SwitchSetting from './SwitchSetting.vue'
+import useTheme from '@/hooks/themeColor'
 
+import { useGlobalStore } from '@/store'
+const globalStore = useGlobalStore()
+const { setGray } = useTheme()
 const drawer = ref(false)
 const handleThemeDialog = () => {
   drawer.value = !drawer.value
 }
+const isDarkSidebar = ref<Boolean>(globalStore.isDarkSidebar)
+watch(
+  () => isDarkSidebar.value,
+  val => globalStore.setGlobalState('isDarkSidebar', val),
+)
+const isGray = ref<Boolean>(globalStore.isGray)
+watch(
+  () => isGray.value,
+  val => {
+    setGray(val as boolean)
+    globalStore.setGlobalState('isGray', val)
+  },
+)
 </script>
 
 <style lang="scss" scoped></style>

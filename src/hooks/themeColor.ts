@@ -34,25 +34,9 @@ const calculateLighterColors = (baseColor: string, steps: number[]): string[] =>
 }
 const useTheme = () => {
   const html = document.documentElement
-  // const PRE = '--el-color-primary'
-  // const PRE_LIGHT = `${PRE}-light`
-  // const PRE_DARK = `${PRE}-dark`
-  // const Levels: number[] = [3, 5, 7, 8, 9]
   const WHITE = '#FFFFFF'
   const BLACK = '#000000'
   const isDark = ref(false)
-
-  // /* 模式切换变量，默认light模式 */
-  // --current-background-color: var(--light-background-color);
-  // --current-primary-color: var(--light-primary-color);
-
-  // /* 浅色主题 */
-  // --light-primary-color: #666;
-  // --light-background-color: #fff;
-
-  // /* 深色主题 */
-  // --dark-primary-color: #fff;
-  // --dark-background-color: #282c34;
 
   // 写一个方法替换var(--light-background-color) => var(--dark-background-color);
   function findCurrentCssVariables(): string[] {
@@ -97,20 +81,14 @@ const useTheme = () => {
   }
 
   const changeTheme = (color: string | null): void => {
-    if (!color) {
-      console.warn('Color value is not provided')
-      return
-    }
-    // html.style.setProperty(PRE, color)
-    // Levels.forEach((level: number) => {
-    //   html.style.setProperty(`${PRE_LIGHT}-${level}`, mix(color, WHITE, level * 0.1))
-    // })
-
+    if (!color) return console.warn('Color value is not provided')
     // 本身设置的颜色
     html.style.setProperty(`--primary`, color)
     for (let i = 0; i < 10; i++) {
       html.style.setProperty(`--light-${i}`, mix(color, WHITE, i * 0.1))
     }
+    // 设置elementpulse主题色
+    html.style.setProperty(`--el-color-primary`, color)
   }
   const setThemeColor = (color: string | null): void => {
     changeTheme(color)
@@ -158,12 +136,18 @@ const useTheme = () => {
 
     isDark.value = !!(theme == 'dark')
   }
+  // 是否灰色主题
+  const setGray = (isGray: boolean): void => {
+    const html = document.documentElement as HTMLElement
+    html.classList.toggle('gray', isGray)
+  }
 
   return {
     setThemeColor,
     changeThemeColor,
     setTheme,
     isDark,
+    setGray,
   }
 }
 

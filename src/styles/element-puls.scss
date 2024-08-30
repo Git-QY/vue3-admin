@@ -1,0 +1,44 @@
+// 侧边栏pop
+$dark: #001529;
+.pop-menu {
+  .el-menu {
+    // background-color: #001529;
+    padding: 8px 0;
+    .el-menu-item {
+      height: 42px;
+      margin: 0 8px;
+      border-radius: 4px;
+      &:hover {
+        background-color: var(--color-fill-2);
+      }
+      &.is-active {
+        background-color: var(--el-fill-color);
+        .use-icon {
+          fill: var(--primary);
+        }
+      }
+    }
+  }
+  &.dark {
+    .el-menu {
+      background-color: $dark;
+      .el-menu-item {
+        color: #bbb;
+        &:hover {
+          background-color: transparent;
+          color: #fff;
+          .use-icon {
+            fill: #fff;
+          }
+        }
+        &.is-active {
+          background-color: var(--primary);
+          color: #fff;
+          .use-icon {
+            fill: #fff;
+          }
+        }
+      }
+    }
+  }
+}

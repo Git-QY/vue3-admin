@@ -8,7 +8,7 @@
       :default-active="activePath"
       :collapse-transition="false"
       :default-openeds="defaultOpeneds"
-      popper-class="pop-menu"
+      :popper-class="isDarkSidebar ? 'pop-menu dark' : 'pop-menu'"
     >
       <template v-for="item in menuList">
         <aside-item :item="item"></aside-item>
@@ -29,6 +29,7 @@ const globalStore = useGlobalStore()
 const authStore = useAuthStore()
 const route = useRoute()
 const isCollapse = computed(() => globalStore.isCollapse)
+const isDarkSidebar = computed(() => globalStore.isDarkSidebar)
 const menuList = computed(() => {
   if (props.menuList.length === 0) {
     return authStore.getLeftMenuTree()

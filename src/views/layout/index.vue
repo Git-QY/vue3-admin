@@ -1,5 +1,5 @@
 <template>
-  <component :is="LayoutComponent[layout]"></component>
+  <component :is="LayoutComponent[layout]" :sidebarClass="sidebarClass"></component>
 </template>
 
 <script lang="ts" setup>
@@ -20,6 +20,10 @@ const LayoutComponent: Record<LayoutType, Component> = {
   classic: LayoutClassic,
   horizontal: LayoutHorizontal,
 }
+// 是否深色侧边栏
+const sidebarClass = computed(() => {
+  return { dark: globalState.isDarkSidebar }
+})
 </script>
 
 <style lang="scss">

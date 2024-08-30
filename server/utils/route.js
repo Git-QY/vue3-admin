@@ -23,5 +23,6 @@ module.exports = function (app) {
   app.use('/interviews', require(routesDir('interviews')))
   app.use('/utils', require(routesDir('utils/index')))
   app.use('/utils/uploads', require(routesDir('utils/uploads')))
+  app.use('/utils/thirdParty', require(routesDir('utils/thirdParty')))
   app.use('/chats', require(routesDir('chats')))
 }

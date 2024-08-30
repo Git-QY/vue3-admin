@@ -61,7 +61,7 @@ const setLayout = (value: any) => globalStore.setGlobalState('layout', value)
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 15px 7px 0;
+  padding: 15px 60px 0;
   .layout-item {
     position: relative;
     box-sizing: border-box;

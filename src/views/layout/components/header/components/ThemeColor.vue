@@ -1,6 +1,6 @@
 <template>
   <div class="themeColor felx-between">
-    <span class="demonstration">主题色 {{ themeColor }}</span>
+    <span class="demonstration" style="line-height: 32px">主题色 {{ themeColor }}</span>
     <el-color-picker v-model="themeColor" :predefine="predefineColors" @change="changeTheme" />
   </div>
 </template>

@@ -7,7 +7,7 @@
 const props = defineProps({
   iconName: {
     type: String,
-    required: true,
+    default: 'icon-jiekouwendang',
   },
   className: {
     type: String,

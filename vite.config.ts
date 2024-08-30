@@ -30,11 +30,6 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 9000,
     proxy: {
-      '/api': {
-        target: 'http://localhost:30001/',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, ''),
-      },
       '/likepoems': {
         target: 'https://api.likepoems.com/',
         changeOrigin: true,

@@ -44,6 +44,7 @@ const init = async () => {
   // 动态设置iconfont
   // 加载js
   await loadScript(globalStore.iconfontUrl)
+  console.log("🚀 ~ init ~ globalStore.iconfontUrl:", globalStore.iconfontUrl)
 
   // 等待 5s
   // await new Promise(resolve => setTimeout(resolve, 5000))

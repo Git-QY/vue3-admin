@@ -4,7 +4,6 @@ var path = require('path')
 var fs = require('fs')
 
 const readline = require('readline')
-
 // 读取5级行政架构
 router.get('/area', (req, res) => {
   let { parentId = 0 } = req.query

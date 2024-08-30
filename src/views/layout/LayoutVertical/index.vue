@@ -2,7 +2,7 @@
   <!-- 纵向布局 -->
   <div class="layout layout-vertical">
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="200px" :class="$attrs.sidebarClass">
         <Logo />
         <Aside />
       </el-aside>

@@ -1,6 +1,6 @@
 import '@/styles/index.scss' // 全局样式
 // import '@/assets/iconfont/iconfont.js' // 引入iconfont图标库
-import '//at.alicdn.com/t/c/font_4388344_po3vhc4e4bh.js'
+// import '//at.alicdn.com/t/c/font_4388344_po3vhc4e4bh.js'
 
 import i18n from '@/language/i18n'
 import router from '@/router' // 注册路由

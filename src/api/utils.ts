@@ -8,6 +8,8 @@ export const uploadChunk = (data: any) => request({ url: '/utils/uploads/chunk',
 export const uploadChunkMerge = (data: any) => request({ url: '/utils/uploads/merge', method: 'post', data })
 // 获取地区
 export const getArea = (params: { parentId: string }) => request({ url: '/utils/area', method: 'get', params })
+// 获取一言
+export const getYiyan = () => request({ url: '/utils/thirdParty/yiyan', method: 'get' })
 
 export function getImage() {
   return request({
