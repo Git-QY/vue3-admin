@@ -42,3 +42,7 @@ $dark: #001529;
     }
   }
 }
+// 鼠标悬浮点击在el-dropdown时，会有黑色边框
+.el-tooltip__trigger:focus-visible {
+  outline: unset;
+}

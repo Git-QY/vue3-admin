@@ -221,3 +221,7 @@ export function copyText(options: { text: string; origin?: boolean }) {
   if (document.execCommand('copy')) document.execCommand('copy')
   document.body.removeChild(input)
 }
+// isEmptyObject
+export function isEmptyObject(obj: any) {
+  return Object.keys(obj).length === 0 && obj.constructor === Object
+}

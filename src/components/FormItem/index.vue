@@ -11,7 +11,15 @@
     </el-select>
   </template>
   <template v-if="item.type === 'tree-select'">
-    <el-tree-select v-model="form[item.prop]" :placeholder="`请选择${item.label}`" :data="item.options" check-strictly :render-after-expand="false" v-bind="item.props" style="width: 100%">
+    <el-tree-select
+      v-model="form[item.prop]"
+      :placeholder="`请选择${item.label}`"
+      :data="item.options"
+      check-strictly
+      :render-after-expand="false"
+      v-bind="item.props"
+      style="width: 100%"
+    >
     </el-tree-select>
   </template>
   <template v-if="item.type === 'switch'">
@@ -44,7 +52,7 @@
     </IconSelector>
   </template>
   <template v-if="item.type === 'upload'">
-    <Upload v-model="form[item.prop]" v-bind="item.props"></Upload>
+    <QyUpload v-model="form[item.prop]" v-bind="item.props"></QyUpload>
   </template>
   <template v-if="item.type === 'region'">
     <Region v-model="form[item.prop]" v-bind="item.props"></Region>
@@ -55,7 +63,14 @@
   </template>
   <!-- 日期范围选择 -->
   <template v-if="item.type === 'daterange'">
-    <el-date-picker v-model="form[item.prop]" type="daterange" unlink-panels range-separator="To" start-placeholder="Start date" end-placeholder="End date" />
+    <el-date-picker
+      v-model="form[item.prop]"
+      type="daterange"
+      unlink-panels
+      range-separator="To"
+      start-placeholder="Start date"
+      end-placeholder="End date"
+    />
   </template>
   <!-- 评分 -->
   <template v-if="item.type === 'rate'">
@@ -71,7 +86,6 @@
 // IconSelector
 import IconSelector from '@/components/Icon/iconSelector.vue'
 import Region from '@/components/FormItem/region.vue'
-import Upload from '@/components/FormItem/upload.vue'
 defineProps<{ item: any; form: any }>()
 </script>
 <style lang="scss" scoped></style>

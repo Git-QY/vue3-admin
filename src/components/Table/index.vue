@@ -70,7 +70,7 @@ const prop = defineProps({
   columns: { type: Array },
   page: { type: Object },
   maxShow: { type: Number, default: 3 },
-}) as tableProps
+})
 const props = reactive(deepMerge(deepClone(defaultConfig), prop))
 const {
   tableData,

@@ -6,8 +6,6 @@ const vue3Loading = {
   mounted(el: HTMLElement, binding: DirectiveBinding) {},
   unmounted(el: HTMLElement) {},
   // 监听值变化
-  updated(el: HTMLElement, binding: DirectiveBinding) {
-    console.log('🚀 ~ updated ~ binding:', binding)
-  },
+  updated(el: HTMLElement, binding: DirectiveBinding) {},
 }
 export default vue3Loading

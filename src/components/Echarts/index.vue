@@ -4,13 +4,13 @@
 
 <script setup lang="ts">
 import echarts, { ECOption } from './config'
-import { debounce } from '@/utils'
+import { debounce, isEmptyObject } from '@/utils'
 
 interface Props {
   option: ECOption
   width?: string
   height?: string
-  loading?: boolean // 获取数据loading
+  loading?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   option: () => ({}),
@@ -19,15 +19,12 @@ const props = withDefaults(defineProps<Props>(), {
   loading: true,
 })
 const style = computed(() => ({ width: props.width, height: props.height }))
-const chart = shallowRef<any>() // shallowRef 创建浅层响应式引用的函数
+const chart = shallowRef<any>()
 const chartId = computed(() => `chart-${new Date().getTime()}-${Math.random()}`)
+
 const initChart = async () => {
   await new Promise(resolve => setTimeout(resolve, 500))
   chart.value = echarts.init(document.getElementById(chartId.value))
-  // props.option == {} 不渲染展示加载中
-  function isEmptyObject(obj: object) {
-    return Object.keys(obj).length === 0 && obj.constructor === Object
-  }
 
   showLoading()
   if (!isEmptyObject(props.option)) {
@@ -38,35 +35,36 @@ const initChart = async () => {
 const resize = () => {
   chart.value.resize({ animation: { duration: 300 } })
 }
+const chartRef = ref<HTMLDivElement>()
 onMounted(async () => {
-  console.log('onMounted')
   await nextTick()
-  initChart()
+  await initChart()
   window.addEventListener('resize', debounce(resize, 300))
+  // resizeObserver.value = new ResizeObserver(resize)
+  // chartRef.value?.parentElement && resizeObserver.value.observe(chartRef.value.parentElement)
 })
-
 watch(
   () => props.option,
   newVal => {
     if (newVal) {
+      if (!isEmptyObject(newVal)) return
       chart.value.setOption(newVal)
       hideLoading()
     }
   },
   { deep: true },
 )
-
 // 即将销毁的生命周期
 onBeforeUnmount(() => {
   chart.value.dispose()
   window.removeEventListener('resize', debounce(resize, 300))
+  // if (resizeObserver.value && chartRef.value?.parentElement) {
+  //   resizeObserver.value.unobserve(chartRef.value.parentElement)
+  // }
 })
-
-// 对父组件暴露获取 ECharts 实例的方法，可直接通过实例调用原生函数
 defineExpose({
   getInstance: () => chart.value,
 })
-
 // 加载中
 const showLoading = () => {
   chart.value.showLoading({

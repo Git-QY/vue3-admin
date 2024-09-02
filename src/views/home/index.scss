@@ -7,8 +7,12 @@
     display: flex;
     gap: 20px;
     align-items: center;
+    flex-direction: column;
     .workbench-list {
       display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 5px;
       &--item {
         display: flex;
         justify-content: space-around;
@@ -23,8 +27,11 @@
         user-select: none;
         cursor: pointer;
         border-radius: 4px;
-        background: #e7e7e7;
-        color: #000;
+        color: #333;
+      }
+      [active='true'] {
+        background: var(--primary);
+        color: #fff;
       }
     }
     &-add {
@@ -36,5 +43,10 @@
     overflow: auto;
     border-radius: 4px;
     background-color: var(--current-background-color-9);
+  }
+  &-setting {
+    position: fixed;
+    right: 16px;
+    top: 108px;
   }
 }

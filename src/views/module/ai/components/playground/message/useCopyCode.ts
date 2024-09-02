@@ -3,7 +3,6 @@ import { copyText } from '@/utils'
 export function useCopyCode() {
   function copyCodeBlock() {
     const codeBlockWrapper = document.querySelectorAll('.code-block-wrapper')
-    console.log("🚀 ~ copyCodeBlock ~ codeBlockWrapper:", codeBlockWrapper)
     codeBlockWrapper.forEach(wrapper => {
       const copyBtn = wrapper.querySelector('.code-block-header__copy')
       const codeBlock = wrapper.querySelector('.code-block-body')

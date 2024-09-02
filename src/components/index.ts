@@ -3,7 +3,7 @@ import Page from './Page/index.vue'
 import Outlet from './Page/outlet.vue'
 import SvgIcon from './Icon/svgIcon.vue'
 import Icon from './Icon/index.vue'
-import Upload from './FormItem/upload.vue'
+import QyUpload from './FormItem/upload.vue'
 import Region from './FormItem/region.vue'
 import RichText from './FormItem/richText.vue'
 import Form from './Form/index.vue'
@@ -17,7 +17,7 @@ const components: { [name: string]: Component } = {
   Page,
   Outlet,
   SvgIcon,
-  Upload,
+  QyUpload,
   Region,
   RichText,
   Form,
@@ -97,7 +97,6 @@ export const evaluateConditions = (mate: MateCondition[], form: any): boolean =>
   //     return `(${conditionsToExpression(item.conditions, item.prop)})${item.among ? '||' : '&&'}`
   //   })
   //   .join('')
-  // console.log('🚀 ~ evaluateConditions ~ data:', data)
   // return data
   const judgment = (item: Condition, prop: string) => {
     switch (item.op) {
