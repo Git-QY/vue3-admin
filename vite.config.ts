@@ -10,7 +10,7 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import ViteCompressionPlugin from 'vite-plugin-compression'
 import importToCDN, { autoComplete } from 'vite-plugin-cdn-import'
 // 图片压缩
-import viteImagemin from 'vite-plugin-imagemin'
+// import viteImagemin from 'vite-plugin-imagemin'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -48,28 +48,28 @@ export default defineConfig({
         // { name: 'echarts', var: 'echarts', path: 'https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js' },
       ],
     }), // 引入cdn
-    viteImagemin({
-      gifsicle: {
-        optimizationLevel: 7, // 动图的优化级别，范围从 1 到 7，值越大优化越强，文件体积越小
-        interlaced: false, // 是否使用交错扫描，交错扫描会使图片逐渐清晰，但文件体积更大
-      },
-      optipng: {
-        optimizationLevel: 7, // PNG 图片的优化级别，范围从 1 到 7，值越大优化越强
-      },
-      mozjpeg: {
-        quality: 20, // JPEG 图片的压缩质量，范围从 0 到 100，值越低压缩越强，图片质量越差
-      },
-      pngquant: {
-        quality: [0.8, 0.9], // PNG 图片的压缩质量范围，0.8 到 0.9 之间的值，值越小图片质量越低，体积更小
-        speed: 4, // 压缩速度，范围从 1 到 10，值越大速度越快，但压缩效果可能较差
-      },
-      svgo: {
-        plugins: [
-          { name: 'removeViewBox' }, // 移除 SVG 的 viewBox 属性，可能会影响缩放效果
-          { name: 'removeEmptyAttrs', active: false }, // 不移除 SVG 中的空属性
-        ],
-      },
-    }), // 图片压缩
+    // viteImagemin({
+    //   gifsicle: {
+    //     optimizationLevel: 7, // 动图的优化级别，范围从 1 到 7，值越大优化越强，文件体积越小
+    //     interlaced: false, // 是否使用交错扫描，交错扫描会使图片逐渐清晰，但文件体积更大
+    //   },
+    //   optipng: {
+    //     optimizationLevel: 7, // PNG 图片的优化级别，范围从 1 到 7，值越大优化越强
+    //   },
+    //   mozjpeg: {
+    //     quality: 20, // JPEG 图片的压缩质量，范围从 0 到 100，值越低压缩越强，图片质量越差
+    //   },
+    //   pngquant: {
+    //     quality: [0.8, 0.9], // PNG 图片的压缩质量范围，0.8 到 0.9 之间的值，值越小图片质量越低，体积更小
+    //     speed: 4, // 压缩速度，范围从 1 到 10，值越大速度越快，但压缩效果可能较差
+    //   },
+    //   svgo: {
+    //     plugins: [
+    //       { name: 'removeViewBox' }, // 移除 SVG 的 viewBox 属性，可能会影响缩放效果
+    //       { name: 'removeEmptyAttrs', active: false }, // 不移除 SVG 中的空属性
+    //     ],
+    //   },
+    // }), // 图片压缩
   ], //这里进行配置别名
   resolve: {
     alias: {
