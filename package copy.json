@@ -1,0 +1,60 @@
+{
+  "name": "my-vue3-ts",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"vite --mode dev\" \"npm start --prefix server\"",
+    "test": "concurrently \"vite --mode test\" \"npm test --prefix server\"",
+    "prod": "vite --mode prod",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "build:no-vue-tsc": "vite build"
+  },
+  "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
+    "@element-plus/icons-vue": "^2.3.1",
+    "@traptitech/markdown-it-katex": "^3.6.0",
+    "@types/crypto-js": "^4.2.2",
+    "@vueuse/core": "^10.9.0",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
+    "axios": "^1.6.8",
+    "crypto-js": "^4.2.0",
+    "echarts": "^5.5.1",
+    "element-plus": "^2.6.3",
+    "highlight.js": "^11.10.0",
+    "lunar-typescript": "^1.7.5",
+    "markdown-it": "^14.1.0",
+    "nprogress": "^0.2.0",
+    "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
+    "socket.io-client": "^4.7.5",
+    "spark-md5": "^3.0.2",
+    "three": "^0.165.0",
+    "vue": "^3.4.21",
+    "vue-draggable-next": "^2.2.1",
+    "vue-grid-layout": "3.0.0-beta1",
+    "vue-i18n": "10.0.0-alpha.2",
+    "vue-router": "4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/nprogress": "^0.2.3",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitejs/plugin-vue-jsx": "^4.0.1",
+    "concurrently": "^8.2.2",
+    "rollup-plugin-visualizer": "^5.12.0",
+    "sass": "^1.74.1",
+    "typescript": "^5.2.2",
+    "unplugin-auto-import": "^0.17.6",
+    "unplugin-vue-components": "^0.27.2",
+    "vite": "^5.2.0",
+    "vite-plugin-cdn-import": "^1.0.1",
+    "vite-plugin-compression": "^0.5.1",
+    "vue-tsc": "^2.0.6"
+  },
+  "volta": {
+    "node": "18.20.3"
+  }
+}
