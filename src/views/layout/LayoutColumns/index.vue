@@ -3,7 +3,7 @@
   <div class="layout layout-columns">
     <div class="layout-column">
       <div class="layout-column--logo">
-        <img src="~@/assets/svgs/logo.svg" style="height: 32px" />
+        <img src="~@/assets/svgs/logo1.svg" style="height: 32px" />
       </div>
       <div
         v-for="item in menuList"

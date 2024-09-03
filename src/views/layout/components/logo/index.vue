@@ -1,7 +1,7 @@
 <template>
   <div class="layout-logo" :class="{ 'layout-logo--collapse': isCollapse }" @click="goHome">
-    <img class="logo" src="~@/assets/svgs/logo.svg" />
-    <span class="title" v-if="!isCollapse">ADMIN</span>
+    <img class="logo" v-if="!isCollapse" src="~@/assets/svgs/logo1.svg" />
+    <img class="logo" v-else src="~@/assets/svgs/logo2.svg" />
   </div>
 </template>
 
