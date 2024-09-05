@@ -28,7 +28,6 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, ref, computed } from 'vue'
 import Welcome from './welcome.vue'
 import Guide from './guide.vue'
 import ChatInput from './chat-input.vue'
@@ -42,10 +41,10 @@ const getCurrentQA = inject<() => { isResponing: boolean }>('getCurrentQA')!
 const stopResponse = inject<() => void>('stopResponse')!
 
 // 定义响应式数据
-const text = ref('')
-const msg = ref('')
-const msgList = ref<string[]>([])
-const currentMsg = ref('')
+// const text = ref('')
+// const msg = ref('')
+// const msgList = ref<string[]>([])
+// const currentMsg = ref('')
 
 // 计算属性
 const currentId = computed(() => getCurrentId())

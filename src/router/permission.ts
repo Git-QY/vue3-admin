@@ -10,7 +10,7 @@ export const resetHasRouteFlag = () => {
 }
 // 路由守卫
 const whiteList = ['/login']
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   nProgress.start()
   const userStore = useUserStore()
   const authStore = useAuthStore()

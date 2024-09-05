@@ -40,7 +40,7 @@ export function useElementUI() {
     // } catch (error) {
     //   return false // 用户点击了取消按钮或关闭了对话框
     // }
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       ElMessageBox.confirm(message, title, {
         confirmButtonText: options.confirmButtonText || '确认',
         cancelButtonText: options.cancelButtonText || '取消',

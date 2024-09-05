@@ -44,7 +44,7 @@
 
 <script lang="ts" setup>
 import { HistoryItem } from '@/types' // 假设你有一个类型定义文件
-import { deleteAiRoom, updateAiRoom } from '@/api'
+import { deleteAiRoom } from '@/api'
 import { useElementUI } from '@/hooks/useMessage'
 const { showMessage, showMessageBox } = useElementUI()
 // iamges
@@ -71,12 +71,12 @@ const historyLoading = computed(() => getHistoryLoading())
 // 方法 操作
 const operate = {
   // 重命名
-  rename: (item: HistoryItem) => {
+  rename: (_item: HistoryItem) => {
     console.log('重命名')
     // await updateAiRoom({ id: item.id, name: searchText.value })
   },
   // 分享
-  share: (item: HistoryItem) => {
+  share: (_item: HistoryItem) => {
     console.log('分享')
   },
   // 删除

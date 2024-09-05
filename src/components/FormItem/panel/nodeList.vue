@@ -19,7 +19,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Item } from './index'
 import NodeContent from './node-content.vue'
 const props = defineProps<{
   getList: Function
@@ -35,11 +34,9 @@ const $emit = defineEmits(['check-node-click', 'update:loading'])
 const checkNodeClick = (data: any) => {
   $emit('check-node-click', data)
 }
-const searchResult = ref<Item[]>([])
+const searchResult = ref<panelItem[]>([])
 const page = ref<{ page: number; pageSize: number; [key: string]: any }>(props.options.page || { page: 1, pageSize: 10 })
 const isLoading = ref<boolean>(false) // 是否请求 判断是否最后一页
-const search = ref<string>('')
-
 /**
  * 获取列表数据
  * @param pageNumber 页码

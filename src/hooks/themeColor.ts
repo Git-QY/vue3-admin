@@ -35,7 +35,7 @@ const calculateLighterColors = (baseColor: string, steps: number[]): string[] =>
 const useTheme = () => {
   const html = document.documentElement
   const WHITE = '#FFFFFF'
-  const BLACK = '#000000'
+  // const BLACK = '#000000'
   const isDark = ref(false)
 
   // 写一个方法替换var(--light-background-color) => var(--dark-background-color);

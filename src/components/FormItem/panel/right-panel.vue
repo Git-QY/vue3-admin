@@ -8,10 +8,8 @@
 </template>
 
 <script lang="ts" setup>
-import { Item } from './index'
-
 defineProps({
-  selected: { type: Array as () => Item[], default: () => [] },
+  selected: { type: Array as () => panelItem[], default: () => [] },
   name: { type: String, default: 'name' },
 })
 const $emits = defineEmits(['delete'])

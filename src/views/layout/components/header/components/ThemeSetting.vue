@@ -33,12 +33,12 @@ const drawer = ref(false)
 const handleThemeDialog = () => {
   drawer.value = !drawer.value
 }
-const isDarkSidebar = ref<Boolean>(globalStore.isDarkSidebar)
+const isDarkSidebar = ref<any>(globalStore.isDarkSidebar)
 watch(
   () => isDarkSidebar.value,
   val => globalStore.setGlobalState('isDarkSidebar', val),
 )
-const isGray = ref<Boolean>(globalStore.isGray)
+const isGray = ref<any>(globalStore.isGray)
 watch(
   () => isGray.value,
   val => {

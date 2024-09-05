@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { useGlobalStore } from './global'
+// import { useGlobalStore } from './global'
 import router from '@/router'
 import { Menu, listMenu } from '@/api'
 import { listToTree } from '@/utils'
@@ -25,7 +25,7 @@ export const useUserStore = defineStore('user', {
       this.$patch({ [args[0]]: args[1] })
     },
     reset() {
-      const globalStore = useGlobalStore()
+      // const globalStore = useGlobalStore()
       this.token = ''
       this.userInfo = {}
       // globalStore.tabList = []

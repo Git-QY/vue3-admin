@@ -11,7 +11,7 @@
 import Sidebar from './components/sidebar/index.vue'
 import Playground from './components/playground/index.vue'
 
-import { addAiRoom, listAiRoom, addAiRoomMessage, chatGpt, chatGptStream, listAiRoomMessage } from '@/api'
+import { addAiRoom, listAiRoom, addAiRoomMessage, chatGptStream, listAiRoomMessage } from '@/api'
 
 const currentId = ref<string>('') // 当前会话 ID
 const historyList = ref<Array<{ name: string; id: string }>>([]) // 会话历史列表

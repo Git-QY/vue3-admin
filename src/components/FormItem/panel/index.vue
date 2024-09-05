@@ -28,7 +28,7 @@
 import RightPanel from './right-panel.vue'
 import SearchBar from './search-bar.vue'
 import { deepClone } from '@/utils'
-import { Item } from './index'
+
 const props = defineProps({
   getList: { type: Function, default: () => {} }, // 获取列表数据的方法
   options: {
@@ -41,7 +41,7 @@ const props = defineProps({
     }),
   }, // 组件配置
   multiple: { type: Boolean, default: false }, // 是否多选
-  selected: { type: Array as () => Item[], default: () => [] }, // 已选数据
+  selected: { type: Array as () => panelItem[], default: () => [] }, // 已选数据
   placeholder: { type: String, default: '请输入关键词' }, // 搜索框占位符
   mode: { type: String, default: 'nodeTree' }, // 默认展示模式 nodeTree|nodeList
   nodeAdapter: { type: Function, default: (list: any) => list }, // 节点适配器函数
@@ -50,13 +50,13 @@ const props = defineProps({
 })
 const name = props.options.label || 'name'
 const $emits = defineEmits(['onchange', 'update:selected'])
-const selectData = ref<Item[]>(props.selected)
+const selectData = ref<panelItem[]>(props.selected)
 const searchInput = ref('')
-const checkNodeClick = (data: Item) => {
+const checkNodeClick = (data: panelItem) => {
   selectData.value = deepClone(data)
   $emits('update:selected', data)
 }
-const searchResult = ref<Item[]>([]) // 搜索结果
+const searchResult = ref<panelItem[]>([]) // 搜索结果
 const MODE = ref<string>(props.mode) // 默认展示树或者list
 const loading = ref(false)
 const componentRef = ref(null as any)
@@ -72,8 +72,8 @@ const isMODE = (searchInput: string) => {
     MODE.value = props.mode == 'nodeTree' ? 'nodeList' : MODE.value
   }
 }
-const onDelete = (data: Item) => {
-  selectData.value = selectData.value.filter((item: Item) => item.id !== data.id)
+const onDelete = (data: panelItem) => {
+  selectData.value = selectData.value.filter((item: panelItem) => item.id !== data.id)
   $emits('update:selected', selectData.value)
 }
 onMounted(() => {

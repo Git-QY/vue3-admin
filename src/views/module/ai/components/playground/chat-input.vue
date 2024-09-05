@@ -91,7 +91,7 @@ const send = () => {
 }
 
 // 触发文件上传
-const triggerUpload = (fileType: 'file' | 'img') => {
+const triggerUpload = (_fileType: 'file' | 'img') => {
   // 目前功能尚在开发中
   alert('功能开发中')
 }

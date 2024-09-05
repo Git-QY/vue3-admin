@@ -107,7 +107,7 @@ const onChangeStatus = async (row: any) => {
 const confirmLoading = ref(false)
 const userIds = ref([])
 const confirm = async (data: any) => {
-  const roleIds: any[] = data.map((item: Role) => item.id)
+  const roleIds: any[] = data.map((item: any) => item.id)
   try {
     confirmLoading.value = true
     await api.assignRoles({ userIds: userIds.value, roleIds })

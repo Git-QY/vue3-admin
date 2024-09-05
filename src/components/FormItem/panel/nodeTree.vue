@@ -17,7 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Item } from './index'
 import NodeContent from './node-content.vue'
 const props = defineProps<{
   getList: Function
@@ -44,7 +43,7 @@ const loadNode = async (node: any, resolve: (data: any[]) => void) => {
     $emit('update:loading', false)
   }
 }
-const checkNodeClick = (data: Item) => {
+const checkNodeClick = (data: panelItem) => {
   $emit('check-node-click', data)
 }
 </script>

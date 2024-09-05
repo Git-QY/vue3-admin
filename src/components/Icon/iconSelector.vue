@@ -7,14 +7,26 @@
           <svg-icon :iconName="layout" className="icon-search--svg" @click="handleLayout" />
         </div>
         <div class="icon-bars" v-if="layout == 'bars'">
-          <div v-for="item in iconData" :key="item" :class="`${item == props.modelValue ? ' icon-item icon-active' : 'icon-item'}`" @click="handleItem(item)">
+          <div
+            v-for="item in iconData"
+            :key="item"
+            :class="`${item == props.modelValue ? ' icon-item icon-active' : 'icon-item'}`"
+            @click="handleItem(item)"
+          >
             <svg-icon :iconName="item" /> <span>{{ item }}</span>
           </div>
         </div>
         <div class="icon-braille" v-else>
-          <svg-icon v-for="item in iconData" :key="item" :className="`${item == props.modelValue ? ' icon-item icon-active' : 'icon-item'}`" :iconName="item" @click="handleItem(item)" />
+          <svg-icon
+            v-for="item in iconData"
+            :key="item"
+            :className="`${item == props.modelValue ? ' icon-item icon-active' : 'icon-item'}`"
+            :iconName="item"
+            @click="handleItem(item)"
+          />
         </div>
-        <el-pagination background :page-size="size" :current-page="page" layout="prev, pager, next" :total="total" @current-change="currentChange"> </el-pagination>
+        <el-pagination background :page-size="size" :current-page="page" layout="prev, pager, next" :total="total" @current-change="currentChange">
+        </el-pagination>
       </div>
       <template #reference>
         <slot :value="props.modelValue">
@@ -48,7 +60,7 @@ const iconData = ref<string[]>([])
 const page = ref(1)
 const size = ref(60)
 const total = ref(0)
-const allData: string[] = getSymbolIDsFromString(window._iconfont_svg_string_4388344) // 全部数据
+const allData: string[] = getSymbolIDsFromString((window as any)._iconfont_svg_string_4388344) // 全部数据
 // 临时数据
 const tableData = ref<string[]>([])
 

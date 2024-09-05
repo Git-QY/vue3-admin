@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { upload } from '@/api/utils'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { SlateElement } from '@wangeditor/editor'
+// import { SlateElement } from '@wangeditor/editor'
 
 // 高度默认
 const props = defineProps({

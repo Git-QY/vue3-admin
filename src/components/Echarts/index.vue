@@ -64,6 +64,7 @@ onBeforeUnmount(() => {
 })
 defineExpose({
   getInstance: () => chart.value,
+  setOption: (option: ECOption) => chart.value.setOption(option),
 })
 // 加载中
 const showLoading = () => {

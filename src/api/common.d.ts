@@ -43,3 +43,10 @@ interface pageProps {
   pageSizes: number[]
   layout?: string
 }
+
+/**
+ * panel
+ */
+interface panelItem {
+  [key: string]: any
+}

@@ -1,12 +1,7 @@
 <template>
-  <div>
-    动态css
-    <AnimationButton1 />
-  </div>
+  <div>动态css</div>
 </template>
 
-<script lang="ts" setup>
-import AnimationButton1 from './components/animationButton1.vue'
-</script>
+<script lang="ts" setup></script>
 
 <style lang="scss" scoped></style>
