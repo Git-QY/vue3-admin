@@ -237,7 +237,7 @@ export const chatGpt = (messages: any[]): Promise<response> =>
   })
 import { useUserStore } from '@/store'
 export const chatGptStream = (messages: any[]) => {
-  return fetch(`${import.meta.env.VITE_API_BASE_URL}chats/chatGpt`, {
+  return fetch(`${import.meta.env.VITE_API_BASE_URL}/chats/chatGpt`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', token: useUserStore().token },
     body: JSON.stringify({ model: 'general', stream: true, messages }),

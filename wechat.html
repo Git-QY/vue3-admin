@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+
+  <body>
+    <script>
+      function getQuery(key = '', path = '') {
+        let search = (path || window.location.href).split('?')[1] || ''
+        let vars = search.split('&')
+        let query = {}
+        for (var i = 0; i < vars.length; i++) {
+          var [name, val] = vars[i].split('=')
+          query[name] = decodeURI(val)
+        }
+        return key ? query[key] : query
+      }
+
+      let query = getQuery()
+      if (query.code) {
+        window.parent.postMessage(
+          {
+            login: getQuery(),
+          },
+          '*',
+        )
+      }
+    </script>
+  </body>
+</html>

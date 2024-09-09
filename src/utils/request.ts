@@ -11,6 +11,7 @@ instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // 在请求发送之前可以做一些处理，比如添加请求头等
     config.headers!.token = useUserStore().token
+    config.headers!.Authorization = `Bearer 13512319102.`
     return config
   },
   (error: any) => {

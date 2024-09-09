@@ -12,6 +12,7 @@ import Sidebar from './components/sidebar/index.vue'
 import Playground from './components/playground/index.vue'
 
 import { addAiRoom, listAiRoom, addAiRoomMessage, chatGptStream, listAiRoomMessage } from '@/api'
+import { da } from 'element-plus/es/locale/index.mjs'
 
 const currentId = ref<string>('') // 当前会话 ID
 const historyList = ref<Array<{ name: string; id: string }>>([]) // 会话历史列表
@@ -99,50 +100,59 @@ const sendQuestion = async (data: { text: string }) => {
     }
     const response: any = await chatGptStream(messageList)
     const reader = response.body.getReader()
-    const decoder = new TextDecoder('utf-8')
-    // 接收流数据
+    const decoder = new TextDecoder()
+    const bufferArray: any[] = []
     while (abort.value) {
-      const { value, done } = await reader.read()
-      // 流结束
+      // 读取数据流的第一块数据，done表示数据流是否完成，value表示当前的数
+      const { done, value } = await reader.read()
+      const text = decoder.decode(value, { stream: true })
+      // 打印第一块的文本内容
+      // 假如text不是已data: 开头 和 前面的拼接 则拼接 发现下一个是data：开头 则解构前一个
+      if (text.startsWith('data:')) {
+        // 记录
+        bufferArray.push(text)
+        if (bufferArray.length > 1) {
+          // 取出第一个
+          const buffer = bufferArray.shift()
+          await typeWriter(buffer)
+        }
+      } else {
+        bufferArray[0] = bufferArray[0] + text
+      }
       if (done) {
+        await typeWriter(bufferArray[0])
         onEnd()
         break
-      }
-      try {
-        let buffer = decoder.decode(value, { stream: true })
-        const lines = buffer.split('\n')
-        // 模拟打字
-        for (const item of lines) {
-          if (!item.trim() || item === 'data: [DONE]') continue
-
-          const bufferObj = JSON.parse(item.substring(6)) as { choices: [{ delta: { content: string } }] }
-          // const text = JSON.stringify(bufferObj.choices[0].delta.content).split('')
-          const text = bufferObj.choices[0].delta.content.split('')
-          if (!text.length) continue
-
-          let timer: NodeJS.Timeout | null = null
-          const chunk = () => text.splice(0, Math.random() > 0.5 ? 3 : 5).join('')
-          onData({ val: chunk() }, abort.value)
-
-          await new Promise<void>(resolve => {
-            timer = setInterval(() => {
-              if (!text.length || !abort.value) {
-                if (timer) clearInterval(timer)
-                resolve()
-              } else {
-                onData({ val: chunk() }, abort.value)
-              }
-            }, 100)
-          })
-        }
-      } catch (error) {
-        console.error(error)
-        onError(error)
       }
     }
   } catch (error) {
     onError(error)
   }
+}
+// 模拟打字机方法
+
+const typeWriter = async (data: string) => {
+  let text = data
+  if (data.includes('data: [DONE]')) {
+    text = data.split('\n')[0]
+    if (text == 'data: [DONE]') return
+  }
+  const bufferObj = JSON.parse(text.substring(6)) as { choices: [{ delta: { content: string } }] }
+  const textArray = bufferObj.choices[0].delta.content.split('')
+  if (!textArray.length) return
+  let timer: NodeJS.Timeout | null = null
+  const chunk = () => textArray.splice(0, Math.random() > 0.5 ? 3 : 5).join('')
+  // onData({ val: chunk() }, abort.value)
+  await new Promise<void>(resolve => {
+    timer = setInterval(() => {
+      if (!textArray.length || !abort.value) {
+        if (timer) clearInterval(timer)
+        resolve()
+      } else {
+        onData({ val: chunk() }, abort.value)
+      }
+    }, 100)
+  })
 }
 // 更新当前问答状态
 const updateCurrentQA = (data: Partial<typeof currentQA.value>) => {

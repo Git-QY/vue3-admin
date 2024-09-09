@@ -44,7 +44,7 @@
         const params = window.location.href.split('?')[1]
         document.querySelector('.overlay').style.display = 'flex'
         await new Promise(resolve => setTimeout(resolve, 1000))
-        window.location.replace('http://localhost:9000/#/login?' + params)
+        window.location.replace(`http://615orob70703.vicp.fun/#/login?type=gitee&` + params)
       }
       window.onload = redirectToLogin
     </script>
@@ -53,7 +53,7 @@
     <div class="overlay" style="display: none">
       <div class="loader"></div>
     </div>
-    <!-- <p>gitee登录回调页面</p> -->
+    <p>gitee登录回调页面</p>
     <!-- https://gitee.com/oauth/authorize?client_id=c2c0c137422ab80e3a13ee7e242ae230b4825f5cf8cde692ce72ae99cea32f78&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2FloginWithGitee.html&response_type=code -->
   </body>
 </html>

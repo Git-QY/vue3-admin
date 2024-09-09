@@ -13,20 +13,21 @@ export function createMyApp() {
       return { isLoaded }
     },
     render() {
-      return this.isLoaded
-        ? h(APP)
-        : h(
-            'div',
-            {
-              style: {
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
-              },
-            },
-            // h('img', { src: gif, style: { width: '100px' } }),
-          )
+      return  h(APP)
+      // return this.isLoaded
+      //   ? h(APP)
+      //   : h(
+      //       'div',
+      //       {
+      //         style: {
+      //           display: 'flex',
+      //           justifyContent: 'center',
+      //           alignItems: 'center',
+      //           height: '100vh',
+      //         },
+      //       },
+      //       h('img', { src: gif, style: { width: '100px' } }),
+      //     )
     },
   })
 

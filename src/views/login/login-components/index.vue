@@ -1,18 +1,14 @@
 <template>
-  <div class="login" v-loading="loading">
-    <p class="login-title">vue3-admin 后台管理</p>
-    <div class="login-logo">{{ pane === forget ? '忘记密码' : pane === register ? '注册' : '登录' }}</div>
-    <component :is="pane"></component>
-    <footer class="footer">
-      <el-divider class="divider">
-        <span>其他登录方式</span>
-      </el-divider>
-      <div class="third-login-items">
-        <div class="item" @click="giteeLogin">
-          <img style="width: 100%; height: 100%" src="@/assets/images/giteeLogo.png" alt="" />
-        </div>
+  <div class="qy-login">
+    <div class="qy-login-container" v-loading="loading">
+      <div class="qy-login-head">
+        <div class="qy-login-title">欢迎使用 vue3-admin</div>
+        <!-- <div class="qy-login-logo">{{ pane === forget ? '忘记密码' : pane === register ? '注册' : '登录' }}</div> -->
       </div>
-    </footer>
+      <TopCorner v-model:value="pane"></TopCorner>
+      <component :is="componentPane"></component>
+      <OtherMethods></OtherMethods>
+    </div>
   </div>
 </template>
 
@@ -20,99 +16,86 @@
 import login from './login.vue'
 import forget from './forget.vue'
 import register from './register.vue'
+import qrCode from './qrCode/index.vue'
 import api from '@/api/user'
+import OtherMethods from './components/other-methods.vue'
+import TopCorner from './components/top-corner.vue'
+import { LoginProvide } from './interface'
+
 import { ElMessage } from 'element-plus'
-import { useUserStore } from '@/store'
-const userStore = useUserStore()
-const route = useRoute()
-const router = useRouter()
+// import { useUserStore } from '@/store'
+// const userStore = useUserStore()
+// const route = useRoute()
+// const router = useRouter()
 
-// 第三方登录登录中加载状态
-const loading = ref(false)
+const props = defineProps<{
+  // 登录成功回调
+  onLogin: (dataL: any) => void
+}>()
 
-onMounted(async () => {
-  const code = route.query.code as string
-  if (code) {
-    try {
-      loading.value = true
-      const data = await api.thirdLogin({ type: 'gitee', code })
-      if (data.code === 200) {
-        loading.value = false
-        ElMessage.success('登录成功')
-        userStore.token = data.data.token
-        userStore.userInfo = data.data.userInfo
-        router.push('/')
-      }
-    } catch (error) {
-      ElMessage.error((error as resError).message)
-      loading.value = false
-    }
-  }
-})
-
-// markRaw 标记为原始类型，不做任何处理
-let pane = ref(markRaw(login))
-provide('loginConfig', {
-  setPane: (name: any) => {
-    pane.value = getComponent(name)
-  },
-})
-
+const pane = ref<string>('login')
+const componentPane = computed(() => getComponent(pane.value))
 const getComponent = (name: string) => {
   const componentMap: { [key: string]: any } = {
     login,
     forget,
     register,
+    qrCode,
   }
   return markRaw(componentMap[name] || login)
 }
 
-// 通过gitee登录
-const giteeLogin = async () => {
-  const client_id = 'c2c0c137422ab80e3a13ee7e242ae230b4825f5cf8cde692ce72ae99cea32f78'
-  // const client_secret = '9d5f56dc5b8fc1ac9dc88a96ba322b0368ec4e94c49d594a5649fe492f4c6d1e'
-  const redirect_uri = 'http://localhost:9000/loginWithGitee.html'
-  const response_type = 'code'
-  window.location.href = `https://gitee.com/oauth/authorize?client_id=${client_id}&response_type=${response_type}&redirect_uri=${redirect_uri}`
+// 登录成功方法
+const loginSuccess = async (res: any) => {
+  // 登录成功回调
+  if (res.code === 200) {
+    if (props.onLogin) {
+      props.onLogin(res.data)
+    } else {
+      console.warn('登录成功,没有配置 onLogin 回调方法')
+    }
+  } else {
+    ElMessage.error(res.message)
+  }
 }
+// 登录失败方法
+const loginFailure = () => {
+  ElMessage.error('登录失败')
+}
+// 第三方登录登录中加载状态
+const loading = ref(false)
+// 第三方免登录方法
+const thirdLogin = async (data: { [key: string]: any }) => {
+  const { code, type } = data
+  if (!code || !type) return ElMessage.error('第三方免登录参数错误')
+  loading.value = true
+  let response = null
+  try {
+    switch (type) {
+      case 'gitee':
+        response = await api.thirdLogin({ type: 'gitee', code })
+        break  
+      default:
+        throw new Error('暂不支持该第三方登录')
+        break
+    }
+    await loginSuccess(response)
+  } catch (error) {
+    console.log("🚀 ~ thirdLogin ~ error:", error)
+    ElMessage.error(error as resError)
+    loading.value = false
+  }
+}
+// markRaw 标记为原始类型，不做任何处理
+// let pane = ref(markRaw(login))
+const loginConfig: LoginProvide = {
+  setPane: (name: string) => (pane.value = name),
+  loginSuccess,
+  loginFailure,
+}
+provide('loginConfig', loginConfig)
+defineExpose({ thirdLogin })
 </script>
-<style lang="scss" scoped>
-.login {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 400px;
-  padding: 40px 10px;
-  border-radius: 16px;
-  height: 400px;
-  &-title {
-    font-weight: 600;
-  }
-
-  .login-logo {
-    text-align: center;
-    height: 50px;
-    img {
-      height: 40px;
-      margin: 10px 0;
-    }
-  }
-  .footer {
-    width: 80%;
-  }
-  .third-login-items {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .item {
-      width: 30px;
-      height: 30px;
-      :hover {
-        cursor: pointer;
-      }
-    }
-  }
-}
+<style lang="scss">
+@import url(./index.scss);
 </style>

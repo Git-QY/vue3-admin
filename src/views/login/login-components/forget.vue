@@ -125,7 +125,6 @@ const onSubmit = () => {
 </script>
 <style lang="scss" scoped>
 .forget-form {
-  width: 70%;
   .forget-form--next {
     width: 100%;
   }

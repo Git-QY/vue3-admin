@@ -225,3 +225,41 @@ export function copyText(options: { text: string; origin?: boolean }) {
 export function isEmptyObject(obj: any) {
   return Object.keys(obj).length === 0 && obj.constructor === Object
 }
+/**
+ * 去除空参数
+ *
+ * @export
+ * @param { object } data
+ * @returns { object }
+ */
+export function dropEmpty(data: { [key: string]: any }): { [key: string]: any } {
+  let newData: { [key: string]: any } = {}
+  Object.keys(data).forEach(key => {
+    let value = data[key]
+    if ([null, '', undefined].some(i => Object.is(value, i)) || (Array.isArray(value) && !value.length)) {
+      // 空参数被忽略
+    } else {
+      newData[key] = value
+    }
+  })
+  return newData
+}
+
+/***
+ * 获取url参数
+ * @param {String} key
+ * @param {String} path
+ * @return {String} value
+ */
+export function getQuery(key?: string, path?: string): string | { [key: string]: string } {
+  let search = (path || window.location.href).split('?').pop() || ''
+  let vars = search ? search.split('&') : []
+  let query: { [key: string]: string } = {}
+  for (let i = 0; i < vars.length; i++) {
+    let [name, val] = vars[i].split('=')
+    if (val) {
+      query[name] = decodeURIComponent(val)
+    }
+  }
+  return key ? query[key] : query
+}

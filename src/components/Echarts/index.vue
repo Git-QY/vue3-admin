@@ -47,7 +47,7 @@ watch(
   () => props.option,
   newVal => {
     if (newVal) {
-      if (!isEmptyObject(newVal)) return
+      if (isEmptyObject(newVal)) return
       chart.value.setOption(newVal)
       hideLoading()
     }

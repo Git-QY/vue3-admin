@@ -1,0 +1,74 @@
+.qy-login {
+  position: relative;
+  box-sizing: border-box;
+  padding: 40px;
+  padding-bottom: 20px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(31, 35, 41, 0.03), 0 3px 6px -6px rgba(31, 35, 41, 0.05), 0 6px 18px 6px rgba(31, 35, 41, 0.03);
+  .qy-login-container {
+    align-items: center;
+    border-radius: 16px;
+  }
+  .qy-login-head {
+    .qy-login-title {
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 30px;
+      color: #1f2329;
+      padding-bottom: 20px;
+    }
+    .qy-login-logo {
+      text-align: center;
+      height: 50px;
+      img {
+        height: 40px;
+        margin: 10px 0;
+      }
+    }
+  }
+  // 登录
+  .login-form {
+    .login-form--submit {
+      width: 100%;
+    }
+    .login-form--footer {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .qy-login--corner {
+    width: 66px;
+    height: 66px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: var(--primary);
+    border-top-right-radius: 10px;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 66px 0 0 66px;
+      border-color: transparent transparent transparent #fff;
+      opacity: 1;
+    }
+  }
+}
+.qy-login--tooltip {
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  font-size: 14px;
+  color: #fff;
+  background-color: var(--primary) !important;
+  border: 0;
+  padding: 6px 10px;
+  .el-popper__arrow {
+    &::before {
+      background-color: var(--primary) !important;
+    }
+  }
+}

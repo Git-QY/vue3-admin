@@ -141,3 +141,9 @@ export default {
     })
   },
 }
+
+// 微信授权登录
+
+// 获取微信二维码
+
+export const wechatLogin = (data: any): Promise<response> => request({ url: '/users/login/wechat', method: 'post', data })
