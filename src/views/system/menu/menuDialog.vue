@@ -1,8 +1,15 @@
 <template>
   <el-dialog v-model="dialogVisible" :title="props.title" :width="props.width" @close="close">
-    <Form :columns="wColumns" v-model="form" ref="formRef">
+    <Form :columns="columns" v-model="form" ref="formRef">
       <template #parentId>
-        <el-tree-select v-model="form.parentId" :data="treeData" check-strictly :render-after-expand="false" placeholder="请选择父级菜单" style="width: 100%" />
+        <el-tree-select
+          v-model="form.parentId"
+          :data="treeData"
+          check-strictly
+          :render-after-expand="false"
+          placeholder="请选择父级菜单"
+          style="width: 100%"
+        />
       </template>
       <template #menuType>
         <el-radio-group v-model="form.menuType" size="small">
@@ -57,8 +64,13 @@ const columns = reactive<columnsProps[]>([
   { prop: 'perms', label: '权限标识', rules: 'must', span: 12 },
   { prop: 'sort', label: '排序', type: 'input-number', span: 12 },
 
-  { prop: 'path', label: '路由路径', span: 12 },
-  { prop: 'component', label: '组件路径', rules: 'must', span: 12 },
+  {
+    prop: 'path',
+    label: '路由路径',
+    span: 12,
+    mate: [{ prop: 'menuType', conditions: [{ op: '!=', value: '2' }] }],
+  },
+  { prop: 'component', label: '组件路径', rules: 'must', span: 12, mate: [{ prop: 'menuType', conditions: [{ op: '==', value: '1' }] }] },
   {
     prop: 'isKeepAlive',
     label: '是否缓存',
@@ -66,6 +78,7 @@ const columns = reactive<columnsProps[]>([
     options: DICTS.menuKeepAlive,
     rules: 'must',
     span: 12,
+    mate: [{ prop: 'menuType', conditions: [{ op: '==', value: '1' }] }],
   },
   {
     prop: 'isHidden',
@@ -82,6 +95,7 @@ const columns = reactive<columnsProps[]>([
     options: DICTS.menuFold,
     rules: 'must',
     span: 12,
+    mate: [{ prop: 'menuType', conditions: [{ op: '==', value: '0' }] }],
   },
   {
     prop: 'isLink',
@@ -131,32 +145,32 @@ const confirm = async () => {
     loading.value = false
   }
 }
-const wColumns = ref<columnsProps[]>([])
-const pickProp = (fields: string[]) => {
-  return columns.filter(item => fields.includes(item.prop))
-}
-watch(
-  () => form.value.menuType,
-  newVal => {
-    let fields: string[] = []
-    switch (newVal) {
-      case '0':
-        fields = ['parentId', 'menuType', 'icon', 'menuName', 'perms', 'path', 'sort', 'isHidden', 'isFold', 'isLink', 'status', 'remark']
-        break
-      case '1':
-        fields = ['parentId', 'menuType', 'icon', 'menuName', 'perms', 'path', 'component', 'sort', 'isHidden', 'isKeepAlive', 'isLink', 'status', 'remark']
-        break
-      case '2':
-        fields = ['parentId', 'menuType', 'menuName', 'sort', 'isHidden', 'perms', 'isLink', 'status', 'remark']
-        break
+// const wColumns = ref<columnsProps[]>([])
+// const pickProp = (fields: string[]) => {
+//   return columns.filter(item => fields.includes(item.prop))
+// }
+// watch(
+//   () => form.value.menuType,
+//   newVal => {
+//     let fields: string[] = []
+//     switch (newVal) {
+//       case '0':
+//         fields = ['parentId', 'menuType', 'icon', 'menuName', 'perms', 'path', 'sort', 'isHidden', 'isFold', 'isLink', 'status', 'remark']
+//         break
+//       case '1':
+//         fields = ['parentId', 'menuType', 'icon', 'menuName', 'perms', 'path', 'component', 'sort', 'isHidden', 'isKeepAlive', 'isLink', 'status', 'remark']
+//         break
+//       case '2':
+//         fields = ['parentId', 'menuType', 'menuName', 'sort', 'isHidden', 'perms', 'isLink', 'status', 'remark']
+//         break
 
-      default:
-        break
-    }
-    wColumns.value = pickProp(fields)
-  },
-  { immediate: true },
-)
+//       default:
+//         break
+//     }
+//     wColumns.value = pickProp(fields)
+//   },
+//   { immediate: true },
+// )
 // 向外暴露
 defineExpose({
   open,

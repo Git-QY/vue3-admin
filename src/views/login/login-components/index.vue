@@ -81,7 +81,6 @@ const thirdLogin = async (data: { [key: string]: any }) => {
     }
     await loginSuccess(response)
   } catch (error) {
-    console.log("🚀 ~ thirdLogin ~ error:", error)
     ElMessage.error(error as resError)
     loading.value = false
   }

@@ -8,7 +8,9 @@
         </div>
         <!-- 左侧原数据列表 -->
         <ul v-infinite-scroll="getList" :infinite-scroll-delay="500" :infinite-scroll-disabled="scrollDisabled" class="left-list">
-          <li v-for="item in listData" class="left-list--item"><el-checkbox :model-value="item.checked" :label="item.roleName" size="large" @change="onCheckChange(item)" /></li>
+          <li v-for="item in listData" class="left-list--item">
+            <el-checkbox :model-value="item.checked" :label="item.roleName" size="large" @change="onCheckChange(item)" />
+          </li>
           <p v-if="loading"><el-divider>正在加载中... </el-divider></p>
           <p v-if="isLoading"><el-divider>没有更多数据~ </el-divider></p>
         </ul>
@@ -52,8 +54,6 @@ const search = () => {
 }
 const searchDebounce = debounce(search, 500)
 const onSearch = () => {
-  console.log('开始搜索')
-
   searchDebounce()
 }
 // 选中

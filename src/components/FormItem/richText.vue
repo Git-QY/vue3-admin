@@ -45,9 +45,7 @@ const upLoad = async (file: any, insertFn: any) => {
     formData.append('file', file)
     const res = await upload(formData)
     insertFn(res.data.url)
-  } catch (error) {
-    console.log(error)
-  }
+  } catch (error) {}
 }
 // 自定义上传插入视频节点
 const customParseVideoSrc = (src: string) => {

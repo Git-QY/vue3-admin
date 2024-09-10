@@ -73,9 +73,7 @@ const getDetails = async () => {
     })
   }
 }
-onMounted(() => {
-  console.log('123456')
-})
+onMounted(() => {})
 // 监听visible
 watch(
   () => visible.value,

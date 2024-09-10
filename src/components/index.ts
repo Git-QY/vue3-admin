@@ -11,6 +11,7 @@ import Dialog from './Dialog/index.vue'
 import Echarts from './Echarts/index.vue'
 
 import type { App, Component } from 'vue'
+import { ca } from 'element-plus/es/locale/index.mjs'
 // 对外暴露插件对象，注册全局组件
 const components: { [name: string]: Component } = {
   PageTable,
@@ -57,7 +58,7 @@ export default {
 //       },
 //     ],
 //   },// 条件运算符类型
-type Operator = '==' | '>' | '<' | '>=' | '<='
+type Operator = '==' | '>' | '<' | '>=' | '<=' | '!='
 
 // 条件接口
 interface Condition {
@@ -110,6 +111,9 @@ export const evaluateConditions = (mate: MateCondition[], form: any): boolean =>
         return form[prop] >= item.value
       case '<=':
         return form[prop] <= item.value
+      //  不等于
+      case '!=':
+        return form[prop] !== item.value
       default:
         return false
     }

@@ -18,7 +18,7 @@ export const useGlobalStore = defineStore('global', {
     return {
       isFullscreen: false, // 是否全屏
       language: 'Chinese', // 语言
-      theme: 'dark', // 主题
+      theme: 'light', // 主题
       themeColor: '#3582FB', // 主题色
       layout: 'vertical', // 布局方式
       isCollapse: false, // 是否折叠

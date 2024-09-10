@@ -32,7 +32,6 @@ const confirm = async () => {
     try {
       await props.confirm(selected.value)
     } catch (error) {
-      console.log(error)
     } finally {
       confirmLoading.value = false
     }
@@ -46,9 +45,7 @@ const open = async (row: Dept[]) => {
   visible.value = true
   selected.value = [...row]
 }
-onMounted(() => {
-  console.log('dept-dialog=>onMounted')
-})
+onMounted(() => {})
 defineExpose({ open })
 </script>
 

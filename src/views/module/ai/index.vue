@@ -12,7 +12,6 @@ import Sidebar from './components/sidebar/index.vue'
 import Playground from './components/playground/index.vue'
 
 import { addAiRoom, listAiRoom, addAiRoomMessage, chatGptStream, listAiRoomMessage } from '@/api'
-import { da } from 'element-plus/es/locale/index.mjs'
 
 const currentId = ref<string>('') // 当前会话 ID
 const historyList = ref<Array<{ name: string; id: string }>>([]) // 会话历史列表
@@ -137,8 +136,11 @@ const typeWriter = async (data: string) => {
     text = data.split('\n')[0]
     if (text == 'data: [DONE]') return
   }
-  const bufferObj = JSON.parse(text.substring(6)) as { choices: [{ delta: { content: string } }] }
-  const textArray = bufferObj.choices[0].delta.content.split('')
+  const bufferObj = JSON.parse(text.substring(6)) as { choices?: [{ delta: { content: string } }] }
+  let textArray: string[] = []
+  if (bufferObj.choices) {
+    textArray = bufferObj?.choices[0].delta.content.split('')
+  }
   if (!textArray.length) return
   let timer: NodeJS.Timeout | null = null
   const chunk = () => textArray.splice(0, Math.random() > 0.5 ? 3 : 5).join('')
@@ -162,12 +164,12 @@ const updateCurrentQA = (data: Partial<typeof currentQA.value>) => {
 const stopResponse = async () => {
   abort.value?.()
   abort.value = null
-  updateCurrentQA({ isResponing: false })
-  if (currentChat.value) {
+  if (currentChat.value && currentQA.value.isResponing) {
     currentChat.value.messageList.push({ type: 'answer', val: currentQA.value.val })
     await addAiRoomMessage({ roomId: currentId.value, contant: { type: 'answer', val: currentQA.value.val } })
-    focusInput()
   }
+  updateCurrentQA({ isResponing: false })
+  focusInput()
 }
 const abort: Ref<(() => void) | null> = ref(null)
 // 接收数据的回调

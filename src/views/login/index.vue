@@ -22,10 +22,8 @@ const bgImg = ref('https://picui.cn//uploads/background/auth/382ae767058ba05c1eb
 const yiyan = ref('')
 // 登录成功的回调
 const onLogin = async (data: any) => {
-  console.log('🚀 ~ onLogin ~ data:', data)
   // 登录成功后跳转
   console.log('登录成功后跳转')
-
   // router.push('/')
   userStore.token = data.token
   userStore.userInfo = data.userInfo

@@ -15,9 +15,10 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '/home', name: 'home', component: () => import('@/views/home/index.vue'), meta: { name: '首页' } }],
   },
   { path: '/layout/edit', component: () => import('@/views/home/edit.vue') },
+  // iframe
+  { path: '/scene/:category', component: () => import('@/views/iframe/index.vue') },
   { path: '/:pathMatch(.*)*', component: () => import('@/views/error/404.vue') },
 ]
-
 // 路由实例
 // history
 // const router: Router = createRouter({ history: createWebHistory(), routes });
