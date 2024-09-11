@@ -56,8 +56,8 @@ export interface Menu {
   status: string
   visible: Boolean
   isLink?: string
-  isKeepAlive?: string
-  isFold: string
+  isKeepAlive?: Boolean
+  isFold: Boolean
   createTime?: Date
   updateTime?: Date
   children?: Menu[]

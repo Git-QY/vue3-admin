@@ -1,4 +1,4 @@
-import APP from './App.vue'
+import APP from '../App.vue'
 // import gif from '@/assets/images/loader-light.gif'
 
 export function createMyApp() {
@@ -13,7 +13,7 @@ export function createMyApp() {
       return { isLoaded }
     },
     render() {
-      return  h(APP)
+      return h(APP)
       // return this.isLoaded
       //   ? h(APP)
       //   : h(

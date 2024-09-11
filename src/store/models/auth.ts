@@ -47,7 +47,7 @@ export const useAuthStore = defineStore('auth', {
 function generateRouter(router: Router, menus: Menu[]) {
   let modules = import.meta.glob('@/views/**/*.vue')
   const iframeComponent = modules['/src/views/iframe/index.vue'] // iframe组件
-  const layoutComponent = modules['/src/views/layout/index.vue'] // layout组件
+  const layoutComponent = () => import('@/layout/index.vue') // layout组件
   const appComponent = modules['/src/views/app.vue'] // 生成空的路由组件阶梯2级以下为目录的情况
   const Component = (component?: string) => modules[`/src/views${component}.vue`]
   const newMenus = menus
@@ -55,34 +55,64 @@ function generateRouter(router: Router, menus: Menu[]) {
     .map((item: Menu) => {
       const { id, parentId, menuType, menuName, path, component, isHidden, isKeepAlive, isLink } = item
       const meta = { name: menuName, isHidden, isKeepAlive, isLink, parentId, id }
-      // 第一级为菜单的情况
-      if (parentId === '0' && menuType === '1') {
-        return {
-          id,
-          parentId: '0',
-          path: '/',
-          component: layoutComponent,
-          children: [{ path, component: Component(component), meta }],
+      const argument = { id, parentId, path, meta }
+      if (menuType == '0') {
+        // 目录是外链(一般不存在)
+        if (isLink) {
+          return { ...argument, component: iframeComponent }
         }
-      }
-      // 生成空的路由组件2级以下为目录的情况
-      else if (parentId !== '0' && menuType === '0') {
-        return {
-          id,
-          parentId,
-          path,
-          component: appComponent,
-          meta,
+        // 第一级为目录
+        if (parentId == '0') {
+          return { ...argument, component: layoutComponent }
+        }
+        // 第一级以外为目录的情况
+        else {
+          return { ...argument, component: appComponent }
+        }
+      } else if (menuType == '1') {
+        // 菜单是外链
+        if (isLink) {
+          return { ...argument, component: iframeComponent }
+        }
+        // 第一级为菜单
+        if (parentId == '0') {
+          return { id, parentId: '0', path: '/', component: layoutComponent, children: [{ ...argument, component: Component(component) }] }
+        }
+        // 第一级以外为菜单的情况
+        else {
+          return { ...argument, component: Component(component) }
         }
       } else {
-        return {
-          id,
-          parentId,
-          path,
-          component: isLink ? iframeComponent : menuType === '0' ? layoutComponent : Component(component),
-          meta,
-        }
+        console.warn('按钮不生成路由')
       }
+      // // 第一级为菜单的情况
+      // if (parentId === '0' && menuType === '1') {
+      //   return {
+      //     id,
+      //     parentId: '0',
+      //     path: '/',
+      //     component: layoutComponent,
+      //     children: [{ path, component: Component(component), meta }],
+      //   }
+      // }
+      // // 生成空的路由组件2级以下为目录的情况
+      // else if (parentId !== '0' && menuType === '0') {
+      //   return {
+      //     id,
+      //     parentId,
+      //     path,
+      //     component: appComponent,
+      //     meta,
+      //   }
+      // } else {
+      //   return {
+      //     id,
+      //     parentId,
+      //     path,
+      //     component: isLink ? iframeComponent : menuType === '0' ? layoutComponent : Component(component),
+      //     meta,
+      //   }
+      // }
     })
   listToTree(deepClone(newMenus)).forEach(route => router.addRoute(route))
 }

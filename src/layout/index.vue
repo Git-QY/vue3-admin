@@ -8,7 +8,6 @@ import LayoutClassic from './LayoutClassic/index.vue'
 import LayoutVertical from './LayoutVertical/index.vue'
 import LayoutHorizontal from './LayoutHorizontal/index.vue'
 import LayoutColumns from './LayoutColumns/index.vue'
-
 import { type Component } from 'vue'
 
 const globalState = useGlobalStore()
