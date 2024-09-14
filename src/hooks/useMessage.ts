@@ -9,37 +9,24 @@ interface MessageBoxOptions {
   cancelButtonText?: string
   type?: MessageType
 }
-
-export function useElementUI() {
+export function useMessage(onlyOne?: boolean) {
   // 是否只显示一个消息或对话框
-  const onlyOne = ref(false)
-
+  const onlyOnes = ref<boolean>(onlyOne || false)
   // 消息提示
-  const showMessage = (message: string, type: MessageType = 'success'): void => {
-    if (onlyOne.value) {
+  const showMessage = (message: any, type: MessageType = 'success'): void => {
+    if (onlyOnes.value) {
       ElMessage.closeAll()
     }
-    ElMessage({
-      message,
-      type,
-    })
+    if (message.error || message.msg || message.message) {
+      message = message.error || message.msg || message.message
+    }
+    ElMessage({ message, type })
   }
-
   // 确认对话框
   const showMessageBox = async (message: string, title: string = '提示', options: MessageBoxOptions = {}): Promise<boolean> => {
-    if (onlyOne.value) {
+    if (onlyOnes.value) {
       ElMessageBox.close()
     }
-    // try {
-    //   const result = await ElMessageBox.confirm(message, title, {
-    //     confirmButtonText: options.confirmButtonText || '确认',
-    //     cancelButtonText: options.cancelButtonText || '取消',
-    //     type: options.type || 'warning',
-    //   })
-    //   return result === 'confirm' // 用户点击了确认按钮
-    // } catch (error) {
-    //   return false // 用户点击了取消按钮或关闭了对话框
-    // }
     return new Promise((resolve, _reject) => {
       ElMessageBox.confirm(message, title, {
         confirmButtonText: options.confirmButtonText || '确认',
@@ -54,7 +41,6 @@ export function useElementUI() {
         })
     })
   }
-
   return {
     showMessage,
     showMessageBox,

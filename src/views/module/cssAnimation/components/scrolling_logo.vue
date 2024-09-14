@@ -29,19 +29,22 @@
 <script lang="ts" setup></script>
 
 <style lang="scss" scoped>
-$wall-item-width: 150px;
-$wall-item-height: 90px;
+$wall-item-width: 200px;
+$wall-item-height: 60px;
 $wall-item-number: 9;
 $duration: 16s;
 
 .container {
+  width: 100%;
   .wall {
-    margin: 30px auto;
+    box-sizing: border-box;
+    padding: 0 $wall-item-width;
+    margin: 0 $wall-item-width;
+    margin-top: 30px;
     height: $wall-item-height;
-    width: 80vw;
     position: relative;
     mask-image: linear-gradient(90deg, hsl(0 0% 0% / 0), hsl(0 0% 0% / 1) 20%, hsl(0 0% 0% / 1) 80%, hsl(0 0% 0% / 0));
-
+    overflow: hidden;
     .wall-item {
       position: absolute;
       top: 0;
@@ -59,7 +62,7 @@ $duration: 16s;
         animation-delay: calc((($duration / $wall-item-number) * ($wall-item-number - #{$i})) * -1);
       }
     }
-    .wall:has(.wall-item:hover) .wall-item {
+    &:has(.wall-item:hover) .wall-item {
       animation-play-state: paused;
     }
     &[data-direction='reverse'] .wall-item {

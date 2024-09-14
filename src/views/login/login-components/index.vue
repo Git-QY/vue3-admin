@@ -44,7 +44,6 @@ const getComponent = (name: string) => {
   }
   return markRaw(componentMap[name] || login)
 }
-
 // 登录成功方法
 const loginSuccess = async (res: any) => {
   // 登录成功回调

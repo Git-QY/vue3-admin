@@ -2,14 +2,14 @@
   <Page main="/system/user">
     <page-table v-bind="tableConfig" ref="tableRef">
       <template #btnleft>
-        <el-button type="primary" @click="onAdd" v-auth="['system:user:add']">新增</el-button>
+        <el-button type="primary" @click="operate['add']" v-auth="['system:user:add']">新增</el-button>
         <el-button type="primary" @click="onAssignRole" v-auth="['system:user:assign']">批量分配角色</el-button>
       </template>
       <!-- <template #query-createTime="{ item }">具名插槽</template> -->
       <template #operate="{ item }">
         <el-table-column v-slot="{ row }" v-bind="item">
-          <el-button type="primary" link @click="onEdit(row)" v-auth="['system:user:update']">编辑</el-button>
-          <el-button type="danger" link @click="onDelete(row.id)" v-auth="['system:user:delete']">删除</el-button>
+          <el-button type="primary" link @click="operate['edit'](row)" v-auth="['system:user:update']">编辑</el-button>
+          <el-button type="danger" link @click="operate['delete'](row.id)" v-auth="['system:user:delete']">删除</el-button>
         </el-table-column>
       </template>
       <template #status="{ item }">
@@ -21,7 +21,7 @@
             active-value="1"
             inactive-value="0"
             :inline-prompt="true"
-            @click="onChangeStatus(row)"
+            @click="operate['changeStatus'](row)"
           >
           </el-switch>
         </el-table-column>
@@ -32,13 +32,14 @@
 </template>
 
 <script lang="ts" setup>
+import { useTemplateRef } from 'vue'
 import pageTable from '@/components/Table/index.vue'
 import request from '@/utils/request'
 import api, { User } from '@/api/user'
-import { ElMessage, ElMessageBox, dayjs } from 'element-plus'
+import { dayjs } from 'element-plus'
 import roleDialog from '@/components/DusinessDialog/role-dialog.vue'
-import { useElementUI } from '@/hooks/useMessage'
-const { showMessage } = useElementUI()
+import { useMessage } from '@/hooks/useMessage'
+const { showMessage, showMessageBox } = useMessage()
 const router = useRouter()
 const tableConfig = reactive({
   table: { rowKey: 'id' },
@@ -74,38 +75,32 @@ const tableConfig = reactive({
     { prop: 'operate', label: '操作', type: 'slot', fixed: 'right', width: 200 },
   ],
 })
-const tableRef = ref(null as any)
-const onAdd = () => {
-  router.push('/system/user/add')
+const tableRef = useTemplateRef<HTMLElement | any>('tableRef')
+const operate = {
+  add: () => router.push('/system/user/add'),
+  edit: (row: User) => router.push(`/system/user/edit?id=${row.id}`),
+  delete: async (id: string) => {
+    try {
+      const result = await showMessageBox('确定删除吗？', '提示')
+      if (!result) return
+      await api.deleteUser(id)
+      tableRef.value?.refresh()
+      showMessage('删除成功')
+    } catch (error) {
+      showMessage((error as resError).message, 'error')
+    }
+  },
+  changeStatus: async (row: User) => {
+    try {
+      await api.updateUserField({ id: row.id, fieldName: 'status', fieldValue: row.status } as any)
+      showMessage('修改成功')
+    } catch (error: any) {
+      showMessage(error.message, 'error')
+    }
+  },
 }
-const onEdit = (row: User) => {
-  router.push(`/system/user/edit?id=${row.id}`)
-}
-const onDelete = (id: string) => {
-  ElMessageBox.confirm('确定删除吗？', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  })
-    .then(async () => {
-      const res = await api.deleteUser(id)
-      ElMessage.success(res.message)
-      tableRef.value.refresh()
-    })
-    .catch(() => {
-      ElMessage.info('取消删除')
-    })
-}
-const onChangeStatus = async (row: any) => {
-  try {
-    const res = await api.updateUserField({ id: row.id, fieldName: 'status', fieldValue: row.status })
-    ElMessage.success(res.message)
-  } catch (error: any) {
-    ElMessage.error(error)
-  }
-}
-const confirmLoading = ref(false)
-const userIds = ref([])
+const confirmLoading = ref<boolean>(false)
+const userIds = ref<string[]>([])
 const confirm = async (data: any) => {
   const roleIds: any[] = data.map((item: any) => item.id)
   try {
@@ -120,9 +115,9 @@ const confirm = async (data: any) => {
   }
 }
 // 分配角色
-const roleAssignmentDialogRef = ref<HTMLFormElement | null>(null)
+const roleAssignmentDialogRef = useTemplateRef<HTMLElement | any>('roleAssignmentDialogRef')
 const onAssignRole = () => {
-  if (tableRef.value?.selectData.length == 0) return ElMessage.warning('请先选择用户')
+  if (tableRef.value?.selectData.length == 0) return showMessage('请先选择用户', 'error')
   if (tableRef.value?.selectData.length == 1) {
     roleAssignmentDialogRef.value?.open(tableRef.value?.selectData[0].roleIds)
   } else {

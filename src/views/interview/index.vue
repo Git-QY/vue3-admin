@@ -18,8 +18,8 @@
 </template>
 <script lang="ts" setup>
 import { listInterview, deleteInterview } from '@/api'
-import { useElementUI } from '@/hooks/useMessage'
-const { showMessage, showMessageBox } = useElementUI()
+import { useMessage } from '@/hooks/useMessage'
+const { showMessage, showMessageBox } = useMessage()
 const router = useRouter()
 const tableConfig = reactive({
   table: { rowKey: 'id' },

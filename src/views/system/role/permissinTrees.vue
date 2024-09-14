@@ -7,8 +7,8 @@
 import { listMenu, detailMenu, updateRoleField } from '@/api'
 import Dialog from '@/components/Dialog/index.vue'
 import Panel from '@/components/FormItem/panel/index.vue'
-import { useElementUI } from '@/hooks/useMessage'
-const { showMessage } = useElementUI()
+import { useMessage } from '@/hooks/useMessage'
+const { showMessage } = useMessage()
 const props = defineProps({
   confirm: { type: Function, default: () => {} },
 })

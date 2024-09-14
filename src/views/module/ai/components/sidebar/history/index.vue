@@ -45,8 +45,8 @@
 <script lang="ts" setup>
 import { HistoryItem } from '@/types' // 假设你有一个类型定义文件
 import { deleteAiRoom } from '@/api'
-import { useElementUI } from '@/hooks/useMessage'
-const { showMessage, showMessageBox } = useElementUI()
+import { useMessage } from '@/hooks/useMessage'
+const { showMessage, showMessageBox } = useMessage()
 // iamges
 import empty from '@/views/module/ai/images/empty.png'
 import history_share from '@/views/module/ai/images/history_share.png'

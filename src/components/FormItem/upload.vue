@@ -87,7 +87,7 @@ const uploadFile = async (file: any) => {
   const formData = new FormData()
   formData.append('file', file)
   try {
-    const res = await request.post('/utils/uploads', formData, {
+    const res = await request.post('/utils/gitee/uploads', formData, {
       onUploadProgress: async function (progressEvent: ProgressEvent) {
         curFile.value.progress = ((progressEvent.loaded / progressEvent.total) * 100) | 0
       },

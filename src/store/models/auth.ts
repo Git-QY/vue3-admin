@@ -26,7 +26,9 @@ export const useAuthStore = defineStore('auth', {
       try {
         // 如果用户是管理员默认返回全部的权限（不在乎自身拥有的权限）
         const res = await listMenuByUserId(userId)
-        this.permissionsMenus = res.data || []
+        // 目前首页(不需要注册成菜单 默认展示)
+        const home = { id: '1', sort: 0, parentId: '0', menuName: '首页', menuType: '1', path: '/home', component: '/home/index' }
+        this.permissionsMenus = (res.data || []).concat(home)
         this.buttonList = this.permissionsMenus.map((item: Menu) => item.perms)
         await generateRouter(router, this.permissionsMenus)
         return this.permissionsMenus
@@ -85,34 +87,6 @@ function generateRouter(router: Router, menus: Menu[]) {
       } else {
         console.warn('按钮不生成路由')
       }
-      // // 第一级为菜单的情况
-      // if (parentId === '0' && menuType === '1') {
-      //   return {
-      //     id,
-      //     parentId: '0',
-      //     path: '/',
-      //     component: layoutComponent,
-      //     children: [{ path, component: Component(component), meta }],
-      //   }
-      // }
-      // // 生成空的路由组件2级以下为目录的情况
-      // else if (parentId !== '0' && menuType === '0') {
-      //   return {
-      //     id,
-      //     parentId,
-      //     path,
-      //     component: appComponent,
-      //     meta,
-      //   }
-      // } else {
-      //   return {
-      //     id,
-      //     parentId,
-      //     path,
-      //     component: isLink ? iframeComponent : menuType === '0' ? layoutComponent : Component(component),
-      //     meta,
-      //   }
-      // }
     })
   listToTree(deepClone(newMenus)).forEach(route => router.addRoute(route))
 }

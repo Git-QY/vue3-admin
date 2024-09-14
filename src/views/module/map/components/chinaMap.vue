@@ -6,9 +6,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useElementUI } from '@/hooks/useMessage'
+import { useMessage } from '@/hooks/useMessage'
 import echarts from '@/components/Echarts/config'
-const { showMessage } = useElementUI()
+const { showMessage } = useMessage()
 // 获取地图json https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json
 const mapJson = ref<any>(null)
 const getMapJson = async (mapId: string) => {

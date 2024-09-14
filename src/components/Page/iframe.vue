@@ -7,8 +7,8 @@
 
 <script lang="ts" setup>
 import gif from '@/assets/images/loader-light.gif'
-import { useElementUI } from '@/hooks/useMessage'
-const { showMessage } = useElementUI()
+import { useMessage } from '@/hooks/useMessage'
+const { showMessage } = useMessage()
 const props = defineProps<{ url: string }>()
 const loading = ref<Boolean>(true)
 const frame = ref<HTMLIFrameElement | null>(null)

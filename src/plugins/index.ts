@@ -7,10 +7,8 @@ import VueGridLayout from 'vue-grid-layout' // 栅格布局
 
 import Components from '@/components/index.ts' // 注册公共组件
 import Directives from '@/directives/index.ts' // 注册自定义指令
-// 加载插件
-export default async function loadPlugins(app: App) {
-  // elementPlus
 
+export default async function loadPlugins(app: App) {
   for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
   }

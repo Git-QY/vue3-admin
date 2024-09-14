@@ -11,8 +11,8 @@
         <el-button class="login-form--submit" type="primary" size="large" @click="submitForm" :loading="loading">登录</el-button>
       </el-form-item>
       <div class="login-form--footer">
-        <el-button type="primary" size="small" link @click="loginConfig.setPane('register')">立即注册</el-button>
-        <el-button type="primary" size="small" link @click="loginConfig.setPane('forget')">忘记密码</el-button>
+        <el-button type="primary" size="small" link @click="loginConfig?.setPane('register')">立即注册</el-button>
+        <el-button type="primary" size="small" link @click="loginConfig?.setPane('forget')">忘记密码</el-button>
       </div>
     </el-form>
   </div>

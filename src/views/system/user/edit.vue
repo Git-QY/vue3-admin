@@ -16,13 +16,14 @@
 <script lang="ts" setup>
 import api, { User } from '@/api/user'
 import { detailRole, detailDept, Dept } from '@/api'
-import { ElMessage } from 'element-plus'
+import { useMessage } from '@/hooks/useMessage.ts'
 
 import RoleDialog from '@/components/DusinessDialog/role-dialog.vue'
 import DeptDialog from '@/components/DusinessDialog/dept-dialog.vue'
 
 const router = useRouter()
 const route = useRoute()
+const { showMessage } = useMessage()
 const columns = reactive([
   { label: '用户名', prop: 'username', rules: 'must' },
   { label: '头像', prop: 'avatar', type: 'upload', rules: 'must', props: { limit: 1 } },
@@ -53,14 +54,14 @@ const onAdd = async () => {
     loading.value = true
     if (route.query.id) {
       await api.updateUser({ ...form.value, avatar: form.value.avatar[0].url })
-      ElMessage.success('修改成功')
+      showMessage('修改成功')
     } else {
       await api.addUser({ ...form.value, avatar: form.value.avatar[0].url })
-      ElMessage.success('添加成功')
+      showMessage('添加成功')
     }
     onBack()
   } catch (error: any) {
-    ElMessage.error(error)
+    showMessage(error, 'error')
   } finally {
     loading.value = false
   }
@@ -76,7 +77,7 @@ const getDetail = async () => {
     const res = await api.detailUser(id)
     form.value = { ...res.data, avatar: res.data.avatar ? [{ url: res.data.avatar }] : [] }
   } catch (error: any) {
-    ElMessage.error(error)
+    showMessage(error, 'error')
   }
 }
 // 角色弹窗
@@ -92,7 +93,7 @@ const getRoleList = async () => {
     const res = await detailRole({ ids: form.value.roleIds })
     roleList.value = res.data || []
   } catch (error: any) {
-    ElMessage.error(error)
+    showMessage(error, 'error')
   }
 }
 const openRoleDialog = async () => {
@@ -120,7 +121,7 @@ const getDepList = async () => {
     const res = await detailDept({ ids: [form.value.deptId] })
     deptList.value = res.data || []
   } catch (error: any) {
-    ElMessage.error(error)
+    showMessage(error, 'error')
   }
 }
 const openDeptDialog = async () => {

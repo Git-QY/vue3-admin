@@ -59,6 +59,13 @@ const getDetail = async () => {
   }
   const res = await detailLayout(route.query.id as string)
   layout.value = res.data
+  // 循环
+  defaultView.moduleList.forEach(item => {
+    const index = layout.value.moduleList.findIndex(it => it.i === item.i)
+    if (index === -1) {
+      layout.value.moduleList.push({ ...item, display: false })
+    }
+  })
 }
 
 onMounted(() => {

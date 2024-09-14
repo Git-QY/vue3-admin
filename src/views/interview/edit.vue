@@ -42,8 +42,8 @@
 
 <script lang="ts" setup>
 import { addInterview, updateInterview, Interview, detailInterview, addInterviewAnswer, updateInterviewAnswer } from '@/api'
-import { useElementUI } from '@/hooks/useMessage'
-const { showMessage } = useElementUI()
+import { useMessage } from '@/hooks/useMessage'
+const { showMessage } = useMessage()
 const columns = reactive([
   { label: '题目类型', prop: 'type', type: 'solt', dict: 'interview_type', rules: 'must' },
   { label: '题目', prop: 'topic', rules: 'must' },

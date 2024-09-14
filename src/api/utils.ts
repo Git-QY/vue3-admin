@@ -2,6 +2,7 @@ import request from '@/utils/request'
 
 // 上传
 export const upload = (data: any) => request({ url: '/utils/uploads', method: 'post', data })
+export const giteeUploads = (data: any) => request({ url: '/utils/gitee/uploads', method: 'post', data })
 // 单个切片上传
 export const uploadChunk = (data: any) => request({ url: '/utils/uploads/chunk', method: 'post', data })
 // 全部切片上传完成合并
